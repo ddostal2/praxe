@@ -1,0 +1,29 @@
+.row {
+    display: inline-flex;
+    max-width: 1200px;
+    align-items: center;
+    min-height: 300px;
+}
+
+.container {
+    flex: 1;
+    width: 275px;
+    height: 325px;
+    background-color: #f0f0f0;
+    margin: 20px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.popis {
+    text-align: center;
+    font-size: larger;
+    font-family: sans-serif;
+}
+
+.image {
+    width: 100%;
+    margin-top: auto;
+    background-color: #f0f0f0;
+}
