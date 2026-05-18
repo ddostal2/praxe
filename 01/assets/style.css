@@ -140,7 +140,7 @@ footer strong {
 .hero-image {
 
     background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
-    url("../assets/hero.jpg");
+    url("");
     height: 80vh;
     background-position: center;
     background-size: cover;
