@@ -33,7 +33,7 @@ export function cartTotal(cartItems, products) {
   }, 0);
 }
 
-
+/*
 console.log('Knihy:', filterByCategory(products, 'books'));
 console.log('Nejdražší první (desc):', sortByPrice(products, 'desc'));
 console.log('Nejdražší produkt:', findMostExpensive(products));
@@ -43,4 +43,4 @@ console.log(
         [{ productId: 1, quantity: 2 }, { productId: 3, quantity: 1 }],
         products
     )
-);
+);*/
