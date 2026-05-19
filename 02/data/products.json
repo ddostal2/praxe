@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "title": "Bezdrátová sluchátka Pro",
+    "price": 2499,
+    "category": "electronics",
+    "stock": 12,
+    "rating": 4.5
+  },
+  {
+    "id": 2,
+    "title": "Mechanická klávesnice RGB",
+    "price": 3299,
+    "category": "electronics",
+    "stock": 5,
+    "rating": 4.7
+  },
+  {
+    "id": 3,
+    "title": "Bavlněné tričko černé",
+    "price": 449,
+    "category": "clothing",
+    "stock": 30,
+    "rating": 4.2
+  },
+  {
+    "id": 4,
+    "title": "Mikina s kapucí šedá",
+    "price": 999,
+    "category": "clothing",
+    "stock": 18,
+    "rating": 4.4
+  },
+  {
+    "id": 5,
+    "title": "Kniha: Clean Code",
+    "price": 699,
+    "category": "books",
+    "stock": 0,
+    "rating": 4.8
+  },
+  {
+    "id": 6,
+    "title": "Kniha: Pragmatic Programmer",
+    "price": 599,
+    "category": "books",
+    "stock": 7,
+    "rating": 4.9
+  },
+  {
+    "id": 7,
+    "title": "Hrnek na kávu 350ml",
+    "price": 189,
+    "category": "home",
+    "stock": 50,
+    "rating": 4.1
+  },
+  {
+    "id": 8,
+    "title": "Stolní lampa LED",
+    "price": 1299,
+    "category": "home",
+    "stock": 8,
+    "rating": 4.3
+  },
+  {
+    "id": 9,
+    "title": "Notebook 14 palců",
+    "price": 24999,
+    "category": "electronics",
+    "stock": 3,
+    "rating": 4.6
+  },
+  {
+    "id": 10,
+    "title": "Batoh městský 20L",
+    "price": 1499,
+    "category": "accessories",
+    "stock": 15,
+    "rating": 4.5
+  },
+  {
+    "id": 11,
+    "title": "Kniha: You Don't Know JS",
+    "price": 499,
+    "category": "books",
+    "stock": 4,
+    "rating": 4.7
+  },
+  {
+    "id": 12,
+    "title": "Tričko s potiskem JS",
+    "price": 549,
+    "category": "clothing",
+    "stock": 22,
+    "rating": 4.0
+  }
+]
