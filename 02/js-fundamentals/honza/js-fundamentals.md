@@ -182,6 +182,4 @@ try {
 } catch (error) {
     console.error("Aha, něco se pokazilo: " + error.message);
 }
-
-
 ```
