@@ -1,0 +1,12 @@
+- **const** - Vytvoří konstantu(nedá se měnit)
+- **let** - Vytvoří proměnou(dá se měnit)
+- **arrow funkce** - Dovolují nám vytvořit jednoduché funkce a zapisují se podobně jako proměná
+- **destructuring** - Dovoluje nam jednodušeji dostat data z objektu nebo pole
+- **spread...** - Spread nám dovoluje rozložit pole na jednotlivé argumenty, které jdou použít ve funkcích
+- **map** - Je to funkce, která nám dovoluje si vybrat z pole objektů jen to co potřebujeme
+- **filter** - je to funkce, která nám dovoluje vyfiltrovat položky z pole objektů
+- **reduce** - je to funkce, je podobná map funkci, ale má accumulator, díky ní mužeme pracovat i s předchozími položky, např. pomocí ní můžeme sečíst všechny čísla
+- **find** - Je to funkce, která nám dá první položku v poli co splňuje nějakou podmínku
+- **async** - Dává se před definici funkce aby se z ní stala asynchronní funkce, ta když se zavolá, tak běží na pozadí
+- **await** - Dává se před volání asynchronní funkce, aby program čekal na její výsledek
+- **try/catch** - Umožňuje nám zachytit a zpracovat nějakou chybu, která by mohla nasat, takto nám program hned neskončí, když detekuje chybu
