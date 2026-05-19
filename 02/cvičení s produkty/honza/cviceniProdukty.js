@@ -1,4 +1,4 @@
-import products from '../../data/products.json';
+import products from '../../data/products.json' with { type: 'json' };
 
 export function filterByCategory(products, category) {
   return products.filter((product) => product.category === category);
@@ -32,3 +32,15 @@ export function cartTotal(cartItems, products) {
     return total + price * item.quantity;
   }, 0);
 }
+
+
+console.log('Knihy:', filterByCategory(products, 'books'));
+console.log('Nejdražší první (desc):', sortByPrice(products, 'desc'));
+console.log('Nejdražší produkt:', findMostExpensive(products));
+console.log(
+    'Košík celkem:',
+    cartTotal(
+        [{ productId: 1, quantity: 2 }, { productId: 3, quantity: 1 }],
+        products
+    )
+);
