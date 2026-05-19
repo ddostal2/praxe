@@ -1,0 +1,15 @@
+.counter {
+  margin-top: 80px;
+}
+
+.counter-value {
+  font-size: 48px;
+  margin: 20px 0;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 18px;
+  cursor: pointer;
+}
