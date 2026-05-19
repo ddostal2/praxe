@@ -183,5 +183,5 @@ try {
     console.error("Aha, něco se pokazilo: " + error.message);
 }
 
-console.log("Konec programu"); // Program pokračuje dál!
+
 ```
