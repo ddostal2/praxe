@@ -1,45 +1,63 @@
-import produkty from "../../data/products.json" with { type: "json" };
+import products from "../../data/products.json" with { type: "json" };
+
+const SORT_DIRECTION = {
+    DESCENDING: "desc",
+};
+
+const DEFAULT_CART_ITEM_QUANTITY = 1;
 
 function filterByCategory(products, category) {
     return products.filter((product) => product.category === category);
 }
 
-function sortByPrice(products, direction) { // direction - asc/desc
-    const dir = String(direction).toLowerCase();
-    const factor = dir === "desc" ? -1 : 1;
+function sortByPrice(products, direction) {
+    const normalizedDirection = String(direction).toLowerCase();
+    const priceSortMultiplier =
+        normalizedDirection === SORT_DIRECTION.DESCENDING ? -1 : 1;
 
-    return [...products].sort((a, b) => (a.price - b.price) * factor);
+    return [...products].sort(
+        (firstProduct, secondProduct) =>
+            (firstProduct.price - secondProduct.price) * priceSortMultiplier
+    );
 }
 
 function findMostExpensive(products) {
-    if (!products.length) return undefined;
+    if (products.length === 0) return undefined;
 
-    return products.reduce((best, product) =>
-        product.price > best.price ? product : best
+    return products.reduce((mostExpensiveProduct, product) =>
+        product.price > mostExpensiveProduct.price
+            ? product
+            : mostExpensiveProduct
     );
 }
 
 function cartTotal(cartItems, products) {
-    // Vytvoří tabulku(id -> produkt)
-    const byId = new Map(products.map((p) => [p.id, p]));
+    const productsById = new Map(
+        products.map((product) => [product.id, product])
+    );
 
-    // projde cartItems, vytáhne z toho cenu produktu(pomocí id) a pak sečte všechny ceny
-    return cartItems.reduce((sum, item) => {
-        const product = byId.get(item.id ?? item.productId); // item.id nebo item.productId
-        if (!product) return sum;
-        const qty = Number(item.quantity ?? item.qty ?? 1); // item.quantity nebo item.qty nebo 1
-        return sum + product.price * qty;
+    return cartItems.reduce((total, cartItem) => {
+        const productId = cartItem.id ?? cartItem.productId;
+        const product = productsById.get(productId);
+
+        if (!product) return total;
+
+        const quantity = Number(
+            cartItem.quantity ?? cartItem.qty ?? DEFAULT_CART_ITEM_QUANTITY
+        );
+
+        return total + product.price * quantity;
     }, 0);
 }
 
-//console.log(filterByCategory(produkty, "books"))
-//console.log(sortByPrice(produkty, "asc"))
-//console.log(findMostExpensive(produkty))
-
-
-/*const cartItems = [
+/*
+const sampleCartItems = [
     { id: 2 },
     { id: 5 },
 ];
 
-console.log(cartTotal(cartItems, produkty));*/
+console.log(filterByCategory(products, "clothing"));
+console.log(sortByPrice(products, "asc"));
+console.log(findMostExpensive(products));
+console.log(cartTotal(sampleCartItems, products));
+*/
