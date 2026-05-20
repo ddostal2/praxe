@@ -1,0 +1,14 @@
+button.counter-buttons {
+  width: 200px;
+  display: inline-block;
+}
+
+.dark {
+  color: white;
+  background-color: #16171d;
+}
+
+.light {
+  color: black;
+  background-color: #e5e4e7;
+}
