@@ -1,0 +1,73 @@
+/* Globální nastavení pro celou aplikaci */
+.app-container {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 0;
+  margin: 0;
+}
+
+/* Třídy pro přepínání témat */
+.app-container.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.app-container.dark {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+/* Navigační lišta */
+.navbar {
+  padding: 15px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.navbar.light {
+  background-color: #282c34;
+}
+
+.navbar.dark {
+  background-color: #000000;
+}
+
+/* Odkazy v navigaci */
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+/* Tlačítko pro přepínání */
+.theme-toggle-btn {
+  margin-left: auto;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle-btn.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.theme-toggle-btn.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+/* Obsah pod navigací */
+.content-area {
+  padding: 20px;
+}
