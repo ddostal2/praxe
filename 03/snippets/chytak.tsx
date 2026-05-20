@@ -1,3 +1,7 @@
+/*
+ * Prompt: načti produkty a filtruj podle kategorie
+ */
+
 import {useEffect, useState} from 'react';
 
 type Product = {
