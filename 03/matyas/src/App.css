@@ -1,0 +1,245 @@
+/**
+ * Stylování tlačítka počítadla (.counter)
+ */
+.counter {
+  font-size: 16px;          /* Velikost textu tlačítka */
+  padding: 5px 10px;        /* Vnitřní okraj: 5px nahoře/dole, 10px vlevo/vpravo */
+  border-radius: 5px;       /* Zaoblení rohů tlačítka */
+  color: var(--accent);     /* Barva textu načtená z CSS proměnné --accent */
+  background: var(--accent-bg); /* Pozadí tlačítka z proměnné --accent-bg */
+  border: 2px solid #00000000; /* Průhledný rámeček (aby se při hoveru nezměnila velikost tlačítka) */
+  transition: border-color 0.3s; /* Plynulý přechod barvy rámečku po dobu 0.3 sekundy */
+  margin-bottom: 24px;      /* Vnější spodní okraj (odstup od prvků pod ním) */
+
+  /**
+   * CSS Nesting (Vnořování): Symbol '&' odkazuje na nadřazený selektor (zde .counter).
+   * &:hover je ekvivalentní zápisu `.counter:hover`.
+   * Spustí se, když uživatel najede na tlačítko myší.
+   */
+  &:hover {
+    border-color: var(--accent-border); /* Rámeček získá barvu definovanou v proměnné */
+  }
+
+  /**
+   * Spustí se, když je na tlačítko zaměřeno (např. pomocí klávesnice - tabulátor)
+   */
+  &:focus-visible {
+    outline: 2px solid var(--accent); /* Výrazný rámeček (outline) okolo tlačítka */
+    outline-offset: 2px;              /* Odstup rámečku od hran tlačítka */
+  }
+}
+
+/**
+ * Sekce s Logy (.hero)
+ */
+.hero {
+  position: relative; /* Pozicování pro vnořené absolutně pozicované prvky */
+
+  /* Hromadný selektor pro obrázky uvnitř .hero */
+  .base,
+  .framework,
+  .vite {
+    inset-inline: 0;  /* Roztáhne prvek od levého po pravý okraj (zkratka pro left: 0; right: 0) */
+    margin: 0 auto;   /* Vycentruje obrázky vodorovně */
+  }
+
+  /* Podkladový šedý obrázek */
+  .base {
+    width: 170px;     /* Fixní šířka */
+    position: relative; /* Relativní pozice vůči svému toku */
+    z-index: 0;       /* Určuje vrstvu (0 je nejníže) */
+  }
+
+  /* Loga Reactu a Vite budou plavat nad základnou */
+  .framework,
+  .vite {
+    position: absolute; /* Absolutní pozicování vůči nejbližšímu rodiči s 'position: relative' (.hero) */
+  }
+
+  /* Logo Reactu (.framework) */
+  .framework {
+    z-index: 1;       /* Zobrazí se nad základnou (vrstva 1) */
+    top: 34px;        /* Umístění 34px od horního okraje */
+    height: 28px;     /* Výška obrázku */
+    /* 3D Transformace: natočení loga v prostoru (perspektiva, rotace podle os Z, X, Y a zvětšení 1.4x) */
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
+      scale(1.4);
+  }
+
+  /* Logo Vite (.vite) */
+  .vite {
+    z-index: 0;       /* Zobrazí se pod React logem, na stejné úrovni jako základna (vrstva 0) */
+    top: 107px;       /* Umístění 107px od horního okraje */
+    height: 26px;     /* Výška obrázku */
+    width: auto;      /* Šířka se dopočítá automaticky dle poměru stran */
+    /* Podobné 3D natočení v prostoru jako u React loga, ale s jiným úhlem a zmenšením na 0.8x */
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
+      scale(0.8);
+  }
+}
+
+/**
+ * Středový sloupec (#center)
+ */
+#center {
+  display: flex;            /* Flexbox rozvržení */
+  flex-direction: column;   /* Prvky se řadí do sloupce pod sebe */
+  gap: 25px;                /* Mezera 25px mezi jednotlivými prvky */
+  place-content: center;    /* Vertikální vycentrování obsahu */
+  place-items: center;      /* Horizontální vycentrování obsahu */
+  flex-grow: 1;             /* Sloupec se roztáhne na maximální dostupnou výšku */
+
+  /**
+   * Responzivní design (Media Query):
+   * Tyto styly se aplikují pouze na zařízeních s šířkou obrazovky 1024px a méně (tablety, mobily).
+   */
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px; /* Vnitřní okraje: 32px nahoře, 20px po stranách, 24px dole */
+    gap: 18px;               /* Zmenšení mezery mezi prvky na 18px */
+  }
+}
+
+/**
+ * Sekce pro další kroky / dokumentaci (#next-steps)
+ */
+#next-steps {
+  display: flex;                        /* Flexbox rozvržení (prvky vedle sebe) */
+  border-top: 1px solid var(--border);  /* Horní dělící linka */
+  text-align: left;                     /* Zarovnání textu doleva */
+
+  /* Stylování přímých potomků typu <div> uvnitř #next-steps */
+  & > div {
+    flex: 1 1 0;                        /* Zkratka pro flex-grow: 1, flex-shrink: 1, flex-basis: 0. Divy si rozdělí místo rovnoměrně */
+    padding: 32px;                      /* Vnitřní okraj */
+    
+    @media (max-width: 1024px) {
+      padding: 24px 20px;               /* Pro mobily padding zmenšíme */
+    }
+  }
+
+  /* Ikona u nadpisu */
+  .icon {
+    margin-bottom: 16px;                /* Odstup pod ikonou */
+    width: 22px;                        /* Šířka ikony */
+    height: 22px;                       /* Výška ikony */
+  }
+
+  /* Responzivní pravidlo pro mobily */
+  @media (max-width: 1024px) {
+    flex-direction: column;             /* Na mobilech se sloupce seřadí pod sebe */
+    text-align: center;                 /* Text se vycentruje */
+  }
+}
+
+/**
+ * Karta dokumentace (#docs)
+ */
+#docs {
+  border-right: 1px solid var(--border); /* Vertikální dělící linka vpravo */
+
+  @media (max-width: 1024px) {
+    border-right: none;                  /* Na mobilech vertikální linku zrušíme */
+    border-bottom: 1px solid var(--border); /* A nahradíme ji horizontální linkou dole */
+  }
+}
+
+/**
+ * Odkazy uvnitř seznamu v sekci další kroky (#next-steps ul)
+ */
+#next-steps ul {
+  list-style: none;         /* Odstraní výchozí odrážky seznamu (tečky) */
+  padding: 0;               /* Odstraní vnitřní odsazení seznamu */
+  display: flex;            /* Odkazy se seřadí vedle sebe */
+  gap: 8px;                 /* Mezera 8px mezi položkami seznamu */
+  margin: 32px 0 0;         /* Vnější okraj pouze nahoře: 32px */
+
+  /* Logo */
+  .logo {
+    height: 18px;           /* Výška loga */
+  }
+
+  /* Stylování samotných odkazů <a> */
+  a {
+    color: var(--text-h);      /* Barva textu */
+    font-size: 16px;           /* Velikost písma */
+    border-radius: 6px;        /* Zaoblení rohů */
+    background: var(--social-bg); /* Světlé pozadí tlačítka */
+    display: flex;             /* Ikona a text budou vedle sebe */
+    padding: 6px 12px;         /* Vnitřní okraj tlačítka */
+    align-items: center;       /* Vertikální vycentrování textu a ikony uvnitř tlačítka */
+    gap: 8px;                  /* Mezera 8px mezi ikonou a textem */
+    text-decoration: none;     /* Odstraní klasické podtržení odkazu */
+    transition: box-shadow 0.3s; /* Plynulé zobrazení stínu na pozadí */
+
+    /* Efekt při najetí myší */
+    &:hover {
+      box-shadow: var(--shadow); /* Zobrazí stín definovaný v proměnné --shadow */
+    }
+    
+    /* Ikona tlačítka */
+    .button-icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  /* Responzivní úprava seznamu na mobilech */
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    flex-wrap: wrap;            /* Povolí zalamování tlačítek na další řádky */
+    justify-content: center;    /* Vycentruje tlačítka */
+
+    /* Položky seznamu <li> */
+    li {
+      flex: 1 1 calc(50% - 8px); /* Každé tlačítko zabere polovinu šířky mínus mezera */
+    }
+
+    /* Odkazy <a> */
+    a {
+      width: 100%;              /* Odkaz se roztáhne na celou šířku položky <li> */
+      justify-content: center;  /* Text s ikonou vycentruje uprostřed tlačítka */
+      box-sizing: border-box;   /* Zajistí, že padding se započítá do celkové šířky */
+    }
+  }
+}
+
+/**
+ * Spodní prázdný prostor pro odsazení (#spacer)
+ */
+#spacer {
+  height: 88px;                         /* Výška prázdného místa */
+  border-top: 1px solid var(--border);  /* Horní linka ohraničení */
+  
+  @media (max-width: 1024px) {
+    height: 48px;                       /* Pro mobily výšku zmenšíme */
+  }
+}
+
+/**
+ * Ozdobné zobáčky/značky na koncích dělících čar (.ticks)
+ */
+.ticks {
+  position: relative; /* Umožní pozicovat pseudo-elementy ::before a ::after */
+  width: 100%;
+
+  /* Společné vlastnosti pro levý i pravý zobáček */
+  &::before,
+  &::after {
+    content: '';        /* Povinná vlastnost pro zobrazení pseudo-elementu */
+    position: absolute; /* Absolutní pozicování */
+    top: -4.5px;        /* Posunutí přesně na úroveň dělicí čáry */
+    border: 5px solid #00000000; /* Vytvoří průhledné okraje pro simulaci trojúhelníku */
+  }
+
+  /* Levý zobáček */
+  &::before {
+    left: 0;
+    border-left-color: var(--border); /* Vybarví levou stranu, čímž vznikne šipka směřující doprava */
+  }
+  
+  /* Pravý zobáček */
+  &::after {
+    right: 0;
+    border-right-color: var(--border); /* Vybarví pravou stranu, čímž vznikne šipka směřující doleva */
+  }
+}
