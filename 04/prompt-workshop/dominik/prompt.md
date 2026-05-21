@@ -1,10 +1,17 @@
 # Můj prompt pro StarRating
 
 ## Prompt
-[Sem napiš prompt, který jsi použil v Cursor Chat]
+Ahoj, Vytvoř jednoduchou react komponentu pro hodnocení hvězdičkami produktu a napiš k tomu testovací kod ať ot mužu otestovat
 
 ## Strategie
-[Kterou strategii jsi zvolil? A/B/C/D?]
+A
 
 ## Poznámky
-[Co fungovalo? Co ne? Co bys příště udělal jinak?]
+- Hvězdičky se zobrazí
+- Nastavení default hodnoty funguje
+- Nastavení jiného počtu hvězdiček funguje
+- Jde přiřadik k state
+- Jde nastavit read-only
+- Jde nastavit callback při změně
+- Nejde dát žádný text k hvězdičkám
+- Asi bych příště zkusil dát přesnější instrukce
