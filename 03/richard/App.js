@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
 import { ThemeContext } from './ThemeContext';
+import StarRating from './components/star-rating-component/StarRating';
 
 import './App.css';
 
@@ -14,6 +15,7 @@ const UserDetail = () => {
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const [hodnoceni, setHodnoceni] = useState(4);
 
   return (
       <BrowserRouter>
@@ -42,6 +44,19 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/user/:id" element={<UserDetail />} />
             </Routes>
+          </div>
+
+          <div style={{ padding: '24px' }}>
+            <h2>Ohodnoťte naši službu</h2>
+
+            {/* Interaktivní hvězdy s krokem 0.5 */}
+            <StarRating
+                value={hodnoceni}
+                precision={0.5}
+                onChange={(noveHodnoceni) => setHodnoceni(noveHodnoceni)}
+            />
+
+            <p>Vybrali jste: {hodnoceni} z 5 hvězdiček</p>
           </div>
 
         </div>
