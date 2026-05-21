@@ -6,6 +6,7 @@
 ## Strategie
 B - kontext
 
+
 ## Poznámky
 1. Prompt fungoval, zapomněl jsem připsat ať to otestuje na stránce.
 2. Prompt jsem napsal špatně. BrowserRouter funguje skvěle, ale tím testováním jsem zamýšlel na stránce, cursor vygeneroval testování na stránce i v samotném projektu (vytvoření komponenty StarRatingTest.test.jsx)
