@@ -1,27 +1,41 @@
-create table products (
-    id int auto increment primary key,
-    name varchar(20) not null,
-    category_id int constraint product_category_fk foreign key (product_category_fk) references categories(id),
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
 );
 
-create table categories (
-    id int auto increment primary key,
-    name varchar(20) not null
+CREATE TABLE products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(100) NOT NULL,
+    price REAL NOT NULL,
+    description TEXT,
+    category_id INTEGER,
+    image TEXT,
+    rating_rate REAL,
+    rating_count INTEGER,
+    FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
-create table orders (
-    id int auto increment primary key,
-    customers_name varchar(20) not null,
-    customers_surname varchar(25) not null,
-    customers_email varchar(40) not null
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customers_name VARCHAR(50) NOT NULL,
+    customers_surname VARCHAR(50) NOT NULL,
+    customers_email VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-create table order_items (
-    id int auto increment primary key,
-    order_id int constraint items_order_fk foreign key (items_order_fk) references orders(id),
-    product_id int constraint items_product_fk foreign key (items_product_fk) references products(id)
+CREATE TABLE order_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
-create table contact_messages (
-
+CREATE TABLE contact_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    message TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
