@@ -4,7 +4,7 @@
     "title": "Zrnková káva Ethiopia Sidamo 250g",
     "price": 249,
     "description": "Výběrová jednodruhová arabika z oblasti Sidamo. Vyznačuje se ovocným profilem s tóny citrusů, jasmínu a černého čaje. Střední pražení.",
-    "category": "Káva",
+    "categoryId": 1,
     "image": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.8,
@@ -16,7 +16,7 @@
     "title": "Zrnková káva Brazil Santos 500g",
     "price": 389,
     "description": "Klasická brazilská káva s plným tělem, nízkou kyselostí a bohatou chutí hořké čokolády a lískových oříšků. Ideální na espresso.",
-    "category": "Káva",
+    "categoryId": 1,
     "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.5,
@@ -28,7 +28,7 @@
     "title": "Zrnková káva Colombia Supremo 250g",
     "price": 229,
     "description": "Vyvážená káva z kolumbijských And. Nabízí sladkost třtinového cukru, tóny červeného jablka a jemnou čokoládovou dochuť.",
-    "category": "Káva",
+    "categoryId": 1,
     "image": "https://images.unsplash.com/photo-1587734195503-904fca47e0e9?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.6,
@@ -40,7 +40,7 @@
     "title": "Zrnková káva Costa Rica Tarrazu 250g",
     "price": 269,
     "description": "Káva s čistým a jasným profilem z vyhlášené oblasti Tarrazu. Tóny peckovitého ovoce, medu a lehký květinový závěr.",
-    "category": "Káva",
+    "categoryId": 1,
     "image": "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.7,
@@ -52,7 +52,7 @@
     "title": "Zrnková káva Decaf Honduras 250g",
     "price": 259,
     "description": "Bezkofeinová káva zpracovaná šetrnou metodou CO2. Sladká chuť s tóny mléčné čokolády a karamelu bez obsahu kofeinu.",
-    "category": "Káva",
+    "categoryId": 1,
     "image": "https://images.unsplash.com/photo-1610970881699-44a5587caaec?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.3,
@@ -63,8 +63,8 @@
     "id": 6,
     "title": "Zrnková káva Kenya AA Nyeri 250g",
     "price": 299,
-    "description": "Prvotřídní keňská káva s výraznou a šťavnatou aciditou. Chuťový profil obsahuje tóny černého rybízu, ostružin a rebarbory.",
-    "category": "Káva",
+    "description": "Prvotřídní keňská káva s výraznou a šťavou aciditou. Chuťový profil obsahuje tóny černého rybízu, ostružin a rebarbory.",
+    "categoryId": 1,
     "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.9,
@@ -76,7 +76,7 @@
     "title": "Pákový kávovar Sage Barista Express",
     "price": 14990,
     "description": "Integrovaný kónický mlýnek, elektronický systém kontroly teploty (PID) a parní tryska pro dokonalou mléčnou pěnu.",
-    "category": "Kávovary",
+    "categoryId": 2,
     "image": "https://images.unsplash.com/photo-1579888944880-99834418fda2?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.8,
@@ -88,7 +88,7 @@
     "title": "Automatický kávovar DeLonghi Magnifica S",
     "price": 7990,
     "description": "Kompaktní plnoautomatický kávovar. Nastavení intenzity, teploty a velikosti kávy. Cappuccino systém pro šlehání mléka.",
-    "category": "Kávovary",
+    "categoryId": 2,
     "image": "https://images.unsplash.com/photo-1517256064527-09c53b2d0bc6?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.4,
@@ -100,7 +100,7 @@
     "title": "Kávovar AeroPress Original",
     "price": 790,
     "description": "Oblíbený alternativní kávovar pro rychlou a snadnou přípravu čisté, plné kávy. Ideální na cestování i na doma.",
-    "category": "Kávovary",
+    "categoryId": 2,
     "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.9,
@@ -112,7 +112,7 @@
     "title": "Hario V60-02 Keramický dripper bílý",
     "price": 490,
     "description": "Tradiční keramický překapávač pro přípravu 1 až 4 šálků filtrované kávy. Vynikající vedení tepla pro stabilní extrakci.",
-    "category": "Kávovary",
+    "categoryId": 2,
     "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.8,
@@ -124,7 +124,7 @@
     "title": "Chemex Classic pro 6 šálků",
     "price": 1190,
     "description": "Designový skleněný kávovar ve tvaru přesýpacích hodin s dřevěným límcem. Připraví dokonale čistou filtrovanou kávu.",
-    "category": "Kávovary",
+    "categoryId": 2,
     "image": "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.7,
@@ -136,7 +136,7 @@
     "title": "Moka konvička Bialetti Moka Express 3tz",
     "price": 690,
     "description": "Tradiční hliníková moka konvička od italského výrobce Bialetti. Pro přípravu 3 šálků silné, espressu podobné kávy.",
-    "category": "Kávovary",
+    "categoryId": 2,
     "image": "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.6,
@@ -148,7 +148,7 @@
     "title": "Ruční mlýnek Comandante C40 MK4",
     "price": 6290,
     "description": "Legendární ruční mlýnek s extrémně přesnými ocelovými kameny. Vhodný pro všechny metody mletí od džezvy po cold brew.",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 5.0,
@@ -160,7 +160,7 @@
     "title": "Elektrický mlýnek Wilfa Svart Aroma",
     "price": 2890,
     "description": "Kvalitní domácí mlýnek s kónickými kameny a nastavením hrubosti pro alternativní metody přípravy (dripper, aeropress, french press).",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.5,
@@ -172,7 +172,7 @@
     "title": "Digitální váha Timemore Black Mirror Basic+",
     "price": 1490,
     "description": "Moderní váha pro baristy s přesností na 0.1g, vestavěnými stopkami, skrytým LED displejem a USB-C nabíjením.",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.7,
@@ -184,7 +184,7 @@
     "title": "Hario Papírové filtry pro V60-02 (100ks)",
     "price": 149,
     "description": "Originální nebělené papírové filtry určené pro překapávače Hario V60-02. Zajišťují optimální průtok a čistou chuť.",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.9,
@@ -196,7 +196,7 @@
     "title": "Baristická konvice Fellow Stagg EKG 0.9l",
     "price": 4490,
     "description": "Designová rychlovarná konvice s husím krkem pro precizní zalévání, elektronickou regulací teploty a funkcí udržování teploty.",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.9,
@@ -208,7 +208,7 @@
     "title": "Skleněný hrnek KeepCup Brew M 340ml",
     "price": 549,
     "description": "Ekologický a stylový cestovní hrnek vyrobený z tvrzeného skla s korkovým prstencem. Ideální pro kávu na cesty.",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.4,
@@ -220,7 +220,7 @@
     "title": "Odměrka na kávu Hario V60 měděná",
     "price": 390,
     "description": "Luxusní celokovová odměrka z mědi s designem řady Hario V60. Kapacita přibližně 12g zrnkové kávy.",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.8,
@@ -232,7 +232,7 @@
     "title": "Čisticí prášek Cafiza Urnex 900g",
     "price": 490,
     "description": "Profesionální čisticí prostředek pro zpětný oplach (backflush) pákových kávovarů. Účinně odstraňuje kávové oleje a usazeniny.",
-    "category": "Příslušenství",
+    "categoryId": 3,
     "image": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=600&auto=format&fit=crop",
     "rating": {
       "rate": 4.7,
