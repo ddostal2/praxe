@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "name": "Bezdrátová sluchátka s potlačením hluku",
+    "categoryId": 1,
+    "price": 4699
+  },
+  {
+    "id": 2,
+    "name": "Mechanická herní klávesnice",
+    "categoryId": 1,
+    "price": 2149
+  },
+  {
+    "id": 3,
+    "name": "Ultraširoký herní monitor",
+    "categoryId": 1,
+    "price": 8299
+  },
+  {
+    "id": 4,
+    "name": "Ergonomická kancelářská židle",
+    "categoryId": 3,
+    "price": 3599
+  },
+  {
+    "id": 5,
+    "name": "Nerezová láhev na vodu",
+    "categoryId": 5,
+    "price": 599
+  },
+  {
+    "id": 6,
+    "name": "Pánské běžecké boty",
+    "categoryId": 2,
+    "price": 1799
+  },
+  {
+    "id": 7,
+    "name": "Dámské sportovní legíny",
+    "categoryId": 2,
+    "price": 1099
+  },
+  {
+    "id": 8,
+    "name": "Chytrý fitness náramek",
+    "categoryId": 1,
+    "price": 1399
+  },
+  {
+    "id": 9,
+    "name": "Nepřilnavá pánev",
+    "categoryId": 3,
+    "price": 849
+  },
+  {
+    "id": 10,
+    "name": "10dílná sada kuchařských nožů",
+    "categoryId": 3,
+    "price": 2899
+  },
+  {
+    "id": 11,
+    "name": "Velký Gatsby (brožovaná)",
+    "categoryId": 4,
+    "price": 299
+  },
+  {
+    "id": 12,
+    "name": "Atomové návyky (pevná vazba)",
+    "categoryId": 4,
+    "price": 449
+  },
+  {
+    "id": 13,
+    "name": "Přenosný Bluetooth reproduktor",
+    "categoryId": 1,
+    "price": 1099
+  },
+  {
+    "id": 14,
+    "name": "Podložka na jógu s popruhem",
+    "categoryId": 5,
+    "price": 699
+  },
+  {
+    "id": 15,
+    "name": "Odolný kempingový batoh",
+    "categoryId": 5,
+    "price": 1549
+  },
+  {
+    "id": 16,
+    "name": "Elektrická konvice na překapávanou kávu",
+    "categoryId": 3,
+    "price": 1899
+  },
+  {
+    "id": 17,
+    "name": "Klasická džínová bunda",
+    "categoryId": 2,
+    "price": 1399
+  },
+  {
+    "id": 18,
+    "name": "Unisex plátěné tenisky",
+    "categoryId": 2,
+    "price": 949
+  },
+  {
+    "id": 19,
+    "name": "Sci-fi román: Duna",
+    "categoryId": 4,
+    "price": 349
+  },
+  {
+    "id": 20,
+    "name": "Sada posilovacích gum",
+    "categoryId": 5,
+    "price": 479
+  }
+]

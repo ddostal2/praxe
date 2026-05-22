@@ -2,6 +2,7 @@ create table products (
     id int auto increment primary key,
     name varchar(20) not null,
     category_id int constraint product_category_fk foreign key (product_category_fk) references categories(id),
+    price int not null
 );
 
 create table categories (
