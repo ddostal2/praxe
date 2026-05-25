@@ -5,9 +5,34 @@
 
 .app-nav {
   display: flex;
-  gap: 1.25rem;
+  align-items: center;
+  gap: 1.5rem;
   max-width: 960px;
   margin: 0 auto;
+}
+
+.app-nav__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.app-nav__logo:hover {
+  opacity: 0.85;
+}
+
+.app-nav__logo-img {
+  display: block;
+  height: 2.5rem;
+  width: auto;
+}
+
+.app-nav__links {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .app-nav__link {
@@ -21,4 +46,41 @@
 
 .app-nav__link--active {
   color: #646cff;
+}
+
+.app-nav__cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  color: #374151;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.app-nav__cart:hover {
+  color: #646cff;
+}
+
+.app-nav__cart--active {
+  color: #646cff;
+}
+
+.app-nav__cart-label {
+  line-height: 1;
+}
+
+.app-nav__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background-color: #646cff;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
 }

@@ -1,15 +1,12 @@
 /**
- * Úvodní stránka aplikace.
+ * Úvodní stránka — placeholder.
  * @component
- * @returns {JSX.Element}
  */
 const HomePage = () => {
   return (
     <section>
-      <h1>Vítejte v eshopu</h1>
-      <p>
-        Základ frontendu běží na Vite + React + react-router-dom.
-      </p>
+      <h1>Domů</h1>
+      <p>Placeholder - úvodní stránka.</p>
     </section>
   );
 };

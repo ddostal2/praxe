@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout.jsx";
-import AboutPage from "./pages/AboutPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import "./App.css";
 
@@ -14,7 +13,6 @@ const App = () => {
     <Routes>
       <Route element={<AppLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="o-nas" element={<AboutPage />} />
       </Route>
     </Routes>
   );
