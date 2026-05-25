@@ -3,6 +3,8 @@ import AppLayout from "./components/layout/AppLayout.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import ProductsPage from "./pages/ProductsPage.jsx";
 import ProductDetailPage from "./pages/ProductDetailPage.jsx";
+import ContactsPage from "./pages/ContactsPage.jsx";
+import CartPage from "./pages/CartPage.jsx";
 import "./App.css";
 
 /**
@@ -17,6 +19,8 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/:id" element={<ProductDetailPage />} />
+        <Route path="kontakty" element={<ContactsPage />} />
+        <Route path="kosik" element={<CartPage />} />
       </Route>
     </Routes>
   );
