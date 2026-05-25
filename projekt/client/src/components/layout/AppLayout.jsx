@@ -14,8 +14,8 @@ const AppLayout = () => {
     <div className="app-layout">
       <header className="app-header">
         <nav className="app-nav" aria-label="Hlavní navigace">
-          <NavLink to="/" end className="app-nav__logo" aria-label="Domů">
-            <img src="/logo.png" alt="" className="app-nav__logo-img" />
+          <NavLink to="/" className="app-nav__logo">
+            <img src="/logo.png" alt="Logo" className="app-nav__logo-img" />
           </NavLink>
 
           <div className="app-nav__links">
@@ -23,9 +23,7 @@ const AppLayout = () => {
               to="/"
               end
               className={({ isActive }) =>
-                isActive
-                  ? "app-nav__link app-nav__link--active"
-                  : "app-nav__link"
+                isActive ? "app-nav__link app-nav__link--active" : "app-nav__link"
               }
             >
               Domů
@@ -33,9 +31,7 @@ const AppLayout = () => {
             <NavLink
               to="/products"
               className={({ isActive }) =>
-                isActive
-                  ? "app-nav__link app-nav__link--active"
-                  : "app-nav__link"
+                isActive ? "app-nav__link app-nav__link--active" : "app-nav__link"
               }
             >
               Produkty
@@ -43,9 +39,7 @@ const AppLayout = () => {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                isActive
-                  ? "app-nav__link app-nav__link--active"
-                  : "app-nav__link"
+                isActive ? "app-nav__link app-nav__link--active" : "app-nav__link"
               }
             >
               Kontakt
