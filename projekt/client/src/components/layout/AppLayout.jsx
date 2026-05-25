@@ -68,22 +68,6 @@ const AppLayout = () => {
               {CART_BADGE_PLACEHOLDER}
             </span>
           </NavLink>
-          <NavLink
-              to="/kontakty"
-              className={({ isActive }) =>
-                  isActive ? "app-nav__link app-nav__link--active" : "app-nav__link"
-              }
-          >
-            Kontakty
-          </NavLink>
-          <NavLink
-              to="/kosik"
-              className={({ isActive }) =>
-                  isActive ? "app-nav__link app-nav__link--active" : "app-nav__link"
-              }
-          >
-            Košík
-          </NavLink>
         </nav>
       </header>
       <main className="app-main">
