@@ -157,6 +157,12 @@ const ProductsPage = () => {
           ))}
         </div>
       )}
+
+      <div className="products-grid">
+        {MOCK_PRODUCTS.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
     </div>
   );
 };
