@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import ProductCard from '../components/ProductCard.jsx';
 import productsData from '../../../server/src/db/products.json';
 import './Products.css';
 
@@ -23,25 +23,7 @@ const ProductsPage = () => {
       
       <div className="products-grid">
         {MOCK_PRODUCTS.map((product) => (
-          <Link to={`/products/${product.id}`} key={product.id} className="product-card">
-            <div className="product-image-container">
-              <span className="product-category">{product.category}</span>
-              <img 
-                src={product.image} 
-                alt={product.name} 
-                className="product-image" 
-                onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x600/eaeaea/666666?text=Obr%C3%A1zek+nedostupn%C3%BD'; }}
-              />
-            </div>
-            <div className="product-info">
-              <h2 className="product-name">{product.name}</h2>
-              <p className="product-description">{product.description}</p>
-              <div className="product-footer">
-                <span className="product-price">${product.price}</span>
-                <span className="product-button">Detail</span>
-              </div>
-            </div>
-          </Link>
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>
