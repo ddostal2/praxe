@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import productsData from '../../../server/src/db/products.json';
 import './Products.css';
+import ProductCard from "../components/ProductCard.jsx";
 
 const CATEGORY_MAP = {
   1: 'Káva',
