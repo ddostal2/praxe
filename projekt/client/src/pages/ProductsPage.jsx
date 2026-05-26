@@ -1,21 +1,15 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import productsData from '../../../server/src/db/products.json';
+import { getProducts, getCategories } from '../api/ApiService.js';
 import './Products.css';
 import ProductCard from "../components/ProductCard.jsx";
 
-const CATEGORY_MAP = {
-  1: 'Káva',
-  2: 'Kávovary',
-  3: 'Příslušenství',
+export const CATEGORY_TRANSLATIONS = {
+  "electronics": "Elektronika",
+  "jewelery": "Šperky",
+  "men's clothing": "Pánské oblečení",
+  "women's clothing": "Dámské oblečení",
 };
-
-const CATEGORY_FILTERS = [
-  { id: 'all', label: 'Vše' },
-  { id: '1', label: 'Káva' },
-  { id: '2', label: 'Kávovary' },
-  { id: '3', label: 'Příslušenství' },
-];
 
 const SORT_OPTIONS = [
   { value: 'default', label: 'Výchozí řazení' },
@@ -24,15 +18,9 @@ const SORT_OPTIONS = [
   { value: 'name-asc', label: 'Název: A–Z' },
 ];
 
-export const MOCK_PRODUCTS = productsData.map((p) => ({
-  ...p,
-  name: p.title,
-  id: p.id.toString(),
-  category: CATEGORY_MAP[p.categoryId] ?? 'Ostatní',
-}));
-
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -41,32 +29,63 @@ const ProductsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // Simulace asynchronního načítání dat (např. z API)
-    const fetchProducts = async () => {
+    let active = true;
+    const controller = new AbortController();
+
+    const fetchAllData = async () => {
       try {
         setLoading(true);
-        // Simulujeme zpoždění sítě
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Zde by v reálu byl: const response = await fetch('/api/products'); const data = await response.json();
-        // Nyní používáme simulovaná data
-        setProducts(MOCK_PRODUCTS);
-        setError(null);
+        const [productsData, categoriesData] = await Promise.all([
+          getProducts({ signal: controller.signal }),
+          getCategories(controller.signal),
+        ]);
+
+        if (active) {
+          const mapped = productsData.map((p) => ({
+            ...p,
+            id: String(p.id),
+            name: p.title,
+            category: CATEGORY_TRANSLATIONS[p.category] || p.category,
+            originalCategory: p.category,
+          }));
+          setProducts(mapped);
+          setCategories(categoriesData);
+          setError(null);
+        }
       } catch (err) {
-        setError('Nepodařilo se načíst produkty. Zkuste to prosím později.');
+        if (active && err.name !== 'AbortError') {
+          setError(err.message || 'Nepodařilo se načíst produkty. Zkuste to prosím později.');
+        }
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchProducts();
+    fetchAllData();
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
   }, []);
+
+  const categoryFilters = useMemo(() => {
+    return [
+      { id: 'all', label: 'Vše' },
+      ...categories.map((cat) => ({
+        id: cat,
+        label: CATEGORY_TRANSLATIONS[cat] || cat,
+      })),
+    ];
+  }, [categories]);
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
     if (categoryFilter !== 'all') {
-      result = result.filter((p) => p.categoryId === Number(categoryFilter));
+      result = result.filter((p) => p.originalCategory === categoryFilter);
     }
 
     const query = searchQuery.trim().toLowerCase();
@@ -100,7 +119,6 @@ const ProductsPage = () => {
     return (
       <div className="products-container" style={{ textAlign: 'center', padding: '5rem' }}>
         <h2>Načítám produkty...</h2>
-        {/* Placeholder pro loading state */}
       </div>
     );
   }
@@ -136,7 +154,7 @@ const ProductsPage = () => {
         </label>
 
         <div className="products-filters__categories" role="group" aria-label="Filtrovat podle kategorie">
-          {CATEGORY_FILTERS.map((cat) => (
+          {categoryFilters.map((cat) => (
             <button
               key={cat.id}
               type="button"

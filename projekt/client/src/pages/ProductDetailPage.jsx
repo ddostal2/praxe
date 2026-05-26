@@ -1,18 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MOCK_PRODUCTS } from './ProductsPage';
+import { getProduct } from '../api/ApiService.js';
+import { CATEGORY_TRANSLATIONS } from './ProductsPage.jsx';
 import './Products.css';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
-  
-  // V reálné aplikaci by se zde udělal fetch na API podle id
-  const product = MOCK_PRODUCTS.find(p => p.id === id);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!product) {
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const data = await getProduct(id, controller.signal);
+        if (active) {
+          if (!data) {
+            setError('Produkt nebyl nalezen.');
+          } else {
+            const mapped = {
+              ...data,
+              id: String(data.id),
+              name: data.title,
+              category: CATEGORY_TRANSLATIONS[data.category] || data.category,
+            };
+            setProduct(mapped);
+            setError(null);
+          }
+        }
+      } catch (err) {
+        if (active && err.name !== 'AbortError') {
+          setError(err.message || 'Nepodařilo se načíst detail produktu.');
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchProduct();
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [id]);
+
+  if (loading) {
     return (
-      <div className="product-detail-container not-found">
-        <h2>Produkt nenalezen</h2>
+      <div className="product-detail-container" style={{ textAlign: 'center', padding: '5rem' }}>
+        <h2>Načítám detail produktu...</h2>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="product-detail-container not-found" style={{ textAlign: 'center', padding: '5rem' }}>
+        <h2>{error || 'Produkt nenalezen'}</h2>
         <Link to="/products" className="back-link">
           ← Zpět na produkty
         </Link>
@@ -41,12 +91,10 @@ const ProductDetailPage = () => {
         <div className="product-detail-info">
           <span className="product-detail-category">{product.category}</span>
           <h1 className="product-detail-name">{product.name}</h1>
-          <div className="product-detail-price">{product.price} Kč</div>
+          <div className="product-detail-price">${product.price}</div>
           
           <p className="product-detail-description">
             {product.description}
-            <br /><br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           </p>
           
           <button className="add-to-cart-btn">
