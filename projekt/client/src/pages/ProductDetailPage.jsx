@@ -41,7 +41,7 @@ const ProductDetailPage = () => {
         <div className="product-detail-info">
           <span className="product-detail-category">{product.category}</span>
           <h1 className="product-detail-name">{product.name}</h1>
-          <div className="product-detail-price">${product.price}</div>
+          <div className="product-detail-price">{product.price} Kč</div>
           
           <p className="product-detail-description">
             {product.description}

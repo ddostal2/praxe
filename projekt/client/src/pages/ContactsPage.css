@@ -1,0 +1,106 @@
+.contacts {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.contacts-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.contacts-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #646cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.contacts-header p {
+  color: #666;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.contact-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.contact-card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+  color: #1a1a1a;
+}
+
+.contact-card__role {
+  color: #646cff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.contact-card__details {
+  margin: 0;
+}
+
+.contact-card__details > div {
+  margin-bottom: 0.75rem;
+}
+
+.contact-card__details > div:last-child {
+  margin-bottom: 0;
+}
+
+.contact-card__details dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #888;
+  margin-bottom: 0.15rem;
+}
+
+.contact-card__details dd {
+  margin: 0;
+  color: #333;
+  line-height: 1.5;
+}
+
+.contact-card__details a {
+  color: #646cff;
+}
+
+.contacts-map-note {
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: rgba(100, 108, 255, 0.08);
+  border: 1px solid rgba(100, 108, 255, 0.15);
+}
+
+.contacts-map-note h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.contacts-map-note p {
+  margin: 0;
+  color: #555;
+  line-height: 1.7;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
