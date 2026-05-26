@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import productsData from '../../../server/src/db/products.json';
 import './Products.css';
@@ -32,12 +32,38 @@ export const MOCK_PRODUCTS = productsData.map((p) => ({
 }));
 
 const ProductsPage = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('default');
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    // Simulace asynchronního načítání dat (např. z API)
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        // Simulujeme zpoždění sítě
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Zde by v reálu byl: const response = await fetch('/api/products'); const data = await response.json();
+        // Nyní používáme simulovaná data
+        setProducts(MOCK_PRODUCTS);
+        setError(null);
+      } catch (err) {
+        setError('Nepodařilo se načíst produkty. Zkuste to prosím později.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const filteredProducts = useMemo(() => {
-    let result = [...MOCK_PRODUCTS];
+    let result = [...products];
 
     if (categoryFilter !== 'all') {
       result = result.filter((p) => p.categoryId === Number(categoryFilter));
@@ -68,7 +94,28 @@ const ProductsPage = () => {
     }
 
     return result;
-  }, [categoryFilter, sortBy, searchQuery]);
+  }, [categoryFilter, sortBy, searchQuery, products]);
+
+  if (loading) {
+    return (
+      <div className="products-container" style={{ textAlign: 'center', padding: '5rem' }}>
+        <h2>Načítám produkty...</h2>
+        {/* Placeholder pro loading state */}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="products-container" style={{ textAlign: 'center', padding: '5rem', color: 'red' }}>
+        <h2>Chyba</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="product-button">
+          Zkusit znovu
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="products-container">
@@ -132,38 +179,10 @@ const ProductsPage = () => {
       ) : (
         <div className="products-grid">
           {filteredProducts.map((product) => (
-            <Link to={`/products/${product.id}`} key={product.id} className="product-card">
-              <div className="product-image-container">
-                <span className="product-category">{product.category}</span>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="product-image"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src =
-                      'https://placehold.co/600x600/eaeaea/666666?text=Obr%C3%A1zek+nedostupn%C3%BD';
-                  }}
-                />
-              </div>
-              <div className="product-info">
-                <h2 className="product-name">{product.name}</h2>
-                <p className="product-description">{product.description}</p>
-                <div className="product-footer">
-                  <span className="product-price">{product.price} Kč</span>
-                  <span className="product-button">Detail</span>
-                </div>
-              </div>
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       )}
-
-      <div className="products-grid">
-        {MOCK_PRODUCTS.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
     </div>
   );
 };
