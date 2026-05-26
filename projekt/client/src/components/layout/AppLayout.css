@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -49,13 +49,10 @@
 }
 
 .app-nav__cart {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  position: relative;
+  margin-left: auto;
+  flex-shrink: 0;
   color: #374151;
   font-weight: 500;
-  flex-shrink: 0;
 }
 
 .app-nav__cart:hover {
@@ -64,23 +61,4 @@
 
 .app-nav__cart--active {
   color: #646cff;
-}
-
-.app-nav__cart-label {
-  line-height: 1;
-}
-
-.app-nav__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.25rem;
-  height: 1.25rem;
-  padding: 0 0.35rem;
-  border-radius: 999px;
-  background-color: #646cff;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1;
 }

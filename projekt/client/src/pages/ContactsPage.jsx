@@ -1,43 +1,46 @@
+import '../styles/PageShared.css';
 import './ContactsPage.css';
 
 const CONTACTS = [
   {
     name: 'Prodejna Praha',
-    role: 'Hlavní obchod a degustace',
-    address: 'Kávová 12, 110 00 Praha 1',
+    role: 'Hlavní obchod',
+    address: 'Obchodní 12, 110 00 Praha 1',
     phone: '+420 222 333 444',
-    email: 'praha@kavovyobchod.cz',
+    email: 'praha@obchod.cz',
     hours: 'Po–Pá 9:00–19:00, So 10:00–16:00',
   },
   {
     name: 'Prodejna Brno',
-    role: 'Výdejna a servis kávovarů',
-    address: 'Roasting Street 5, 602 00 Brno',
+    role: 'Výdejna a reklamace',
+    address: 'Nákupní 5, 602 00 Brno',
     phone: '+420 555 666 777',
-    email: 'brno@kavovyobchod.cz',
+    email: 'brno@obchod.cz',
     hours: 'Po–Pá 8:30–18:00',
   },
   {
     name: 'Zákaznická podpora',
-    role: 'Objednávky a reklamace',
-    address: 'Online / e-mail',
+    role: 'Objednávky online',
+    address: 'E-mail / telefon',
     phone: '+420 800 123 456',
-    email: 'podpora@kavovyobchod.cz',
+    email: 'podpora@obchod.cz',
     hours: 'Po–Ne 8:00–20:00',
   },
 ];
 
 const ContactsPage = () => {
   return (
-    <div className="contacts">
-      <header className="contacts-header">
+    <div className="page-container contacts-page">
+      <header className="page-header">
         <h1>Kontakty</h1>
-        <p>Máte dotaz k objednávce, výběru kávy nebo servisu? Ozvěte se nám — rádi pomůžeme.</p>
+        <p>
+          Máte dotaz k objednávce nebo výběru produktu? Ozvěte se nám — rádi pomůžeme.
+        </p>
       </header>
 
-      <div className="contacts-grid">
+      <div className="page-grid contacts-grid">
         {CONTACTS.map((contact) => (
-          <article key={contact.email} className="contact-card">
+          <article key={contact.email} className="page-panel contact-card">
             <h2>{contact.name}</h2>
             <p className="contact-card__role">{contact.role}</p>
             <dl className="contact-card__details">
@@ -66,11 +69,11 @@ const ContactsPage = () => {
         ))}
       </div>
 
-      <section className="contacts-map-note" aria-label="Jak nás najdete">
+      <section className="page-panel contacts-map-note" aria-label="Jak nás najdete">
         <h2>Jak nás najdete</h2>
         <p>
-          Prodejna v Praze je 3 minuty chůze od stanice metra Můstek. Parkování je možné
-          v garážích OC Palladium. U Brna doporučujeme tramvaj na zastávku Česká.
+          Prodejna v Praze je 3 minuty chůze od stanice metra Můstek. V Brně doporučujeme
+          tramvaj na zastávku Česká. Pro online objednávky pište na podpora@obchod.cz.
         </p>
       </section>
     </div>

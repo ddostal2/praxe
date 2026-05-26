@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProduct } from '../api/ApiService.js';
 import { CATEGORY_TRANSLATIONS } from './ProductsPage.jsx';
+import '../styles/PageShared.css';
 import './Products.css';
 
 const ProductDetailPage = () => {
@@ -9,6 +10,7 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [justAdded, setJustAdded] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -51,9 +53,18 @@ const ProductDetailPage = () => {
     };
   }, [id]);
 
+  useEffect(() => {
+    setJustAdded(false);
+  }, [id]);
+
+  const handleAddToCart = () => {
+    setJustAdded(true);
+    window.setTimeout(() => setJustAdded(false), 2000);
+  };
+
   if (loading) {
     return (
-      <div className="product-detail-container" style={{ textAlign: 'center', padding: '5rem' }}>
+      <div className="page-container product-detail-container" style={{ textAlign: 'center', padding: '5rem' }}>
         <h2>Načítám detail produktu...</h2>
       </div>
     );
@@ -61,7 +72,7 @@ const ProductDetailPage = () => {
 
   if (error || !product) {
     return (
-      <div className="product-detail-container not-found" style={{ textAlign: 'center', padding: '5rem' }}>
+      <div className="page-container product-detail-container not-found">
         <h2>{error || 'Produkt nenalezen'}</h2>
         <Link to="/products" className="back-link">
           ← Zpět na produkty
@@ -71,34 +82,40 @@ const ProductDetailPage = () => {
   }
 
   return (
-    <div className="product-detail-container">
+    <div className="page-container product-detail-container">
       <Link to="/products" className="back-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
         </svg>
         Zpět na produkty
       </Link>
-      
+
       <div className="product-detail-card">
-        <img 
-          src={product.image} 
-          alt={product.name} 
-          className="product-detail-image" 
-          onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/800x800/eaeaea/666666?text=Obr%C3%A1zek+nedostupn%C3%BD'; }}
+        <img
+          src={product.image}
+          alt={product.name}
+          className="product-detail-image"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src =
+              'https://placehold.co/800x800/eaeaea/666666?text=Obr%C3%A1zek+nedostupn%C3%BD';
+          }}
         />
-        
+
         <div className="product-detail-info">
           <span className="product-detail-category">{product.category}</span>
           <h1 className="product-detail-name">{product.name}</h1>
           <div className="product-detail-price">${product.price}</div>
-          
-          <p className="product-detail-description">
-            {product.description}
-          </p>
-          
-          <button className="add-to-cart-btn">
-            Přidat do košíku
+
+          <p className="product-detail-description">{product.description}</p>
+
+          <button
+            type="button"
+            className={`add-to-cart-btn${justAdded ? ' add-to-cart-btn--added' : ''}`}
+            onClick={handleAddToCart}
+          >
+            {justAdded ? 'Přidáno ✓' : 'Přidat do košíku'}
           </button>
         </div>
       </div>

@@ -1,9 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import "./AppLayout.css";
 
-/** Placeholder počtu položek v košíku — nahradit stavem z CartContext. */
-const CART_BADGE_PLACEHOLDER = 0;
-
 /**
  * Společný layout s navigací a výstupem pro vnořené routy.
  * @component
@@ -49,18 +46,10 @@ const AppLayout = () => {
           <NavLink
             to="/cart"
             className={({ isActive }) =>
-              isActive
-                ? "app-nav__cart app-nav__cart--active"
-                : "app-nav__cart"
+              isActive ? "app-nav__cart app-nav__cart--active" : "app-nav__cart"
             }
           >
-            <span className="app-nav__cart-label">Košík</span>
-            <span
-              className="app-nav__badge"
-              aria-label={`Počet položek v košíku: ${CART_BADGE_PLACEHOLDER}`}
-            >
-              {CART_BADGE_PLACEHOLDER}
-            </span>
+            Košík
           </NavLink>
         </nav>
       </header>

@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { getProducts, getCategories } from '../api/ApiService.js';
 import './Products.css';
 import ProductCard from "../components/ProductCard.jsx";
@@ -117,7 +116,7 @@ const ProductsPage = () => {
 
   if (loading) {
     return (
-      <div className="products-container" style={{ textAlign: 'center', padding: '5rem' }}>
+      <div className="page-container" style={{ textAlign: 'center', padding: '5rem' }}>
         <h2>Načítám produkty...</h2>
       </div>
     );
@@ -125,7 +124,7 @@ const ProductsPage = () => {
 
   if (error) {
     return (
-      <div className="products-container" style={{ textAlign: 'center', padding: '5rem', color: 'red' }}>
+      <div className="page-container" style={{ textAlign: 'center', padding: '5rem', color: 'red' }}>
         <h2>Chyba</h2>
         <p>{error}</p>
         <button onClick={() => window.location.reload()} className="product-button">
@@ -136,11 +135,11 @@ const ProductsPage = () => {
   }
 
   return (
-    <div className="products-container">
-      <div className="products-header">
+    <div className="page-container">
+      <header className="page-header">
         <h1>Naše Produkty</h1>
         <p>Objevte naši prémiovou kolekci navrženou pro vás.</p>
-      </div>
+      </header>
 
       <div className="products-filters" role="search">
         <label className="products-filters__search">
