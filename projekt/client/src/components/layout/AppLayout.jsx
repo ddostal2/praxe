@@ -53,12 +53,14 @@ const AppLayout = () => {
             }
           >
             <span className="app-nav__cart-label">Košík</span>
-            <span
-              className="app-nav__badge"
-              aria-label={`Počet položek v košíku: ${totalItems}`}
-            >
-              {totalItems}
-            </span>
+            {totalItems > 0 && (
+              <span
+                className="app-nav__badge"
+                aria-label={`Počet položek v košíku: ${totalItems}`}
+              >
+                {totalItems}
+              </span>
+            )}
           </NavLink>
         </nav>
       </header>
