@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { useCart } from "../../hooks/useCart.js";
 import "./AppLayout.css";
 
 /**
@@ -7,6 +8,8 @@ import "./AppLayout.css";
  * @returns {JSX.Element}
  */
 const AppLayout = () => {
+  const { totalItems } = useCart();
+
   return (
     <div className="app-layout">
       <header className="app-header">
@@ -49,7 +52,13 @@ const AppLayout = () => {
               isActive ? "app-nav__cart app-nav__cart--active" : "app-nav__cart"
             }
           >
-            Košík
+            <span className="app-nav__cart-label">Košík</span>
+            <span
+              className="app-nav__badge"
+              aria-label={`Počet položek v košíku: ${totalItems}`}
+            >
+              {totalItems}
+            </span>
           </NavLink>
         </nav>
       </header>

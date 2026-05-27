@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useCart } from '../hooks/useCart.js';
 
 /**
  * Komponenta pro zobrazení karty jednoho produktu v seznamu.
  */
 const ProductCard = ({ product }) => {
   const { id, name, description, price, image, category } = product;
+  const { addToCart } = useCart();
   const [justAdded, setJustAdded] = useState(false);
 
   const [imageSrc, setImageSrc] = useState(
@@ -22,6 +24,7 @@ const ProductCard = ({ product }) => {
   };
 
   const handleAddToCart = () => {
+    addToCart(id);
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 2000);
   };

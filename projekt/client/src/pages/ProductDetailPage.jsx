@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProduct } from '../api/ApiService.js';
 import { CATEGORY_TRANSLATIONS } from './ProductsPage.jsx';
+import { useCart } from '../hooks/useCart.js';
 import '../styles/PageShared.css';
 import './Products.css';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -58,6 +60,8 @@ const ProductDetailPage = () => {
   }, [id]);
 
   const handleAddToCart = () => {
+    if (!product) return;
+    addToCart(product.id);
     setJustAdded(true);
     window.setTimeout(() => setJustAdded(false), 2000);
   };

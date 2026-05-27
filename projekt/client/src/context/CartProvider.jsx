@@ -17,10 +17,10 @@ export function CartProvider({ children }) {
                 setError(null);
                 setProducts(await getProducts());
                 setLoading(false);
-            }catch(error) {
+            } catch (err) {
                 setLoading(false);
-                setError(error);
-                console.log(error);
+                setError(err.message || 'Nepodařilo se načíst produkty.');
+                console.error(err);
             }
         };
 
@@ -28,15 +28,15 @@ export function CartProvider({ children }) {
     }, []);
 
     const addToCart = useCallback((productId, quantity = 1) => {
-        setCartItems((cart) => addToCartState(cart, productId, quantity));
+        setCartItems((cart) => addToCartState(cart, String(productId), quantity));
     }, []);
 
     const removeFromCart = useCallback((productId) => {
-        setCartItems((cart) => removeFromCartState(cart, productId));
+        setCartItems((cart) => removeFromCartState(cart, String(productId)));
     }, []);
 
     const updateQuantity = useCallback((productId, quantity) => {
-        setCartItems((cart) => updateQuantityState(cart, productId, quantity));
+        setCartItems((cart) => updateQuantityState(cart, String(productId), quantity));
     }, []);
 
     const clearCart = useCallback(() => {
@@ -59,9 +59,10 @@ export function CartProvider({ children }) {
         [cartItems, products]
     );
 
-    return (
-        <CartContext.Provider value={{
+    const value = useMemo(
+        () => ({
             cartItems,
+            products,
             addToCart,
             removeFromCart,
             updateQuantity,
@@ -70,8 +71,24 @@ export function CartProvider({ children }) {
             totalPrice,
             loading,
             error,
-        }}>
+        }),
+        [
+            cartItems,
+            products,
+            addToCart,
+            removeFromCart,
+            updateQuantity,
+            clearCart,
+            totalItems,
+            totalPrice,
+            loading,
+            error,
+        ]
+    );
+
+    return (
+        <CartContext.Provider value={value}>
             {children}
         </CartContext.Provider>
-    )
+    );
 }
