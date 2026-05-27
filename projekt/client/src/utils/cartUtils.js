@@ -7,7 +7,7 @@
  * @param {number} [quantity=1] - The quantity to add.
  * @returns {Array<{productId: string, quantity: number}>} The updated cart state.
  */
-export const addToCart = (cart, productId, quantity = 1) => {
+export const addToCartState = (cart, productId, quantity = 1) => {
   const existingItemIndex = cart.findIndex(item => item.productId === productId);
 
   if (existingItemIndex > -1) {
@@ -28,7 +28,7 @@ export const addToCart = (cart, productId, quantity = 1) => {
  * @param {string} productId - The ID of the product to remove.
  * @returns {Array<{productId: string, quantity: number}>} The updated cart state.
  */
-export const removeFromCart = (cart, productId) => {
+export const removeFromCartState = (cart, productId) => {
   return cart.filter(item => item.productId !== productId);
 };
 
@@ -41,7 +41,7 @@ export const removeFromCart = (cart, productId) => {
  * @param {number} quantity - The new quantity.
  * @returns {Array<{productId: string, quantity: number}>} The updated cart state.
  */
-export const updateQuantity = (cart, productId, quantity) => {
+export const updateQuantityState = (cart, productId, quantity) => {
   const sanitizedQuantity = Math.max(1, quantity);
   return cart.map(item =>
     item.productId === productId
@@ -55,6 +55,6 @@ export const updateQuantity = (cart, productId, quantity) => {
  * 
  * @returns {Array} An empty array representing the cleared cart state.
  */
-export const clearCart = () => {
+export const clearCartState = () => {
   return [];
 };
