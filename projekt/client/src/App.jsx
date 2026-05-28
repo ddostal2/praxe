@@ -5,6 +5,7 @@ import ProductsPage from "./pages/ProductsPage.jsx";
 import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 import ContactsPage from "./pages/ContactsPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage.jsx";
 import "./styles/App.css";
 
 /**
@@ -21,6 +22,7 @@ const App = () => {
                 <Route path="products/:id" element={<ProductDetailPage/>}/>
                 <Route path="contact" element={<ContactsPage/>}/>
                 <Route path="cart" element={<CartPage/>}/>
+                <Route path="order-confirmation" element={<OrderConfirmationPage/>}/>
             </Route>
         </Routes>
     );
