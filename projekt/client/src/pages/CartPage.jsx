@@ -63,8 +63,47 @@ const CartPage = () => {
       <div className="page-container cart-page">
         <header className="page-header">
           <h1>Košík</h1>
-          <p>Načítám košík…</p>
+          <div className="skeleton" style={{ width: '150px', height: '1.2rem', margin: '0.5rem auto 0' }}></div>
         </header>
+
+        <div className="cart-layout">
+          <ul className="cart-list">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <li key={i} className="cart-item page-panel" style={{ display: 'flex', gap: '1.5rem', marginBottom: '1rem' }}>
+                <div className="skeleton" style={{ width: '120px', height: '120px', borderRadius: '12px', flexShrink: 0 }}></div>
+                <div className="cart-item__info" style={{ flexGrow: 1 }}>
+                  <div className="skeleton" style={{ width: '80px', height: '1rem', marginBottom: '0.5rem' }}></div>
+                  <div className="skeleton skeleton-title" style={{ width: '60%', height: '1.5rem', marginBottom: '0.5rem' }}></div>
+                  <div className="skeleton" style={{ width: '100px', height: '1.2rem' }}></div>
+                </div>
+                <div className="cart-item__controls" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+                  <div className="skeleton" style={{ width: '100px', height: '2.5rem', borderRadius: '20px' }}></div>
+                  <div className="skeleton" style={{ width: '80px', height: '1.5rem' }}></div>
+                  <div className="skeleton" style={{ width: '80px', height: '2rem', borderRadius: '8px' }}></div>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <aside className="cart-summary page-panel">
+            <h2>Shrnutí</h2>
+            <dl className="cart-summary__rows">
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <div className="skeleton" style={{ width: '60px', height: '1.2rem' }}></div>
+                <div className="skeleton" style={{ width: '40px', height: '1.2rem' }}></div>
+              </div>
+              <div className="cart-summary__total-row" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
+                <div className="skeleton" style={{ width: '80px', height: '1.5rem' }}></div>
+                <div className="skeleton" style={{ width: '100px', height: '1.5rem' }}></div>
+              </div>
+            </dl>
+            <div className="skeleton" style={{ width: '100%', height: '3rem', borderRadius: '50px', marginBottom: '1rem' }}></div>
+            <div className="cart-summary__actions" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div className="skeleton" style={{ width: '100%', height: '2.5rem', borderRadius: '50px' }}></div>
+              <div className="skeleton" style={{ width: '100%', height: '2.5rem', borderRadius: '50px' }}></div>
+            </div>
+          </aside>
+        </div>
       </div>
     );
   }
