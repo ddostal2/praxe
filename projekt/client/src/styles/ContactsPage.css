@@ -56,3 +56,107 @@
   color: var(--text-secondary);
   line-height: 1.7;
 }
+
+.contacts-page .contact-form {
+  margin-top: 2rem;
+}
+
+.contacts-page .contact-form__title {
+  font-size: 1.05rem;
+  margin: 0 0 0.9rem;
+  color: #1a1a1a;
+}
+
+.contacts-page .contact-form__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+}
+
+@media (min-width: 720px) {
+  .contacts-page .contact-form__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contacts-page .contact-form__field--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.contacts-page .contact-form__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: #333;
+}
+
+.contacts-page .contact-form__input,
+.contacts-page .contact-form__textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 10px;
+  background: #fff;
+  color: #1a1a1a;
+  outline: none;
+}
+
+.contacts-page .contact-form__textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.contacts-page .contact-form__input:focus,
+.contacts-page .contact-form__textarea:focus {
+  border-color: rgba(100, 108, 255, 0.65);
+  box-shadow: 0 0 0 4px rgba(100, 108, 255, 0.15);
+}
+
+.contacts-page .contact-form__error {
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  color: #b42318;
+}
+
+.contacts-page .contact-form__actions {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.contacts-page .contact-form__submit {
+  appearance: none;
+  border: none;
+  background: #646cff;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.contacts-page .contact-form__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contacts-page .contact-form__status {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.contacts-page .contact-form__status.is-success {
+  color: #067647;
+}
+
+.contacts-page .contact-form__status.is-error {
+  color: #b42318;
+}
+
+.contacts-page .contact-form__status.is-info {
+  color: #1d4ed8;
+}
