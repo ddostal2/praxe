@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart.js';
 import { CATEGORY_TRANSLATIONS } from './ProductsPage.jsx';
 import '../styles/PageShared.css';
 import './CartPage.css';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const {
     cartItems,
     products,
@@ -16,6 +18,45 @@ const CartPage = () => {
     updateQuantity,
     clearCart,
   } = useCart();
+
+  const orderItems = useMemo(
+    () =>
+      cartItems
+        .map((item) => {
+          const product = products.find(
+            (p) => String(p.id) === String(item.productId)
+          );
+          if (!product) return null;
+
+          return {
+            productId: String(product.id),
+            name: product.title,
+            category:
+              CATEGORY_TRANSLATIONS[product.category] || product.category,
+            unitPrice: product.price,
+            quantity: item.quantity,
+            lineTotal: product.price * item.quantity,
+          };
+        })
+        .filter(Boolean),
+    [cartItems, products]
+  );
+
+  const handleCheckout = () => {
+    if (orderItems.length === 0) return;
+
+    const orderId = `ORD-${Date.now().toString().slice(-6)}`;
+    const order = {
+      id: orderId,
+      createdAt: new Date().toISOString(),
+      items: orderItems,
+      totalItems,
+      totalPrice,
+    };
+
+    clearCart();
+    navigate('/order-confirmation', { state: { order } });
+  };
 
   if (loading) {
     return (
@@ -75,9 +116,7 @@ const CartPage = () => {
       <div className="cart-layout">
         <ul className="cart-list">
           {cartItems.map((item) => {
-            const product = products.find(
-              (p) => String(p.id) === String(item.productId)
-            );
+            const product = products.find((p) => String(p.id) === String(item.productId));
             if (!product) return null;
 
             const category =
@@ -165,7 +204,11 @@ const CartPage = () => {
               <dd>${totalPrice.toFixed(2)}</dd>
             </div>
           </dl>
-          <button type="button" className="page-btn page-btn--primary cart-summary__checkout">
+          <button
+            type="button"
+            className="page-btn page-btn--primary cart-summary__checkout"
+            onClick={handleCheckout}
+          >
             Dokončit objednávku
           </button>
           <div className="cart-summary__actions">

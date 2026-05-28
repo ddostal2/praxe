@@ -1,0 +1,78 @@
+.order-confirmation__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-confirmation__meta h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #777;
+  margin-bottom: 0.35rem;
+}
+
+.order-confirmation__meta p {
+  margin: 0;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.order-confirmation__items h2 {
+  margin-bottom: 1rem;
+}
+
+.order-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.order-items__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 0.9rem;
+}
+
+.order-items__item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.order-items__name {
+  margin: 0;
+  font-weight: 700;
+  color: #222;
+}
+
+.order-items__category {
+  margin: 0.2rem 0 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.order-items__pricing {
+  text-align: right;
+}
+
+.order-items__pricing p {
+  margin: 0;
+  color: #555;
+}
+
+.order-items__pricing strong {
+  color: #646cff;
+}
+
+.order-confirmation__fallback {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
