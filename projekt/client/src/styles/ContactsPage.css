@@ -57,48 +57,58 @@
   line-height: 1.7;
 }
 
+/* Contact Form Styling */
 .contacts-page .contact-form {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .contacts-page .contact-form__title {
-  font-size: 1.05rem;
-  margin: 0 0 0.9rem;
-  color: #1a1a1a;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-heading);
 }
 
 .contacts-page .contact-form__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.9rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
-@media (min-width: 720px) {
+@media (max-width: 600px) {
   .contacts-page .contact-form__grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
+}
 
-  .contacts-page .contact-form__field--full {
-    grid-column: 1 / -1;
-  }
+.contacts-page .contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.contacts-page .contact-form__field--full {
+  grid-column: 1 / -1;
 }
 
 .contacts-page .contact-form__label {
-  display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 0.35rem;
-  color: #333;
+  color: var(--text-secondary);
 }
 
 .contacts-page .contact-form__input,
 .contacts-page .contact-form__textarea {
   width: 100%;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
   border-radius: 10px;
-  background: #fff;
-  color: #1a1a1a;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
   outline: none;
 }
 
@@ -109,54 +119,75 @@
 
 .contacts-page .contact-form__input:focus,
 .contacts-page .contact-form__textarea:focus {
-  border-color: rgba(100, 108, 255, 0.65);
-  box-shadow: 0 0 0 4px rgba(100, 108, 255, 0.15);
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.15);
 }
 
 .contacts-page .contact-form__error {
-  margin-top: 0.35rem;
-  font-size: 0.82rem;
-  color: #b42318;
+  color: #ef4444;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.15rem;
+}
+
+.contacts-page .contact-form__status {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.contacts-page .contact-form__status.is-success {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.contacts-page .contact-form__status.is-error {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .contacts-page .contact-form__actions {
   margin-top: 1rem;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
 }
 
 .contacts-page .contact-form__submit {
-  appearance: none;
-  border: none;
-  background: #646cff;
-  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
   font-weight: 700;
-  padding: 0.65rem 1rem;
-  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  border: none;
   cursor: pointer;
+  background: linear-gradient(135deg, #646cff 0%, #a855f7 100%);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(100, 108, 255, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.contacts-page .contact-form__submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(100, 108, 255, 0.35);
+}
+
+.contacts-page .contact-form__submit:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .contacts-page .contact-form__submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.contacts-page .contact-form__status {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #444;
-}
-
-.contacts-page .contact-form__status.is-success {
-  color: #067647;
-}
-
-.contacts-page .contact-form__status.is-error {
-  color: #b42318;
-}
-
-.contacts-page .contact-form__status.is-info {
-  color: #1d4ed8;
+  transform: none;
+  box-shadow: none;
 }
