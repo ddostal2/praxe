@@ -1,5 +1,6 @@
 import '../styles/PageShared.css';
 import './ContactsPage.css';
+import { useState } from 'react';
 
 const CONTACTS = [
   {
@@ -29,6 +30,90 @@ const CONTACTS = [
 ];
 
 const ContactsPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [question, setQuestion] = useState("");
+  const [errors, setErrors] = useState({});
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateName = (value) => {
+    if (!value.trim()) return 'Zadejte jméno.';
+    return undefined;
+  };
+
+  const validateEmail = (value) => {
+    if (!value.trim()) return 'Zadejte e-mail.';
+    if (!value.includes('@')) return 'E-mail musí obsahovat znak @.';
+    return undefined;
+  };
+
+  const validateQuestion = (value) => {
+    if (!value.trim()) return 'Zadejte dotaz.';
+    if (value.trim().length < 10) return 'Dotaz musí mít alespoň 10 znaků.';
+    return undefined;
+  };
+
+  const validateAll = ({ name: nextName, email: nextEmail, question: nextQuestion }) => {
+    const nextErrors = {};
+
+    const nameError = validateName(nextName);
+    if (nameError) nextErrors.name = nameError;
+
+    const emailError = validateEmail(nextEmail);
+    if (emailError) nextErrors.email = emailError;
+
+    const questionError = validateQuestion(nextQuestion);
+    if (questionError) nextErrors.question = questionError;
+
+    return nextErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitStatus(null);
+
+    const payload = {
+      name: name.trim(),
+      email: email.trim(),
+      question: question.trim(),
+    };
+
+    const nextErrors = validateAll(payload);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setIsSubmitting(true);
+    try {
+      //const endpoint = ""; // není backend
+
+      //if (!endpoint) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      /*} else {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      }*/
+
+      setName('');
+      setEmail('');
+      setQuestion('');
+      setErrors({});
+      setSubmitStatus({ type: 'success', message: 'Děkujeme! Zpráva byla odeslána.' });
+    } catch {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Odeslání se nepovedlo. Zkuste to prosím znovu.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="page-container contacts-page">
       <header className="page-header">
@@ -75,6 +160,107 @@ const ContactsPage = () => {
           Prodejna v Praze je 3 minuty chůze od stanice metra Můstek. V Brně doporučujeme
           tramvaj na zastávku Česká. Pro online objednávky pište na podpora@obchod.cz.
         </p>
+      </section>
+
+      <section className="contact-form page-panel contacts-map-note" aria-label="Kontaktujte nás">
+        <form className="" noValidate onSubmit={handleSubmit}>
+          <h2 className="contact-form__title">Kontaktujte nás</h2>
+
+          <div className="contact-form__grid">
+            <div className="contact-form__field">
+              <label className="contact-form__label" htmlFor="contact-name">
+                Jméno
+              </label>
+              <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  className="contact-form__input"
+                  value={name}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setName(next);
+                    setErrors((prev) => ({ ...prev, name: validateName(next) }));
+                  }}
+                  autoComplete="name"
+                  aria-invalid={Boolean(errors.name)}
+                  aria-describedby={errors.name ? 'contact-name-error' : undefined}
+              />
+              {errors.name && (
+                <div className="contact-form__error" id="contact-name-error" role="alert">
+                  {errors.name}
+                </div>
+              )}
+            </div>
+
+            <div className="contact-form__field">
+              <label className="contact-form__label" htmlFor="contact-email">
+                E-mail
+              </label>
+              <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  className="contact-form__input"
+                  value={email}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setEmail(next);
+                    setErrors((prev) => ({ ...prev, email: validateEmail(next) }));
+                  }}
+                  autoComplete="email"
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={errors.email ? 'contact-email-error' : undefined}
+              />
+              {errors.email && (
+                <div className="contact-form__error" id="contact-email-error" role="alert">
+                  {errors.email}
+                </div>
+              )}
+            </div>
+
+            <div className="contact-form__field contact-form__field--full">
+              <label className="contact-form__label" htmlFor="contact-question">
+                Dotaz
+              </label>
+              <textarea
+                  id="contact-question"
+                  name="question"
+                  className="contact-form__textarea"
+                  rows={4}
+                  value={question}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setQuestion(next);
+                    setErrors((prev) => ({ ...prev, question: validateQuestion(next) }));
+                  }}
+                  aria-invalid={Boolean(errors.question)}
+                  aria-describedby={errors.question ? 'contact-question-error' : undefined}
+              />
+              {errors.question && (
+                <div className="contact-form__error" id="contact-question-error" role="alert">
+                  {errors.question}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {submitStatus?.message && (
+            <div
+              className={`contact-form__status is-${submitStatus.type}`}
+              role="status"
+              aria-live="polite"
+            >
+              {submitStatus.message}
+            </div>
+          )}
+
+          <div className="contact-form__actions">
+            <button className="contact-form__submit" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Odesílám…' : 'Odeslat'}
+            </button>
+          </div>
+        </form>
       </section>
     </div>
   );
