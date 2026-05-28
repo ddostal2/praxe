@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { getProducts, getCategories } from '../api/ApiService.js';
 import '../styles/Products.css';
 import ProductCard from "../components/ProductCard.jsx";
@@ -26,6 +26,51 @@ const ProductsPage = () => {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('default');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
+  const didInitPagination = useRef(false);
+
+  const readPaginationFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const rawPage = Number(params.get('page') || 1);
+    const rawLimit = Number(params.get('limit') || 12);
+
+    const nextPage = Number.isFinite(rawPage) && rawPage > 0 ? Math.floor(rawPage) : 1;
+    const nextLimit = Number.isFinite(rawLimit) && rawLimit > 0 ? rawLimit : 12;
+
+    return { nextPage, nextLimit };
+  };
+
+  const writePaginationToUrl = (nextPage, nextLimit, { replace = false } = {}) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', String(nextPage));
+
+    if (replace) {
+      window.history.replaceState(null, '', url.toString());
+    } else {
+      window.history.pushState(null, '', url.toString());
+    }
+  };
+
+  const goToPage = (nextPage) => {
+    const safePage = Number.isFinite(nextPage) && nextPage > 0 ? Math.floor(nextPage) : 1;
+    setPage(safePage);
+    writePaginationToUrl(safePage, limit);
+  };
+
+  useEffect(() => {
+    const sync = () => {
+      const { nextPage, nextLimit } = readPaginationFromUrl();
+      setPage(nextPage);
+      setLimit(nextLimit);
+    };
+
+    sync();
+    didInitPagination.current = true;
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -114,6 +159,35 @@ const ProductsPage = () => {
     return result;
   }, [categoryFilter, sortBy, searchQuery, products]);
 
+  const totalPages = useMemo(() => {
+    const pages = Math.ceil(filteredProducts.length / limit);
+    return pages > 0 ? pages : 1;
+  }, [filteredProducts.length, limit]);
+
+  const currentPage = useMemo(() => {
+    if (page < 1) return 1;
+    if (page > totalPages) return totalPages;
+    return page;
+  }, [page, totalPages]);
+
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * limit;
+    return filteredProducts.slice(start, start + limit);
+  }, [filteredProducts, currentPage, limit]);
+
+  useEffect(() => {
+    if (currentPage !== page) {
+      setPage(currentPage);
+      writePaginationToUrl(currentPage, limit, { replace: true });
+    }
+  }, [currentPage, page, limit]);
+
+  useEffect(() => {
+    if (!didInitPagination.current) return;
+    setPage(1);
+    writePaginationToUrl(1, limit, { replace: true });
+  }, [categoryFilter, sortBy, searchQuery]);
+
   if (loading) {
     return (
       <div className="page-container" style={{ textAlign: 'center', padding: '5rem' }}>
@@ -195,11 +269,50 @@ const ProductsPage = () => {
         <p className="products-empty">Žádné produkty neodpovídají zvoleným filtrům.</p>
       ) : (
         <div className="products-grid">
-          {filteredProducts.map((product) => (
+          {paginatedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       )}
+
+      {filteredProducts.length > 0 && totalPages > 1 ? (
+        <nav
+          className="products-pagination"
+          aria-label="Stránkování"
+          style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}
+        >
+          <button
+            type="button"
+            className="product-button"
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage <= 1}
+          >
+            Předchozí
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              type="button"
+              className="product-button"
+              onClick={() => goToPage(p)}
+              aria-current={p === currentPage ? 'page' : undefined}
+              style={p === currentPage ? { opacity: 0.7, pointerEvents: 'none' } : undefined}
+            >
+              {p}
+            </button>
+          ))}
+
+          <button
+            type="button"
+            className="product-button"
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+          >
+            Další
+          </button>
+        </nav>
+      ) : null}
     </div>
   );
 };
