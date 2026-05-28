@@ -5,7 +5,7 @@
 .contacts-page .contact-card h2 {
   font-size: 1.2rem;
   margin-bottom: 0.25rem;
-  color: #1a1a1a;
+  color: var(--text-heading);
 }
 
 .contacts-page .contact-card__role {
@@ -32,13 +32,13 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #888;
+  color: var(--text-extra-muted);
   margin-bottom: 0.15rem;
 }
 
 .contacts-page .contact-card__details dd {
   margin: 0;
-  color: #333;
+  color: var(--text-primary);
   line-height: 1.5;
 }
 
@@ -53,6 +53,6 @@
 
 .contacts-page .contacts-map-note p {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary);
   line-height: 1.7;
 }

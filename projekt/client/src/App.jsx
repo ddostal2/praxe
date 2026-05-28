@@ -5,7 +5,7 @@ import ProductsPage from "./pages/ProductsPage.jsx";
 import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 import ContactsPage from "./pages/ContactsPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
-import "./App.css";
+import "./styles/App.css";
 
 /**
  * Kořenová aplikace — definice rout.

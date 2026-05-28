@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../hooks/useCart.js';
 import { CATEGORY_TRANSLATIONS } from './ProductsPage.jsx';
 import '../styles/PageShared.css';
-import './CartPage.css';
+import '../styles/CartPage.css';
 
 const CartPage = () => {
   const {

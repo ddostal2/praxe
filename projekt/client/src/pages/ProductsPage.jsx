@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { getProducts, getCategories } from '../api/ApiService.js';
-import './Products.css';
+import '../styles/Products.css';
 import ProductCard from "../components/ProductCard.jsx";
 
 export const CATEGORY_TRANSLATIONS = {

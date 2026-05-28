@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import '../styles/PageShared.css';
-import './HomePage.css';
+import '../styles/HomePage.css';
 
 /**
  * Úvodní stránka obchodu.

@@ -1,14 +1,16 @@
 .home-page .home-feature h2 {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
-  color: #1a1a1a;
+  color: var(--text-heading);
+  transition: color 0.3s ease;
 }
 
 .home-page .home-feature p {
   margin: 0;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.6;
+  transition: color 0.3s ease;
 }
 
 .home-page .home-cta {
@@ -18,11 +20,14 @@
 .home-page .home-cta h2 {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  color: var(--text-heading);
+  transition: color 0.3s ease;
 }
 
 .home-page .home-cta p {
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 1.25rem;
+  transition: color 0.3s ease;
 }
 
 .home-page .home-features {

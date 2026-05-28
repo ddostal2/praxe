@@ -1,0 +1,134 @@
+.app-header {
+  border-bottom: 1px solid var(--header-border);
+  padding: 0.75rem 1.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-nav__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.app-nav__logo:hover {
+  opacity: 0.85;
+}
+
+.app-nav__logo-img {
+  display: block;
+  height: 2.5rem;
+  width: auto;
+  transition: filter 0.3s ease;
+}
+
+html.dark .app-nav__logo-img {
+  filter: invert(1);
+}
+
+.app-nav__links {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.app-nav__link {
+  color: var(--nav-link-color);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.app-nav__link:hover {
+  color: #646cff;
+}
+
+.app-nav__link--active {
+  color: #646cff;
+}
+
+.app-nav__cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--nav-link-color);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.app-nav__cart:hover {
+  color: #646cff;
+}
+
+.app-nav__cart--active {
+  color: #646cff;
+}
+
+.app-nav__cart-label {
+  line-height: 1;
+}
+
+.app-nav__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background-color: #646cff;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--header-border);
+  background: var(--qty-bg);
+  color: var(--nav-link-color);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-left: 1rem;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.08);
+  color: #646cff;
+  border-color: #646cff;
+  background: rgba(100, 108, 255, 0.08);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(30deg);
+}

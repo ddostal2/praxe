@@ -4,7 +4,7 @@ import { getProduct } from '../api/ApiService.js';
 import { CATEGORY_TRANSLATIONS } from './ProductsPage.jsx';
 import { useCart } from '../hooks/useCart.js';
 import '../styles/PageShared.css';
-import './Products.css';
+import '../styles/Products.css';
 
 const ProductDetailPage = () => {
   const { id } = useParams();

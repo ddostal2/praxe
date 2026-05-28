@@ -1,5 +1,5 @@
 import '../styles/PageShared.css';
-import './ContactsPage.css';
+import '../styles/ContactsPage.css';
 
 const CONTACTS = [
   {
