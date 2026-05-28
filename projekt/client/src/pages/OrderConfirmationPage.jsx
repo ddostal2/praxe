@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import '../styles/PageShared.css';
-import './OrderConfirmationPage.css';
+import '../styles/OrderConfirmationPage.css';
 
 const formatDateTime = (isoString) => {
   if (!isoString) return '-';
