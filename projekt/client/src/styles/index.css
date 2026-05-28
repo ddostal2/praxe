@@ -1,0 +1,127 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Barevné schéma pro světlý režim (Light Mode) */
+  --bg-color: #f0f4f8;
+  --bg-radial-1: hsla(253, 16%, 7%, 0);
+  --bg-radial-2: hsla(225, 39%, 30%, 0.1);
+  --bg-radial-3: hsla(339, 49%, 30%, 0.1);
+
+  --text-primary: #213547;
+  --text-heading: #1a1a1a;
+  --text-secondary: #555555;
+  --text-muted: #666666;
+  --text-extra-muted: #888888;
+  
+  --panel-bg: rgba(255, 255, 255, 0.75);
+  --panel-border: rgba(255, 255, 255, 0.6);
+  --panel-shadow: rgba(0, 0, 0, 0.05);
+
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.5);
+  --card-shadow: rgba(0, 0, 0, 0.05);
+
+  --header-border: #e5e7eb;
+  --nav-link-color: #374151;
+
+  --input-bg: #ffffff;
+  --input-border: #e5e7eb;
+  --input-text: #213547;
+
+  --qty-bg: #ffffff;
+  --qty-border: #e5e7eb;
+  --qty-btn-text: #374151;
+
+  --detail-card-bg: rgba(255, 255, 255, 0.8);
+  --detail-card-border: rgba(255, 255, 255, 0.6);
+}
+
+html.dark {
+  /* Barevné schéma pro tmavý režim (Dark Mode) */
+  --bg-color: #0f172a;
+  --bg-radial-1: hsla(253, 16%, 7%, 0);
+  --bg-radial-2: hsla(244, 62%, 15%, 0.4);
+  --bg-radial-3: hsla(263, 70%, 15%, 0.4);
+
+  --text-primary: #f1f5f9;
+  --text-heading: #ffffff;
+  --text-secondary: #cbd5e1;
+  --text-muted: #cbd5e1;
+  --text-extra-muted: #94a3b8;
+
+  --panel-bg: rgba(30, 41, 59, 0.75);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --panel-shadow: rgba(0, 0, 0, 0.3);
+
+  --card-bg: rgba(30, 41, 59, 0.6);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-shadow: rgba(0, 0, 0, 0.25);
+
+  --header-border: rgba(255, 255, 255, 0.08);
+  --nav-link-color: #cbd5e1;
+
+  --input-bg: #1e293b;
+  --input-border: rgba(255, 255, 255, 0.15);
+  --input-text: #f1f5f9;
+
+  --qty-bg: #1e293b;
+  --qty-border: rgba(255, 255, 255, 0.15);
+  --qty-btn-text: #cbd5e1;
+
+  --detail-card-bg: rgba(30, 41, 59, 0.85);
+  --detail-card-border: rgba(255, 255, 255, 0.08);
+}
+
+:root {
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg-color);
+  background-image:
+    radial-gradient(at 0% 0%, var(--bg-radial-1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, var(--bg-radial-2) 0, transparent 50%),
+    radial-gradient(at 100% 0%, var(--bg-radial-3) 0, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-heading);
+  transition: color 0.3s ease;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+p {
+  margin: 0 0 1rem;
+}
