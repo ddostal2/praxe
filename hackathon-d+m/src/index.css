@@ -121,14 +121,26 @@ body {
 }
 
 .dashboard-panel {
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, rgba(20, 20, 35, 0.6), rgba(10, 10, 20, 0.8));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+  animation: panelSlideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes panelSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .panel-header {
@@ -136,16 +148,17 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .panel-title {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 /* Specific Styles */
@@ -261,58 +274,98 @@ body {
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .stat-card {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1rem;
-  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(0,0,0,0.3));
+  padding: 1.25rem;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.02);
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+.stat-card:hover::before {
+  opacity: 1;
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  font-weight: 500;
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 /* Data state indicators */
 .loading {
   animation: pulse 1.5s infinite ease-in-out;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 @keyframes pulse {
-  0% { opacity: 0.6; }
+  0% { opacity: 0.5; }
   50% { opacity: 1; }
-  100% { opacity: 0.6; }
+  100% { opacity: 0.5; }
 }
 
 /* Controls */
+input[type="text"] {
+  transition: all 0.3s ease;
+}
+input[type="text"]:focus {
+  background: rgba(255,255,255,0.1) !important;
+  border-color: var(--accent-earth) !important;
+  box-shadow: 0 0 15px rgba(77, 166, 255, 0.2);
+}
+
 select, button.control-btn {
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-main);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   outline: none;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 select:hover, button.control-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border-color: rgba(255,255,255,0.2);
 }
 
 /* Visualizations */
@@ -331,31 +384,65 @@ select:hover, button.control-btn:hover {
   background-position: center;
 }
 
-.viz-earth {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/600px-The_Blue_Marble_%28remastered%29.jpg');
-  box-shadow: inset -30px -30px 50px rgba(0,0,0,0.9),
-              0 0 40px var(--glow-earth);
-  animation: rotate 120s linear infinite;
+/* Earth Globe Visualization */
+.earth-globe-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 60px var(--glow-earth);
+  background: transparent;
 }
 
-.terminator-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.8) 60%);
-  pointer-events: none;
-  z-index: 10;
-  mix-blend-mode: multiply;
-  transition: transform 1s ease-in-out;
+@keyframes pulse-light {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes radar-ping {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-pulse-light {
+  animation: pulse-light 3s ease-in-out infinite;
+}
+
+.animate-radar-ping {
+  animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 .viz-mars {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/600px-OSIRIS_Mars_true_color.jpg');
-  box-shadow: inset -30px -30px 50px rgba(0,0,0,0.9),
-              0 0 40px var(--glow-mars);
-  animation: rotate 150s linear infinite;
+  background-color: #c1440e; /* Mars red */
+  background-image: 
+    radial-gradient(circle at 30% 40%, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.3) 10%, transparent 10.5%), /* Craters */
+    radial-gradient(circle at 70% 25%, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.3) 15%, transparent 15.5%),
+    radial-gradient(circle at 45% 70%, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 12%, transparent 12.5%),
+    radial-gradient(circle at 80% 60%, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.3) 8%, transparent 8.5%),
+    radial-gradient(circle at 20% 80%, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.4) 6%, transparent 6.5%),
+    radial-gradient(ellipse at 50% 0%, #fffafa 0%, #fffafa 6%, transparent 6.5%), /* Mars North Pole Ice */
+    radial-gradient(ellipse at 50% 100%, #fffafa 0%, #fffafa 6%, transparent 6.5%); /* Mars South Pole Ice */
+  background-size: 200% 100%;
+  box-shadow: inset -30px -30px 60px rgba(0,0,0,0.9),
+              inset 5px 5px 20px rgba(255, 150, 100, 0.4), /* Subtle dust glare */
+              0 0 60px var(--glow-mars);
+  animation: rotatePlanet 25s linear infinite;
+}
+
+@keyframes rotatePlanet {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @keyframes rotate {
@@ -385,14 +472,15 @@ select:hover, button.control-btn:hover {
   width: 20px;
   height: 20px;
   opacity: 0;
-  animation: windMove 3s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 200, 150, 0.5));
+  animation: windMove 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @keyframes windMove {
-  0% { transform: translateX(-10px) translateY(10px); opacity: 0; }
-  20% { opacity: 0.8; }
-  80% { opacity: 0.8; }
-  100% { transform: translateX(30px) translateY(-30px); opacity: 0; }
+  0% { transform: translate(-15px, 15px) scale(0.5); opacity: 0; }
+  30% { opacity: 0.6; transform: translate(0px, 0px) scale(1); }
+  70% { opacity: 0.6; transform: translate(30px, -30px) scale(1.1); }
+  100% { transform: translate(50px, -50px) scale(0.8); opacity: 0; }
 }
 
 /* Responsive */
@@ -400,4 +488,82 @@ select:hover, button.control-btn:hover {
   .dashboard {
     grid-template-columns: 1fr;
   }
+}
+
+/* Cosmic Background */
+.cosmic-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  pointer-events: none;
+  background-color: #030014;
+  overflow: hidden;
+}
+
+@keyframes nebula-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: nebula-drift 20s infinite ease-in-out;
+}
+
+.nebula-1 {
+  top: -10%; left: -10%; width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(138,43,226,0.8) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+.nebula-2 {
+  top: 40%; right: -20%; width: 60vw; height: 60vw;
+  background: radial-gradient(circle, rgba(255,0,255,0.6) 0%, transparent 70%);
+  animation-duration: 25s;
+  animation-delay: -5s;
+}
+.nebula-3 {
+  bottom: -20%; left: 20%; width: 55vw; height: 55vw;
+  background: radial-gradient(circle, rgba(0,206,209,0.7) 0%, transparent 70%);
+  animation-duration: 22s;
+  animation-delay: -10s;
+}
+.nebula-4 {
+  top: 20%; left: 30%; width: 40vw; height: 40vw;
+  background: radial-gradient(circle, rgba(25,25,112,0.9) 0%, transparent 70%);
+  animation-duration: 30s;
+  animation-delay: -15s;
+}
+
+.starfield-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.star-twinkle-fast {
+  animation: star-twinkle 3s infinite ease-in-out alternate;
+}
+.star-twinkle-medium {
+  animation: star-twinkle 5s infinite ease-in-out alternate -2s;
+}
+.star-twinkle-slow {
+  animation: star-twinkle 8s infinite ease-in-out alternate -4s;
+}
+.star-static {
+  opacity: 0.3;
 }
