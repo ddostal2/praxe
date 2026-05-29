@@ -1,15 +1,82 @@
 import { useState, useEffect } from 'react';
 import { Thermometer, Wind, Compass, Camera, AlertTriangle } from 'lucide-react';
 
+import marsMapImage from '../assets/mars_map.jpg';
+
 const NASA_API_KEY = 'AaD540tNdp60rKSeCM6yef4BiheAgLgInWjivBYt';
 
-// Generate static wind arrows outside the component to avoid re-render jumping and linter warnings
-const WIND_ARROWS = Array.from({ length: 8 }).map((_, i) => ({
-  id: i,
-  left: `${Math.random() * 100}%`,
-  top: `${Math.random() * 100}%`,
-  delay: `${Math.random() * 2}s`
-}));
+const MAP_WIDTH = 1000;
+const MAP_HEIGHT = 500;
+const VIEWPORT_SIZE = 400;
+
+const MarsGlobe = () => {
+  const [rotationOffset, setRotationOffset] = useState(0);
+
+  useEffect(() => {
+    // Slowly rotate Mars constantly
+    const updateRotation = () => {
+      setRotationOffset(prev => {
+        let next = prev - 0.5;
+        if (next <= -MAP_WIDTH) return 0;
+        return next;
+      });
+    };
+    // Update frequently for smooth animation
+    const interval = setInterval(updateRotation, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{ 
+      width: VIEWPORT_SIZE, 
+      height: VIEWPORT_SIZE, 
+      borderRadius: '50%', 
+      overflow: 'hidden', 
+      position: 'relative',
+      boxShadow: '0 0 80px var(--glow-mars)',
+      backgroundColor: '#000'
+    }}>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+      }}>
+        {/* Render tiles to wrap horizontally */}
+        {[0, 1, 2].map(tileOffset => (
+          <div key={tileOffset} style={{
+            position: 'absolute',
+            left: rotationOffset + (tileOffset * MAP_WIDTH),
+            top: (VIEWPORT_SIZE - MAP_HEIGHT) / 2,
+            width: MAP_WIDTH,
+            height: MAP_HEIGHT
+          }}>
+            <img src={marsMapImage} alt="Mars Satellite Map" style={{ 
+              width: '100%', 
+              height: '100%', 
+              display: 'block', 
+              objectFit: 'fill',
+              filter: 'brightness(1.1)'
+            }} />
+          </div>
+        ))}
+      </div>
+      
+      {/* 3D Atmospheric and Shading Overlay */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        pointerEvents: 'none',
+        boxShadow: 'inset 0 0 60px rgba(0,0,0,0.8), inset -40px -40px 80px rgba(0,0,0,0.9), inset 15px 15px 40px rgba(255, 80, 40, 0.4)'
+      }} />
+    </div>
+  );
+};
 
 export default function MarsDashboard() {
   const [weatherData, setWeatherData] = useState(null);
@@ -93,19 +160,19 @@ export default function MarsDashboard() {
           </h2>
           {usingFallback && (
             <span style={{ fontSize: '0.8rem', color: '#ffb84d', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <AlertTriangle size={14} /> Archived Data
+              <AlertTriangle size={14} /> Archivovaná Data
             </span>
           )}
         </div>
 
         {loadingWeather || !weatherData ? (
           <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>
-            Awaiting Mars relays...
+            Čekání na přenos z Marsu...
           </div>
         ) : (
           <div className="stat-grid">
             <div className="stat-card">
-              <span className="stat-label">Avg Temperature</span>
+              <span className="stat-label">Průměrná Teplota</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Thermometer className="mars-title" />
                 {weatherData.temp}°C
@@ -113,7 +180,7 @@ export default function MarsDashboard() {
             </div>
             
             <div className="stat-card">
-              <span className="stat-label">Pressure</span>
+              <span className="stat-label">Tlak</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Compass className="mars-title" />
                 {weatherData.pressure} Pa
@@ -121,7 +188,7 @@ export default function MarsDashboard() {
             </div>
 
             <div className="stat-card">
-              <span className="stat-label">Wind Speed</span>
+              <span className="stat-label">Rychlost Větru</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Wind className="mars-title" />
                 {weatherData.windSpeed} m/s
@@ -129,7 +196,7 @@ export default function MarsDashboard() {
             </div>
 
             <div className="stat-card">
-              <span className="stat-label">Wind Direction</span>
+              <span className="stat-label">Směr Větru</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Compass className="mars-title" />
                 {weatherData.windDir}
@@ -140,7 +207,7 @@ export default function MarsDashboard() {
 
         <div className="panel-header" style={{ marginTop: '2rem' }}>
           <h2 className="panel-title mars-title">
-            <Camera size={20} /> Latest Rover Photo
+            <Camera size={20} /> Nejnovější Fotografie Roveru
           </h2>
         </div>
 
@@ -156,35 +223,16 @@ export default function MarsDashboard() {
           </div>
         ) : (
           <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-            No recent photos available.
+            Žádné nedávné fotografie nejsou k dispozici.
           </div>
         )}
       </div>
 
       <div className="dashboard-panel" style={{ alignItems: 'center', justifyContent: 'center' }}>
         <h3 style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 10, color: 'var(--text-muted)' }}>
-          2D Visualization & Dust Vectors
+          Satelitní Pohled
         </h3>
-        <div style={{ width: '80%', maxWidth: '400px' }}>
-          <div className="viz-container viz-mars">
-            {/* Wind animation overlay */}
-            <div className="wind-streamlines">
-              {WIND_ARROWS.map(arrow => (
-                <div 
-                  key={arrow.id} 
-                  className="wind-arrow"
-                  style={{
-                    left: arrow.left,
-                    top: arrow.top,
-                    animationDelay: arrow.delay
-                  }}
-                >
-                  <Wind size={24} color="rgba(255,255,255,0.4)" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <MarsGlobe />
       </div>
     </div>
   );
