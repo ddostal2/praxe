@@ -177,16 +177,17 @@ export default function MoonDashboard() {
           </button>
         </div>
 
-        <div className="moon-phase-banner">
-          <span className="stat-label">Aktuální fáze</span>
-          <span className="moon-phase-name">{phaseLabel}</span>
-          <span className="moon-phase-meta">
-            Úhel fáze: {Math.round(phaseAngle)}° · {isLunarDay ? 'Lunární den' : 'Lunární noc'}
-          </span>
-        </div>
-
-        <h3 className="moon-section-heading">Environmentální zpráva</h3>
         <div className="stat-grid">
+          <div className="stat-card" style={{ gridColumn: '1 / -1' }}>
+            <span className="stat-label">Aktuální fáze</span>
+            <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <span className="moon-phase-name" style={{ margin: 0, fontSize: '1.5rem' }}>{phaseLabel}</span>
+              <span className="moon-phase-meta" style={{ margin: 0, paddingLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.2)', fontSize: '1rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
+                Úhel fáze: {Math.round(phaseAngle)}° · {isLunarDay ? 'Lunární den' : 'Lunární noc'}
+              </span>
+            </div>
+          </div>
+
           <div className="stat-card">
             <span className="stat-label">
               <Thermometer size={14} style={{ display: 'inline', marginRight: 4 }} />
