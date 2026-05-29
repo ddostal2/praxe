@@ -2,11 +2,17 @@
    EARTH MODULE - CYBERPUNK SPACE SCI-FI DESIGN
    ========================================================================== */
 
-/* Space Scene background */
+/* Space Scene Background with Glowing Galactic Nebulae */
 .earth-container {
   min-height: 100vh;
   width: 100%;
-  background: radial-gradient(circle at 50% 50%, #0c0f24 0%, #05060f 100%);
+  /* Multi-layered radial gradients to simulate interstellar dust/nebula */
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(138, 43, 226, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(0, 240, 255, 0.13) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.09) 0%, transparent 55%),
+    radial-gradient(circle at 30% 80%, rgba(0, 114, 255, 0.12) 0%, transparent 40%),
+    #050515; /* Deep rich space base */
   color: #e2e8f0;
   font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
   position: relative;
@@ -16,24 +22,102 @@
 }
 
 /* --------------------------------------------------------------------------
-   SUPER DENSE METEOR SHOWER BACKGROUND ANIMATION (Matching Screenshot)
+   STARFIELD LAYERS & TWINKLING EFFECTS
    -------------------------------------------------------------------------- */
-.meteor-container {
+.starfield-layer {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
 }
 
+/* Tiny static stars (0.8px, various opacities, very dense) */
+.starfield-small {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  opacity: 0.65;
+  box-shadow: 
+    /* First quadrant */
+    80px 120px rgba(255,255,255,0.8), 240px 80px rgba(255,255,255,0.4), 380px 220px rgba(255,255,255,0.7), 490px 140px rgba(255,255,255,0.5),
+    150px 380px rgba(255,255,255,0.6), 290px 420px rgba(255,255,255,0.8), 420px 310px rgba(255,255,255,0.4), 580px 490px rgba(255,255,255,0.5),
+    70px 620px rgba(255,255,255,0.7), 210px 550px rgba(255,255,255,0.5), 350px 710px rgba(255,255,255,0.8), 530px 650px rgba(255,255,255,0.6),
+    120px 880px rgba(255,255,255,0.5), 270px 810px rgba(255,255,255,0.7), 440px 920px rgba(255,255,255,0.4), 590px 840px rgba(255,255,255,0.8),
+    /* Second quadrant */
+    710px 90px rgba(255,255,255,0.6), 840px 160px rgba(255,255,255,0.8), 990px 70px rgba(255,255,255,0.4), 1150px 230px rgba(255,255,255,0.5),
+    680px 340px rgba(255,255,255,0.5), 890px 290px rgba(255,255,255,0.7), 1030px 380px rgba(255,255,255,0.8), 1190px 310px rgba(255,255,255,0.4),
+    750px 520px rgba(255,255,255,0.8), 860px 480px rgba(255,255,255,0.4), 970px 600px rgba(255,255,255,0.6), 1120px 540px rgba(255,255,255,0.7),
+    690px 740px rgba(255,255,255,0.7), 810px 830px rgba(255,255,255,0.5), 940px 790px rgba(255,255,255,0.8), 1080px 890px rgba(255,255,255,0.4),
+    /* Third quadrant */
+    1310px 110px rgba(255,255,255,0.8), 1460px 70px rgba(255,255,255,0.5), 1620px 210px rgba(255,255,255,0.7), 1850px 150px rgba(255,255,255,0.4),
+    1280px 360px rgba(255,255,255,0.4), 1410px 280px rgba(255,255,255,0.6), 1590px 410px rgba(255,255,255,0.8), 1740px 330px rgba(255,255,255,0.5),
+    1350px 580px rgba(255,255,255,0.7), 1490px 490px rgba(255,255,255,0.4), 1680px 550px rgba(255,255,255,0.8), 1820px 630px rgba(255,255,255,0.6),
+    1260px 810px rgba(255,255,255,0.5), 1430px 890px rgba(255,255,255,0.7), 1600px 760px rgba(255,255,255,0.4), 1790px 820px rgba(255,255,255,0.8),
+    /* Bottom expansion */
+    200px 1150px rgba(255,255,255,0.6), 550px 1250px rgba(255,255,255,0.8), 890px 1120px rgba(255,255,255,0.4), 1180px 1310px rgba(255,255,255,0.7),
+    1450px 1190px rgba(255,255,255,0.5), 1710px 1260px rgba(255,255,255,0.8), 950px 1420px rgba(255,255,255,0.6), 1600px 1450px rgba(255,255,255,0.4);
+}
+
+/* Medium twinkling stars (1.5px, medium rate) */
+.starfield-medium {
+  width: 1.5px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  box-shadow: 
+    180px 190px #fff, 340px 290px rgba(0, 240, 255, 0.8), 510px 70px #fff, 620px 410px #fff,
+    110px 580px rgba(236, 72, 153, 0.8), 470px 780px #fff, 220px 940px #fff,
+    790px 210px #fff, 930px 120px #fff, 1120px 380px rgba(0, 240, 255, 0.8),
+    870px 680px #fff, 1040px 610px #fff, 730px 910px #fff,
+    1380px 250px rgba(236, 72, 153, 0.8), 1540px 130px #fff, 1720px 380px #fff,
+    1320px 640px #fff, 1610px 590px rgba(0, 240, 255, 0.8), 1810px 790px #fff,
+    400px 1190px #fff, 980px 1280px rgba(0, 240, 255, 0.8), 1510px 1340px #fff;
+}
+
+/* Large glowing stars (2.2px, slow breathing) */
+.starfield-large {
+  width: 2.2px;
+  height: 2.2px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 
+    290px 140px 3px rgba(255,255,255,0.8), 580px 250px 3px rgba(0, 240, 255, 0.7),
+    190px 720px 3px rgba(255,255,255,0.8), 410px 890px 3px rgba(236, 72, 153, 0.6),
+    830px 90px 3px rgba(255,255,255,0.8), 1180px 490px 3px rgba(0, 240, 255, 0.7),
+    950px 810px 3px rgba(255,255,255,0.8), 1480px 310px 3px rgba(255,255,255,0.8),
+    1760px 180px 3px rgba(236, 72, 153, 0.6), 1650px 680px 3px rgba(0, 240, 255, 0.7),
+    720px 1210px 3px rgba(255,255,255,0.8), 1320px 1290px 3px rgba(255,255,255,0.8);
+}
+
+.twinkling {
+  animation: star-twinkle 4s infinite ease-in-out;
+}
+
+.twinkling-slow {
+  animation: star-twinkle-slow 6s infinite ease-in-out;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1.0; }
+}
+
+@keyframes star-twinkle-slow {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.95; filter: drop-shadow(0 0 2px #fff); }
+}
+
+/* --------------------------------------------------------------------------
+   DENSE METEOR SHOWER OVER Nebula
+   -------------------------------------------------------------------------- */
 .meteor {
   position: absolute;
   opacity: 0;
   transform: rotate(-45deg);
-  /* Continuous, fluid motion with high visibility ratio */
   animation: meteor-shoot 3.5s infinite linear;
+  z-index: 2; /* Renders above nebulae/stars */
 }
 
 /* Custom trail gradients for depth and spectral diversity */
@@ -52,7 +136,6 @@
   box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
 }
 
-/* Highly randomized starting coordinates (X and Y) to distribute streaks across the entire canvas */
 /* Distant background layer (thin, slow, low opacity) */
 .meteor-1 { top: -10%; left: 30%; width: 1.0px; height: 50px; animation-delay: 0.2s; animation-duration: 4.8s; opacity: 0.35; }
 .meteor-3 { top: 15%; left: 90%; width: 0.8px; height: 40px; animation-delay: 1.8s; animation-duration: 5.2s; opacity: 0.30; }
@@ -79,7 +162,6 @@
 .meteor-13 { top: 15%; left: 40%; width: 2.5px; height: 160px; animation-delay: 1.2s; animation-duration: 1.4s; opacity: 1.00; }
 .meteor-17 { top: -12%; left: 85%; width: 2.3px; height: 145px; animation-delay: 0.6s; animation-duration: 1.7s; opacity: 0.98; }
 
-/* Continuous full-screen sweep animation */
 @keyframes meteor-shoot {
   0% {
     opacity: 0;
@@ -90,7 +172,6 @@
   }
   90% {
     opacity: 1;
-    /* Longer sweep distance to match exposure lines in screenshot */
     transform: translate(-550px, 550px) rotate(-45deg) scale(1.15);
   }
   100% {
@@ -127,11 +208,12 @@
 .search-control-panel {
   max-width: 600px;
   margin: 0 auto 1.5rem auto;
-  background: rgba(13, 17, 39, 0.5);
-  border: 1px solid rgba(0, 240, 255, 0.15);
+  background: rgba(13, 17, 39, 0.55);
+  border: 1px solid rgba(0, 240, 255, 0.18);
   padding: 1rem;
   border-radius: 20px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.05);
 }
 
@@ -160,7 +242,7 @@
 
 .search-input {
   width: 100%;
-  background: rgba(5, 6, 15, 0.6);
+  background: rgba(5, 6, 15, 0.65);
   border: 1px solid rgba(0, 240, 255, 0.2);
   color: #fff;
   padding: 0.75rem 1rem 0.75rem 2.8rem;
@@ -176,7 +258,7 @@
 .search-input:focus {
   outline: none;
   border-color: #00f0ff;
-  background: rgba(5, 6, 15, 0.8);
+  background: rgba(5, 6, 15, 0.85);
   box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
 }
 
@@ -241,9 +323,9 @@
 }
 
 .quick-tag-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.78);
   padding: 0.35rem 0.8rem;
   font-size: 0.8rem;
   font-weight: 600;
@@ -261,7 +343,6 @@
   background: rgba(0, 240, 255, 0.08);
 }
 
-/* Solid glowing gradient background for active selections (Matching Screenshot) */
 .quick-tag-btn.active {
   color: #0c0f24;
   background: linear-gradient(135deg, #00f0ff 0%, #0072ff 100%);
@@ -304,24 +385,24 @@
   align-items: center;
 }
 
-/* Glassmorphism Cards */
+/* Glassmorphism Cards - Upgraded background opacity & blur for Nebula contrast */
 .glass-card {
-  background: rgba(13, 20, 44, 0.5);
-  border: 1px solid rgba(0, 240, 255, 0.1);
+  background: rgba(10, 15, 30, 0.72); /* Slightly darker for maximum contrast */
+  border: 1px solid rgba(0, 240, 255, 0.15);
   border-radius: 20px;
   padding: 2rem;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4),
-              inset 0 0 15px rgba(0, 240, 255, 0.03);
+  backdrop-filter: blur(15px); /* Increased blur */
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5),
+              inset 0 0 15px rgba(0, 240, 255, 0.05);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .glass-card:hover {
-  border-color: rgba(0, 240, 255, 0.25);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5),
-              0 0 20px rgba(0, 240, 255, 0.08),
-              inset 0 0 15px rgba(0, 240, 255, 0.05);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6),
+              0 0 25px rgba(0, 240, 255, 0.12),
+              inset 0 0 15px rgba(0, 240, 255, 0.06);
 }
 
 /* Locations Info Header */
@@ -367,8 +448,8 @@
 }
 
 .coord-tag {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.3rem 0.6rem;
   border-radius: 6px;
 }
@@ -432,7 +513,7 @@
   align-items: center;
   gap: 2rem;
   margin-bottom: 1.5rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.25);
   padding: 1.2rem;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.03);
@@ -452,7 +533,7 @@
 .temperature-main {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center aligned below main temp */
+  align-items: center;
   flex: 1;
 }
 
@@ -475,7 +556,7 @@
   color: #e2e8f0;
   font-weight: 600;
   margin-top: 6px;
-  text-align: center; /* Precise horizontal centering */
+  text-align: center;
 }
 
 /* Weather Grid Metrics */
@@ -486,8 +567,8 @@
 }
 
 .metric-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 1rem;
   border-radius: 12px;
   display: flex;
@@ -497,8 +578,8 @@
 }
 
 .metric-card:hover {
-  background: rgba(0, 240, 255, 0.03);
-  border-color: rgba(0, 240, 255, 0.15);
+  background: rgba(0, 240, 255, 0.04);
+  border-color: rgba(0, 240, 255, 0.2);
 }
 
 .metric-icon-box {
@@ -603,13 +684,13 @@
   50% { r: 3.5; opacity: 0.8; filter: drop-shadow(0 0 5px #00f0ff); }
 }
 
-/* Information panel underneath the planet - Repaired for word wrap & alignment */
+/* Information panel underneath the planet - Upgraded for Nebula contrast */
 .terminator-info-box {
   width: 100%;
   max-width: 380px;
   margin-top: 1.5rem;
-  background: rgba(13, 20, 44, 0.4);
-  border: 1px solid rgba(0, 240, 255, 0.08);
+  background: rgba(10, 15, 30, 0.6); /* Darker glass background */
+  border: 1px solid rgba(0, 240, 255, 0.12);
   padding: 1.2rem;
   border-radius: 12px;
   text-align: center;
@@ -619,6 +700,8 @@
   word-wrap: break-word;
   white-space: normal;
   box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .terminator-info-box strong {

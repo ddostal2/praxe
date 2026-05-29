@@ -392,8 +392,13 @@ export default function EarthModule() {
 
   return (
     <div className="earth-container">
-      {/* Enhanced Cosmic Meteor Shower Background (20 dynamically layered meteors) */}
+      {/* Enhanced Cosmic Meteor Shower & Starfield Background */}
       <div className="meteor-container">
+        {/* Glowing Galactic Starfields */}
+        <div className="starfield-layer starfield-small" />
+        <div className="starfield-layer starfield-medium twinkling" />
+        <div className="starfield-layer starfield-large twinkling-slow" />
+
         {/* Cyan trails (foreground/mid-ground) */}
         <div className="meteor meteor-1 meteor-cyan" />
         <div className="meteor meteor-2 meteor-cyan" />
