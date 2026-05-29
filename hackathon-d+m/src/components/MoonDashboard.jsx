@@ -1,43 +1,35 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { Moon, Thermometer, AlertTriangle, Sun, RefreshCw } from 'lucide-react';
+import { MOON } from '../planets';
 import { calculateMoonPhase } from '../utils/moonApi';
-import moonMapImage from '../assets/moon_map.jpg';
-import { globeGlowShadow, globeInsetShadow } from '../utils/globeStyles';
-
-export const MOON = {
-  id: 'moon',
-  name: 'Měsíc',
-  accent: 'moon',
-  diameterKm: 3_474,
-  massKg: 7.342e22,
-  gravityMs2: 1.62,
-  dayLabel: '27,3 dní (vázaný)',
-  orbitLabel: '27,3 dní kolem Země',
-  distanceFromSunAu: 1,
-  avgSurfaceTempC: null,
-  atmosphere: 'Žádná',
-  moons: 0,
-  note: 'Oběžná dráha kolem Země (~384 400 km)',
-};
+import moonMapImage from '../assets/moon_map.jpg'; // Keep resolving to existing image
+import { getGlobeGlowShadow, getGlobeInsetShadow } from '../utils/globeStyles';
+import { useGlobeRotation } from '../utils/useGlobeRotation';
 
 const MAP_WIDTH = 1000;
 const DEFAULT_SIZE = 400;
+const ROTATION_SPEED = 0.4;
+const ROTATION_INTERVAL_MS = 50;
 
-export const MoonGlobe = ({ phaseAngle, size = DEFAULT_SIZE, variant = 'default', showPhase = true }) => {
-  const [rotationOffset, setRotationOffset] = useState(0);
-
-  useEffect(() => {
-    // Slowly rotate Moon constantly
-    const updateRotation = () => {
-      setRotationOffset(prev => {
-        let next = prev - 0.4;
-        if (next <= -MAP_WIDTH) return 0;
-        return next;
-      });
-    };
-    const interval = setInterval(updateRotation, 50);
-    return () => clearInterval(interval);
-  }, []);
+/**
+ * MoonGlobe component visualizing the rotating Moon surface, 
+ * simulated phase shadow projection overlay, and 3D lunar glow.
+ *
+ * @component
+ * @param {Object} props
+ * @param {number} props.phaseAngle - Current angle of the lunar phase in degrees.
+ * @param {number} [props.size=400] - Render diameter size of the globe in pixels.
+ * @param {'default'|'compare'} [props.variant='default'] - Visual layout variant.
+ * @param {boolean} [props.showPhase=true] - Whether to overlay the phase shadow.
+ */
+export const MoonGlobe = ({ 
+  phaseAngle, 
+  size = DEFAULT_SIZE, 
+  variant = 'default', 
+  showPhase = true 
+}) => {
+  // Use standard rotation hook
+  const rotationOffset = useGlobeRotation(ROTATION_SPEED, MAP_WIDTH, ROTATION_INTERVAL_MS);
 
   const SIZE = size;
   const CX = SIZE / 2;
@@ -60,7 +52,7 @@ export const MoonGlobe = ({ phaseAngle, size = DEFAULT_SIZE, variant = 'default'
       borderRadius: '50%', 
       overflow: 'hidden', 
       position: 'relative',
-      boxShadow: globeGlowShadow(size, 'rgba(200, 200, 220, 0.4)'),
+      boxShadow: getGlobeGlowShadow(size, 'rgba(200, 200, 220, 0.4)'),
       backgroundColor: '#000'
     }}>
       <div style={{
@@ -84,7 +76,9 @@ export const MoonGlobe = ({ phaseAngle, size = DEFAULT_SIZE, variant = 'default'
               height: '100%', 
               display: 'block', 
               objectFit: 'fill',
-              filter: variant === 'compare' ? 'brightness(1.25) contrast(1.15)' : 'brightness(1.1) contrast(1.1)'
+              filter: variant === 'compare' 
+                ? 'brightness(1.25) contrast(1.15)' 
+                : 'brightness(1.1) contrast(1.1)'
             }} />
           </div>
         ))}
@@ -122,7 +116,7 @@ export const MoonGlobe = ({ phaseAngle, size = DEFAULT_SIZE, variant = 'default'
         height: '100%',
         borderRadius: '50%',
         pointerEvents: 'none',
-        boxShadow: globeInsetShadow(size, 'rgba(220, 220, 240, 0.4)', variant),
+        boxShadow: getGlobeInsetShadow(size, 'rgba(220, 220, 240, 0.4)', variant),
       }} />
     </div>
   );
@@ -145,6 +139,13 @@ const RISK_LABELS = {
   high: 'Vysoké',
 };
 
+/**
+ * Main MoonDashboard component calculating current lunar phase telemetry,
+ * displaying simulated temperatures, radiation levels, and rendering
+ * the interactive Moon globe.
+ *
+ * @component
+ */
 export default function MoonDashboard() {
   const [data, setData] = useState(() => calculateMoonPhase());
 
@@ -171,7 +172,12 @@ export default function MoonDashboard() {
             <Moon size={22} />
             Datový panel — {MOON.name}
           </h2>
-          <button type="button" className="control-btn" onClick={refresh} title="Obnovit telemetry">
+          <button 
+            type="button" 
+            className="control-btn" 
+            onClick={refresh} 
+            title="Obnovit telemetry"
+          >
             <RefreshCw size={16} style={{ verticalAlign: 'middle', marginRight: 4 }} />
             Obnovit
           </button>
@@ -180,9 +186,26 @@ export default function MoonDashboard() {
         <div className="stat-grid">
           <div className="stat-card" style={{ gridColumn: '1 / -1' }}>
             <span className="stat-label">Aktuální fáze</span>
-            <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <span className="moon-phase-name" style={{ margin: 0, fontSize: '1.5rem' }}>{phaseLabel}</span>
-              <span className="moon-phase-meta" style={{ margin: 0, paddingLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.2)', fontSize: '1rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '1rem', 
+              flexWrap: 'wrap' 
+            }}>
+              <span className="moon-phase-name" style={{ margin: 0, fontSize: '1.5rem' }}>
+                {phaseLabel}
+              </span>
+              <span 
+                className="moon-phase-meta" 
+                style={{ 
+                  margin: 0, 
+                  paddingLeft: '1rem', 
+                  borderLeft: '1px solid rgba(255,255,255,0.2)', 
+                  fontSize: '1rem', 
+                  color: 'var(--text-muted)', 
+                  fontWeight: 'normal' 
+                }}
+              >
                 Úhel fáze: {Math.round(phaseAngle)}° · {isLunarDay ? 'Lunární den' : 'Lunární noc'}
               </span>
             </div>

@@ -1,45 +1,27 @@
 import { useState, useEffect } from 'react';
 import { Thermometer, Wind, Compass, Camera, AlertTriangle } from 'lucide-react';
-
 import marsMapImage from '../assets/mars_map.jpg';
-import { globeGlowShadow, globeInsetShadow } from '../utils/globeStyles';
+import { getGlobeGlowShadow, getGlobeInsetShadow } from '../utils/globeStyles';
+import { useGlobeRotation } from '../utils/useGlobeRotation';
 
-export const MARS = {
-  id: 'mars',
-  name: 'Mars',
-  accent: 'mars',
-  diameterKm: 6_779,
-  massKg: 6.39e23,
-  gravityMs2: 3.721,
-  dayLabel: '24,6 h',
-  orbitLabel: '687 dní kolem Slunce',
-  distanceFromSunAu: 1.524,
-  avgSurfaceTempC: -63,
-  atmosphere: 'CO₂ (tenká)',
-  moons: 2,
-};
 
 const NASA_API_KEY = 'AaD540tNdp60rKSeCM6yef4BiheAgLgInWjivBYt';
-
 const MAP_WIDTH = 1000;
 const DEFAULT_SIZE = 400;
+const ROTATION_SPEED = 0.5;
+const ROTATION_INTERVAL_MS = 50;
 
+/**
+ * MarsGlobe component visualizing the rotating Mars surface with 3D atmospheric glow.
+ *
+ * @component
+ * @param {Object} props
+ * @param {number} [props.size=400] - Render diameter size of the globe in pixels.
+ * @param {'default'|'compare'} [props.variant='default'] - Visual layout variant.
+ */
 export const MarsGlobe = ({ size = DEFAULT_SIZE, variant = 'default' }) => {
-  const [rotationOffset, setRotationOffset] = useState(0);
-
-  useEffect(() => {
-    // Slowly rotate Mars constantly
-    const updateRotation = () => {
-      setRotationOffset(prev => {
-        let next = prev - 0.5;
-        if (next <= -MAP_WIDTH) return 0;
-        return next;
-      });
-    };
-    // Update frequently for smooth animation
-    const interval = setInterval(updateRotation, 50);
-    return () => clearInterval(interval);
-  }, []);
+  // Use standard rotation hook
+  const rotationOffset = useGlobeRotation(ROTATION_SPEED, MAP_WIDTH, ROTATION_INTERVAL_MS);
 
   const currentMapWidth = size * 2.5;
   const currentMapHeight = size * 1.25;
@@ -52,7 +34,7 @@ export const MarsGlobe = ({ size = DEFAULT_SIZE, variant = 'default' }) => {
       borderRadius: '50%', 
       overflow: 'hidden', 
       position: 'relative',
-      boxShadow: globeGlowShadow(size, 'var(--glow-mars)'),
+      boxShadow: getGlobeGlowShadow(size, 'var(--glow-mars)'),
       backgroundColor: '#000'
     }}>
       <div style={{
@@ -91,19 +73,24 @@ export const MarsGlobe = ({ size = DEFAULT_SIZE, variant = 'default' }) => {
         height: '100%',
         borderRadius: '50%',
         pointerEvents: 'none',
-        boxShadow: globeInsetShadow(size, 'rgba(255, 80, 40, 0.4)', variant),
+        boxShadow: getGlobeInsetShadow(size, 'rgba(255, 80, 40, 0.4)', variant),
       }} />
     </div>
   );
 };
 
+/**
+ * Main MarsDashboard component loading Insight lander weather telemetry,
+ * real-time Rover photographs from NASA's Curiosity rover, and rendering
+ * the simulated 3D Mars globe.
+ *
+ * @component
+ */
 export default function MarsDashboard() {
   const [weatherData, setWeatherData] = useState(null);
   const [loadingWeather, setLoadingWeather] = useState(true);
-  
   const [roverPhoto, setRoverPhoto] = useState(null);
   const [loadingPhoto, setLoadingPhoto] = useState(true);
-  
   const [usingFallback, setUsingFallback] = useState(false);
 
   useEffect(() => {
@@ -111,7 +98,8 @@ export default function MarsDashboard() {
       // 1. Fetch InSight Weather Data
       setLoadingWeather(true);
       try {
-        const res = await fetch(`https://api.nasa.gov/insight_weather/?api_key=${NASA_API_KEY}&feedtype=json&ver=1.0`);
+        const weatherUrl = `https://api.nasa.gov/insight_weather/?api_key=${NASA_API_KEY}&feedtype=json&ver=1.0`;
+        const res = await fetch(weatherUrl);
         const data = await res.json();
         
         // InSight returns sol keys if data is available
@@ -131,7 +119,10 @@ export default function MarsDashboard() {
           throw new Error("No recent data from InSight");
         }
       } catch (err) {
-        console.warn("InSight API failed or returned empty (lander retired). Using fallback data.", err);
+        console.warn(
+          "InSight API failed or returned empty (lander retired). Using fallback data.", 
+          err
+        );
         setUsingFallback(true);
         // Fallback realistic data
         setWeatherData({
@@ -147,11 +138,12 @@ export default function MarsDashboard() {
       // 2. Fetch Latest Rover Photo
       setLoadingPhoto(true);
       try {
-        const photoRes = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=${NASA_API_KEY}`);
+        const photoUrl = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=${NASA_API_KEY}`;
+        const photoRes = await fetch(photoUrl);
         const photoData = await photoRes.json();
         
         if (photoData.latest_photos && photoData.latest_photos.length > 0) {
-          // Get a random photo from the latest batch
+          // Get the first photo from the latest batch
           const photo = photoData.latest_photos[0];
           setRoverPhoto({
             url: photo.img_src,
@@ -178,7 +170,13 @@ export default function MarsDashboard() {
             Elysium Planitia (InSight)
           </h2>
           {usingFallback && (
-            <span style={{ fontSize: '0.8rem', color: '#ffb84d', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ 
+              fontSize: '0.8rem', 
+              color: '#ffb84d', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '4px' 
+            }}>
               <AlertTriangle size={14} /> Archivovaná Data
             </span>
           )}
@@ -187,7 +185,11 @@ export default function MarsDashboard() {
         {loadingWeather || !weatherData ? (
           <div className="stat-grid">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="stat-card skeleton-box" style={{ height: '88px', border: '1px solid transparent' }} />
+              <div 
+                key={i} 
+                className="stat-card skeleton-box" 
+                style={{ height: '88px', border: '1px solid transparent' }} 
+              />
             ))}
           </div>
         ) : (
@@ -233,11 +235,20 @@ export default function MarsDashboard() {
         </div>
 
         {loadingPhoto ? (
-          <div className="skeleton-box" style={{ height: '350px', width: '100%', borderRadius: '12px', marginTop: '1rem' }} />
+          <div 
+            className="skeleton-box" 
+            style={{ height: '350px', width: '100%', borderRadius: '12px', marginTop: '1rem' }} 
+          />
         ) : roverPhoto ? (
           <div>
             <img src={roverPhoto.url} alt="Mars Rover" className="rover-image" />
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              marginTop: '0.5rem', 
+              color: 'var(--text-muted)', 
+              fontSize: '0.85rem' 
+            }}>
               <span>Curiosity • {roverPhoto.camera}</span>
               <span>Sol {roverPhoto.sol}</span>
             </div>

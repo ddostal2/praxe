@@ -2,6 +2,20 @@ import { BODIES } from '../planets';
 
 export { BODIES };
 
+/**
+ * @typedef {Object} CompareMetric
+ * @property {string} key - The property key inside a Body object to compare.
+ * @property {string} label - Czech display label of the metric.
+ * @property {function(*): string} format - Format function to display the value nicely.
+ * @property {boolean} [higherIsLarger] - Whether higher numerical values represent a larger/more positive metric.
+ * @property {boolean} [compareNumeric] - Set to false if values are purely textual and cannot be compared numerically.
+ * @property {function(*): boolean} [skipHighlight] - Optional predicate to skip high/low highlighting for specific values.
+ */
+
+/**
+ * Configuration array for metrics compared side-by-side in the Comparison module.
+ * @type {CompareMetric[]}
+ */
 export const COMPARE_METRICS = [
   {
     key: 'diameterKm',
@@ -60,9 +74,21 @@ export const COMPARE_METRICS = [
   },
 ];
 
+/**
+ * Formats a celestial body's mass in kilograms into a highly readable scientific notation.
+ *
+ * @param {number} kg - The raw mass of the body in kilograms.
+ * @returns {string} Formatted scientific string (e.g. "5.97 × 10²⁴ kg").
+ */
 function formatMass(kg) {
-  if (kg >= 1e24) return `${(kg / 1e24).toFixed(2)} × 10²⁴ kg`;
-  if (kg >= 1e23) return `${(kg / 1e23).toFixed(2)} × 10²³ kg`;
-  if (kg >= 1e22) return `${(kg / 1e22).toFixed(2)} × 10²² kg`;
+  if (kg >= 1e24) {
+    return `${(kg / 1e24).toFixed(2)} × 10²⁴ kg`;
+  }
+  if (kg >= 1e23) {
+    return `${(kg / 1e23).toFixed(2)} × 10²³ kg`;
+  }
+  if (kg >= 1e22) {
+    return `${(kg / 1e22).toFixed(2)} × 10²² kg`;
+  }
   return `${kg.toExponential(2)} kg`;
 }

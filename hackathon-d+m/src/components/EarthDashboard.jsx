@@ -1,23 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Thermometer, Wind, Droplets, MapPin, Clock, Search, Sun, Cloud, CloudRain, CloudSnow, CloudLightning, CloudFog } from 'lucide-react';
+import { 
+  Thermometer, 
+  Wind, 
+  Droplets, 
+  MapPin, 
+  Clock, 
+  Search, 
+  Sun, 
+  Cloud, 
+  CloudRain, 
+  CloudSnow, 
+  CloudLightning, 
+  CloudFog 
+} from 'lucide-react';
 import earthMapImage from '../assets/earth_map.jpg';
-import { globeGlowShadow, globeInsetShadow } from '../utils/globeStyles';
+import { getGlobeGlowShadow, getGlobeInsetShadow } from '../utils/globeStyles';
+import { useGlobeRotation } from '../utils/useGlobeRotation';
 
-export const EARTH = {
-  id: 'earth',
-  name: 'Země',
-  accent: 'earth',
-  diameterKm: 12_742,
-  massKg: 5.972e24,
-  gravityMs2: 9.807,
-  dayLabel: '24 h',
-  orbitLabel: '365 dní kolem Slunce',
-  distanceFromSunAu: 1,
-  avgSurfaceTempC: 15,
-  atmosphere: 'N₂, O₂ (21 % kyslíku)',
-  moons: 1,
-};
 
+/**
+ * Predefined major world cities with their geographic coordinates.
+ */
 const MAJOR_CITIES = [
   { name: 'Tokyo', lat: 35.6762, lon: 139.6503 },
   { name: 'Mumbai', lat: 19.0760, lon: 72.8777 },
@@ -84,11 +87,29 @@ const MAJOR_CITIES = [
 const MAP_WIDTH = 1000;
 const MAP_HEIGHT = 500;
 const DEFAULT_SIZE = 400;
+const ROTATION_SPEED = 0.5;
+const ROTATION_INTERVAL_MS = 50;
 
+/**
+ * EarthGlobe component visualizing the Earth map wrapping, dynamic day/night shadow,
+ * active pinpoint marker, and ambient atmospheric glow.
+ *
+ * @component
+ * @param {Object} props
+ * @param {Object} [props.activeCity] - Selected city coordinate context.
+ * @param {number} [props.size=400] - Render diameter size of the globe in pixels.
+ * @param {'default'|'compare'} [props.variant='default'] - Visual layout variant.
+ */
 export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default' }) => {
   const isCompare = variant === 'compare';
   const [sunLon, setSunLon] = useState(0);
-  const [rotationOffset, setRotationOffset] = useState(0);
+
+  // Consume standard rotation hook when in compare mode
+  const rotationOffset = useGlobeRotation(
+    isCompare ? ROTATION_SPEED : 0, 
+    MAP_WIDTH, 
+    ROTATION_INTERVAL_MS
+  );
 
   useEffect(() => {
     if (isCompare) return undefined;
@@ -96,7 +117,9 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
     const updateTime = () => {
       const now = new Date();
       // Calculate UTC decimal hours (e.g., 14.5 for 14:30)
-      const utcHours = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
+      const utcHours = now.getUTCHours() + 
+                       now.getUTCMinutes() / 60 + 
+                       now.getUTCSeconds() / 3600;
       // At UTC 12:00, the sun is exactly at prime meridian (lon 0).
       // Earth rotates 15 degrees per hour. Sun appears to move West (negative longitude).
       let lon = -(utcHours - 12) * 15;
@@ -113,20 +136,12 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
     return () => clearInterval(interval);
   }, [isCompare]);
 
-  useEffect(() => {
-    if (!isCompare) return undefined;
-
-    const updateRotation = () => {
-      setRotationOffset((prev) => {
-        const next = prev - 0.5;
-        if (next <= -MAP_WIDTH) return 0;
-        return next;
-      });
-    };
-
-    const interval = setInterval(updateRotation, 50);
-    return () => clearInterval(interval);
-  }, [isCompare]);
+  // Convert real geographic lat/lon to map image coordinate pixel points
+  const getMapCoords = (lat, lon) => {
+    const x = ((lon + 180) / 360) * MAP_WIDTH;
+    const y = ((90 - lat) / 180) * MAP_HEIGHT;
+    return { x, y };
+  };
 
   if (isCompare) {
     const currentMapWidth = size * 2.5;
@@ -140,7 +155,7 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
         borderRadius: '50%',
         overflow: 'hidden',
         position: 'relative',
-        boxShadow: globeGlowShadow(size, 'var(--glow-earth)'),
+        boxShadow: getGlobeGlowShadow(size, 'var(--glow-earth)'),
         backgroundColor: '#000',
       }}>
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
@@ -178,19 +193,12 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
             height: '100%',
             borderRadius: '50%',
             pointerEvents: 'none',
-            boxShadow: globeInsetShadow(size, 'rgba(77, 166, 255, 0.35)', 'compare'),
+            boxShadow: getGlobeInsetShadow(size, 'rgba(77, 166, 255, 0.35)', 'compare'),
           }}
         />
       </div>
     );
   }
-
-  // Map Real Lat/Lon to exact Map Pixels
-  const getMapCoords = (lat, lon) => {
-    const x = ((lon + 180) / 360) * MAP_WIDTH;
-    const y = ((90 - lat) / 180) * MAP_HEIGHT;
-    return { x, y };
-  };
 
   // Determine if a coordinate is in the dark
   const isNight = (cityLon) => {
@@ -199,22 +207,20 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
     return delta > 90; // > 90 degrees away from the sun is night time
   };
 
-  let panX;
-  let panY;
-  let activeCoords = null;
+  const activeCoords = activeCity && activeCity.lat && activeCity.lon
+    ? getMapCoords(activeCity.lat, activeCity.lon)
+    : null;
 
-  if (activeCity && activeCity.lat && activeCity.lon) {
-    activeCoords = getMapCoords(activeCity.lat, activeCity.lon);
-    // Center the target coordinate in the viewport
-    panX = size / 2 - activeCoords.x;
-    // Prevent panning past the North (0) or South (MAP_HEIGHT) poles to avoid empty space
-    panY = Math.min(0, Math.max(size - MAP_HEIGHT, size / 2 - activeCoords.y));
-  } else {
-    // Default Atlantic-centric view (approx Lon -30, Lat 0) if no city is selected
-    const centerCoords = getMapCoords(0, -30);
-    panX = size / 2 - centerCoords.x;
-    panY = size / 2 - centerCoords.y;
-  }
+  // Compute camera pan offset
+  const { panX, panY } = activeCoords
+    ? {
+        panX: size / 2 - activeCoords.x,
+        panY: Math.min(0, Math.max(size - MAP_HEIGHT, size / 2 - activeCoords.y))
+      }
+    : {
+        panX: size / 2 - getMapCoords(0, -30).x,
+        panY: size / 2 - getMapCoords(0, -30).y
+      };
 
   // Calculate position of the daylight center (the sun)
   const sunX = ((sunLon + 180) / 360) * MAP_WIDTH;
@@ -238,7 +244,7 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
       borderRadius: '50%', 
       overflow: 'hidden', 
       position: 'relative',
-      boxShadow: globeGlowShadow(size, 'var(--glow-earth)'),
+      boxShadow: getGlobeGlowShadow(size, 'var(--glow-earth)'),
       backgroundColor: '#000'
     }}>
       <div style={{
@@ -340,12 +346,18 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
         height: '100%',
         borderRadius: '50%',
         pointerEvents: 'none',
-        boxShadow: globeInsetShadow(size, 'rgba(77, 166, 255, 0.4)'),
+        boxShadow: getGlobeInsetShadow(size, 'rgba(77, 166, 255, 0.4)'),
       }} />
     </div>
   );
 };
 
+/**
+ * Returns weather description text and suitable Lucide weather icon.
+ *
+ * @param {number} code - Open-Meteo weather code number.
+ * @returns {{ text: string, icon: import('lucide-react').LucideIcon }}
+ */
 const getWeatherDescription = (code) => {
   if (code === 0) return { text: 'Jasno', icon: Sun };
   if (code === 1 || code === 2) return { text: 'Polojasno', icon: Cloud };
@@ -359,9 +371,20 @@ const getWeatherDescription = (code) => {
   return { text: 'Proměnlivo', icon: Cloud };
 };
 
+/**
+ * Main EarthDashboard component loading city search telemetry, live weather,
+ * local city time, and rendering the interactive Earth globe visualization.
+ *
+ * @component
+ */
 export default function EarthDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentLocation, setCurrentLocation] = useState({ name: 'Prague', lat: 50.0755, lon: 14.4378, timezone: 'Europe/Prague' });
+  const [currentLocation, setCurrentLocation] = useState({ 
+    name: 'Prague', 
+    lat: 50.0755, 
+    lon: 14.4378, 
+    timezone: 'Europe/Prague' 
+  });
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState('');
@@ -374,7 +397,8 @@ export default function EarthDashboard() {
     setSearchError('');
     try {
       const query = searchQuery.trim().replace(/\s+/g, ' ');
-      const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`);
+      const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`;
+      const geoRes = await fetch(geoUrl);
       const geoData = await geoRes.json();
       if (!geoData.results || geoData.results.length === 0) {
         setSearchError('Město nenalezeno (zkontrolujte překlep)');
@@ -383,7 +407,12 @@ export default function EarthDashboard() {
       }
       const sortedResults = geoData.results.sort((a, b) => (b.population || 0) - (a.population || 0));
       const { name, latitude, longitude, country, timezone } = sortedResults[0];
-      setCurrentLocation({ name: `${name}, ${country || 'Neznámé'}`, lat: latitude, lon: longitude, timezone });
+      setCurrentLocation({ 
+        name: `${name}, ${country || 'Neznámé'}`, 
+        lat: latitude, 
+        lon: longitude, 
+        timezone 
+      });
       setSearchQuery('');
     } catch (err) {
       console.error("Geocoding failed:", err);
@@ -397,7 +426,8 @@ export default function EarthDashboard() {
       setLoading(true);
       try {
         const { lat, lon } = currentLocation;
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relative_humidity_2m`);
+        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relative_humidity_2m`;
+        const res = await fetch(weatherUrl);
         const data = await res.json();
         const currentHour = new Date().toISOString().slice(0, 14) + '00';
         const humIndex = data.hourly?.time?.findIndex(t => t.startsWith(currentHour.slice(0, 13))) || 0;
@@ -422,12 +452,13 @@ export default function EarthDashboard() {
     const updateTime = () => {
       try {
         if (currentLocation.timezone) {
-          setCurrentTime(new Date().toLocaleTimeString('en-GB', { timeZone: currentLocation.timezone }));
+          setCurrentTime(new Date().toLocaleTimeString('en-GB', { 
+            timeZone: currentLocation.timezone 
+          }));
         } else {
           setCurrentTime(new Date().toLocaleTimeString());
         }
       } catch {
-        // Fallback if timezone is invalid
         setCurrentTime(new Date().toLocaleTimeString());
       }
     };
@@ -439,7 +470,10 @@ export default function EarthDashboard() {
   return (
     <div className="dashboard">
       <div className="dashboard-panel">
-        <div className="panel-header" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}>
+        <div 
+          className="panel-header" 
+          style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}
+        >
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
             <h2 className="panel-title earth-title">
               <MapPin size={20} /> {currentLocation.name}
@@ -459,7 +493,11 @@ export default function EarthDashboard() {
                   outline: 'none'
                 }}
               />
-              <button type="submit" className="control-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
+              <button 
+                type="submit" 
+                className="control-btn" 
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}
+              >
                 <Search size={18} />
               </button>
             </form>
@@ -469,9 +507,16 @@ export default function EarthDashboard() {
 
         {loading || !weatherData ? (
           <div className="stat-grid">
-            <div className="stat-card skeleton-box" style={{ gridColumn: '1 / -1', height: '88px', border: '1px solid transparent' }} />
+            <div 
+              className="stat-card skeleton-box" 
+              style={{ gridColumn: '1 / -1', height: '88px', border: '1px solid transparent' }} 
+            />
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="stat-card skeleton-box" style={{ height: '88px', border: '1px solid transparent' }} />
+              <div 
+                key={i} 
+                className="stat-card skeleton-box" 
+                style={{ height: '88px', border: '1px solid transparent' }} 
+              />
             ))}
           </div>
         ) : (

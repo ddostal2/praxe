@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Rocket } from 'lucide-react';
 import MoonDashboard from './components/MoonDashboard';
 import CompareDashboard from './components/CompareDashboard';
 import CosmicBackground from './components/CosmicBackground';
 import './App.css';
-import MarsDashboard from "./components/MarsDashboard.jsx";
-import EarthDashboard from "./components/EarthDashboard.jsx"; // Optional, but keeping for standard Vite
+import MarsDashboard from './components/MarsDashboard';
+import EarthDashboard from './components/EarthDashboard';
 
+/**
+ * Root Application component providing the main tabbed layout, 
+ * navigation header, and wrapping content inside the live cosmic starfield.
+ *
+ * @component
+ */
 export default function App() {
   const [activeTab, setActiveTab] = useState('earth');
 
@@ -38,8 +44,8 @@ export default function App() {
               Měsíc
             </button>
             <button
-                className={`nav-btn ${activeTab === 'compare' ? 'active-compare' : ''}`}
-                onClick={() => setActiveTab('compare')}
+              className={`nav-btn ${activeTab === 'compare' ? 'active-compare' : ''}`}
+              onClick={() => setActiveTab('compare')}
             >
               Porovnání
             </button>

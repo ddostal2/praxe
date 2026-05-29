@@ -1,13 +1,21 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 const SIZE = 280;
 const CX = SIZE / 2;
 const CY = SIZE / 2;
 const R = SIZE * 0.42;
+
 /** Slightly larger than disc so phase shadow fully covers edge pixels */
 const SHADOW_R = R * 1.14;
 
-function shadowCenterX(phaseAngle) {
+/**
+ * Calculates the exact X-coordinate center for the SVG shadow overlay
+ * based on the current lunar phase angle.
+ *
+ * @param {number} phaseAngle - Current moon phase angle in degrees (0-360).
+ * @returns {number} The calculated horizontal SVG center coordinate for the shadow circle.
+ */
+function calculateShadowCenterX(phaseAngle) {
   const illum = (1 - Math.cos((phaseAngle * Math.PI) / 180)) / 2;
   const waxing = phaseAngle < 180;
   if (waxing) {
@@ -16,8 +24,16 @@ function shadowCenterX(phaseAngle) {
   return CX + 2 * R * illum;
 }
 
+/**
+ * Visual-only Moon component rendering a circular lunar disk overlayed with
+ * an SVG phase-based shadow circle to represent the current phase illumination percentage.
+ *
+ * @component
+ * @param {Object} props
+ * @param {number} props.phaseAngle - Angle of the moon phase in degrees.
+ */
 export default function MoonVisualization({ phaseAngle }) {
-  const shadowX = useMemo(() => shadowCenterX(phaseAngle), [phaseAngle]);
+  const shadowX = useMemo(() => calculateShadowCenterX(phaseAngle), [phaseAngle]);
   const illum = (1 - Math.cos((phaseAngle * Math.PI) / 180)) / 2;
 
   return (
