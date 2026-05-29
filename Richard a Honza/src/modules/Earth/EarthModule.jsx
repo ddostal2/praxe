@@ -208,19 +208,7 @@ const getLocalTime = (offsetFn) => {
 
 
 
-const renderCityLights = () => (
-  <>
-    <circle cx="55" cy="72" r="1.5" className="city-light" style={{ animationDelay: '0.2s' }} />
-    <circle cx="100" cy="54" r="1.2" className="city-light" style={{ animationDelay: '0.6s' }} />
-    <circle cx="168" cy="62" r="1.5" className="city-light" style={{ animationDelay: '0.9s' }} />
-    <circle cx="165" cy="138" r="1.2" className="city-light" style={{ animationDelay: '0.1s' }} />
-    <circle cx="108" cy="58" r="1.4" className="city-light" style={{ animationDelay: '0s' }} />
-    <circle cx="140" cy="98" r="1.2" className="city-light" style={{ animationDelay: '1.5s' }} />
-    <circle cx="70" cy="138" r="1.3" className="city-light" style={{ animationDelay: '1.2s' }} />
-    <circle cx="116" cy="92" r="1.2" className="city-light" style={{ animationDelay: '0.8s' }} />
-    <circle cx="114" cy="152" r="1" className="city-light" style={{ animationDelay: '0.4s' }} />
-  </>
-);
+
 
 const calculateMapCoordinates = (lat, lon) => {
   return {
@@ -240,18 +228,61 @@ export default function EarthModule() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  // Helper to render shifted and wrapped layers horizontally (translated side-by-side at -172.8, 0, +172.8)
-  const renderShiftedLayer = (children) => {
-    const shift = 100 - selectedLocation.mapX;
-    return (
-      <g transform={`translate(${shift}, 0)`} className="globe-map-group">
-        <g transform="translate(-172.8, 0)">{children}</g>
-        <g transform="translate(0, 0)">{children}</g>
-        <g transform="translate(172.8, 0)">{children}</g>
-      </g>
-    );
-  };
+  // 1. Dynamic Search Autocomplete & Debouncing suggestion fetcher
+  useEffect(() => {
+    if (searchQuery.trim().length < 2) {
+      setSuggestions([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      setSearchLoading(true);
+      setSearchError(null);
+      try {
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery)}&count=5&language=en&format=json`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error('Chyba při stahování lokací.');
+        }
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          setSuggestions(data.results);
+          setShowDropdown(true);
+        } else {
+          setSuggestions([]);
+          setShowDropdown(true); // display "Žádná města nenalezena"
+        }
+      } catch (err) {
+        console.error("Geocoding suggestions error:", err);
+        setSuggestions([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  // 2. Click outside handler to dismiss search drop-down suggestions
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      const searchContainer = document.querySelector('.search-control-panel');
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener('click', handleGlobalClick);
+    }
+    return () => {
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, [showDropdown]);
 
   // Update time details every second
   useEffect(() => {
@@ -300,48 +331,33 @@ export default function EarthModule() {
     };
   }, [selectedLocation]);
 
-  // Geocoding API handler for dynamic search
-  const handleSearchSubmit = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
+  // Handle suggestion selection
+  const handleSelectSuggestion = (city) => {
+    const coords = calculateMapCoordinates(city.latitude, city.longitude);
+    const customLocation = {
+      id: `custom-${city.id || Date.now()}`,
+      name: city.name,
+      country: city.country || 'Pozemská federace',
+      flag: '📍',
+      lat: city.latitude,
+      lon: city.longitude,
+      mapX: coords.x,
+      mapY: coords.y,
+      timezone: city.timezone || 'UTC',
+      timezoneOffset: () => getOffsetForTimezone(city.timezone || 'UTC')
+    };
 
-    setSearchLoading(true);
+    setSelectedLocation(customLocation);
+    setSearchQuery('');
+    setShowDropdown(false);
     setSearchError(null);
+  };
 
-    try {
-      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchQuery)}&count=1&language=en&format=json`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error('Nepodařilo se spojit se satelitním registrem měst.');
-      }
-      
-      const data = await res.json();
-      if (!data.results || data.results.length === 0) {
-        throw new Error('Město nebylo nalezeno, zkontrolujte prosím překlepy.');
-      }
-
-      const city = data.results[0];
-      const coords = calculateMapCoordinates(city.latitude, city.longitude);
-
-      const customLocation = {
-        id: `custom-${city.id || Date.now()}`,
-        name: city.name,
-        country: city.country || 'Pozemská federace',
-        flag: '📍',
-        lat: city.latitude,
-        lon: city.longitude,
-        mapX: coords.x,
-        mapY: coords.y,
-        timezone: city.timezone || 'UTC',
-        timezoneOffset: () => getOffsetForTimezone(city.timezone || 'UTC')
-      };
-
-      setSelectedLocation(customLocation);
-      setSearchQuery('');
-    } catch (err) {
-      setSearchError(err.message);
-    } finally {
-      setSearchLoading(false);
+  // If user presses enter on input or clicks Search button, select the first suggestion
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (suggestions.length > 0) {
+      handleSelectSuggestion(suggestions[0]);
     }
   };
 
@@ -444,11 +460,32 @@ export default function EarthModule() {
               <input
                 type="text"
                 className="search-input"
-                placeholder="Hledat pozemské město..."
+                placeholder="Napište název města (např. Praha, New York...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                disabled={searchLoading}
               />
+              
+              {/* Autocomplete Dropdown List */}
+              {showDropdown && (
+                <div className="suggestions-dropdown">
+                  {suggestions.length > 0 ? (
+                    suggestions.map((city) => (
+                      <button
+                        key={city.id || `${city.latitude}-${city.longitude}`}
+                        type="button"
+                        className="suggestion-item"
+                        onClick={() => handleSelectSuggestion(city)}
+                      >
+                        <span className="suggestion-city-name">{city.name}</span>
+                        {city.admin1 && <span className="suggestion-admin-name">, {city.admin1}</span>}
+                        <span className="suggestion-country-name">, {city.country}</span>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="suggestion-empty-state">Žádné město nenalezeno</div>
+                  )}
+                </div>
+              )}
             </div>
             <button type="submit" className="search-btn" disabled={searchLoading}>
               {searchLoading ? (
@@ -657,16 +694,6 @@ export default function EarthModule() {
                   {getTerminatorStops(false)}
                 </linearGradient>
 
-                {/* City Lights Mask Gradient (Inverse terminator gradient) */}
-                <linearGradient id="city-lights-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  {getTerminatorStops(true)}
-                </linearGradient>
-
-                {/* Night Mask to display city lights only on the dark hemisphere */}
-                <mask id="night-mask">
-                  <rect x="0" y="0" width="200" height="200" fill="url(#city-lights-grad)" />
-                </mask>
-
                 {/* Earth sphere clipping boundary */}
                 <clipPath id="earth-clip">
                   <circle cx="100" cy="100" r="80" />
@@ -681,13 +708,6 @@ export default function EarthModule() {
               <g clipPath="url(#earth-clip)">
                 {/* 1. Dynamic Night Shadow (Linear gradient overlay) */}
                 <circle cx="100" cy="100" r="80" fill="url(#terminator-grad)" />
-                
-                {/* 2. Glowing Golden City Lights (Shifted & Wrapped, displayed only in dark night regions) */}
-                {renderShiftedLayer(
-                  <g fill="#ffd700" mask="url(#night-mask)">
-                    {renderCityLights()}
-                  </g>
-                )}
 
                 {/* 3. Globe Cyber Grid Overlay */}
                 <g stroke="rgba(0, 240, 255, 0.08)" strokeWidth="0.4" fill="none">
