@@ -1,57 +1,8 @@
 import { useState } from 'react';
 import EarthModule from './modules/Earth/EarthModule.jsx';
+import MarsModule from './modules/Mars/MarsModule.jsx';
 import { MoonModule } from './moon/index.js';
 import './App.css';
-
-function MarsPlaceholder() {
-  return (
-    <div className="placeholder-module">
-      <div
-        className="placeholder-card"
-        style={{
-          '--accent-color': '#ff5722',
-          '--laser-color': '#ff5722',
-          '--shadow-color': 'rgba(255, 87, 34, 0.4)',
-          '--bg-tag': 'rgba(255, 87, 34, 0.08)',
-        }}
-      >
-        <div className="cyber-icon-outer">
-          <div className="cyber-ring-spin" />
-          <div className="cyber-icon-inner cyber-icon-pulse">
-            <span className="placeholder-icon" aria-hidden="true">⚙️</span>
-          </div>
-        </div>
-
-        <h2 className="placeholder-title">🔴 MODUL MARS</h2>
-        <div className="placeholder-tag">
-          <span className="pulse-dot" />
-          SYSTÉMY SE PŘIPRAVUJÍ...
-        </div>
-
-        <p className="placeholder-desc">
-          Připravujeme telemetrické rozhraní pro přenos meteorologických dat ze sondy{' '}
-          <strong>InSight</strong>. Brzy zprovozníme 2D simulátor povrchových větrů a zobrazení
-          nejnovějších fotografií z roveru <strong>Perseverance</strong>.
-        </p>
-
-        <div className="cyber-terminal">
-          <div className="terminal-line">
-            <span className="terminal-prompt">&gt;</span>
-            <span className="terminal-text">SYS_INIT: MARS MODULE CORE v0.92 BETA...</span>
-          </div>
-          <div className="terminal-line">
-            <span className="terminal-prompt">&gt;</span>
-            <span className="terminal-text">NASA INSIGHT API CONNECT: PENDING (SOL 142)</span>
-          </div>
-          <div className="terminal-line">
-            <span className="terminal-prompt">&gt;</span>
-            <span className="terminal-text anim-blink">CHYBA: ČEKÁNÍ NA SCHVÁLENÍ ORBITÁLNÍ DRÁHY...</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function App() {
   const [activeModule, setActiveModule] = useState('earth');
@@ -132,7 +83,7 @@ function App() {
 
           {activeModule === 'mars' && (
             <div className="module-fade-wrapper" key="mars">
-              <MarsPlaceholder />
+              <MarsModule />
             </div>
           )}
 
