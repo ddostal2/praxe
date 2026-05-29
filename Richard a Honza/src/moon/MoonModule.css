@@ -1,0 +1,200 @@
+/* Moon module — mirrors Earth cyberpunk layout with lunar silver accents */
+
+.moon-container.earth-container {
+  --moon-accent: #cbd5e1;
+  --moon-accent-bright: #f1f5f9;
+  --moon-glow: rgba(203, 213, 225, 0.35);
+}
+
+.moon-container .earth-title {
+  text-shadow: 0 0 10px rgba(203, 213, 225, 0.45), 0 0 20px rgba(203, 213, 225, 0.2);
+}
+
+.moon-container .search-control-panel {
+  border-color: rgba(203, 213, 225, 0.18);
+  box-shadow: inset 0 0 15px rgba(203, 213, 225, 0.05);
+}
+
+.moon-container .search-input {
+  border-color: rgba(203, 213, 225, 0.2);
+}
+
+.moon-container .search-input:focus {
+  border-color: var(--moon-accent);
+  box-shadow: 0 0 15px rgba(203, 213, 225, 0.25);
+}
+
+.moon-container .search-btn {
+  background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+  box-shadow: 0 0 10px rgba(203, 213, 225, 0.2);
+}
+
+.moon-container .search-btn:hover {
+  box-shadow: 0 0 18px rgba(203, 213, 225, 0.4);
+}
+
+.moon-container .quick-links-label {
+  color: var(--moon-accent);
+}
+
+.moon-container .quick-tag-btn:hover {
+  color: var(--moon-accent);
+  border-color: rgba(203, 213, 225, 0.4);
+  background: rgba(203, 213, 225, 0.08);
+}
+
+.moon-container .quick-tag-btn.active {
+  background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+  box-shadow: 0 0 12px rgba(203, 213, 225, 0.35);
+}
+
+.moon-container .glass-card {
+  border-color: rgba(203, 213, 225, 0.15);
+  box-shadow:
+    0 12px 40px 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(203, 213, 225, 0.05);
+}
+
+.moon-container .glass-card:hover {
+  border-color: rgba(203, 213, 225, 0.3);
+  box-shadow:
+    0 12px 40px 0 rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(203, 213, 225, 0.12),
+    inset 0 0 15px rgba(203, 213, 225, 0.06);
+}
+
+.moon-container .location-country {
+  color: var(--moon-accent);
+}
+
+.moon-container .clock-time {
+  color: var(--moon-accent);
+  text-shadow: 0 0 10px rgba(203, 213, 225, 0.3);
+}
+
+.moon-container .timezone-tag {
+  background: rgba(203, 213, 225, 0.07);
+  border-color: rgba(203, 213, 225, 0.15);
+}
+
+.moon-container .weather-large-icon {
+  color: var(--moon-accent);
+  filter: drop-shadow(0 0 12px rgba(203, 213, 225, 0.4));
+}
+
+.moon-container .temp-unit {
+  color: var(--moon-accent);
+}
+
+.moon-container .metric-card:hover {
+  background: rgba(203, 213, 225, 0.04);
+  border-color: rgba(203, 213, 225, 0.2);
+}
+
+.moon-container .metric-icon-box {
+  background: rgba(203, 213, 225, 0.06);
+  color: var(--moon-accent);
+}
+
+.moon-container .globe-glow-ambient {
+  background: radial-gradient(
+    circle,
+    rgba(203, 213, 225, 0.15) 0%,
+    rgba(148, 163, 184, 0.05) 50%,
+    rgba(0, 0, 0, 0) 70%
+  );
+}
+
+.moon-container .earth-visual-column {
+  width: 100%;
+  align-items: center;
+}
+
+.moon-container .globe-wrapper {
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+}
+
+.moon-container .earth-svg,
+.moon-container .moon-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 25px rgba(148, 163, 184, 0.25));
+}
+
+.moon-container .globe-glow-ambient {
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  inset: auto;
+}
+
+.moon-container .terminator-info-box {
+  border-color: rgba(203, 213, 225, 0.12);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.moon-container .terminator-info-box strong {
+  color: var(--moon-accent);
+}
+
+.moon-container .spinner {
+  border-top-color: var(--moon-accent);
+  box-shadow: 0 0 15px rgba(203, 213, 225, 0.2);
+}
+
+.moon-container .risk-low {
+  color: #86efac;
+}
+
+.moon-container .risk-medium {
+  color: #fcd34d;
+}
+
+.moon-container .risk-high {
+  color: #fca5a5;
+}
+
+.moon-container .illumination-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.15);
+  overflow: hidden;
+  margin-top: 0.35rem;
+}
+
+.moon-container .illumination-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #64748b, #f1f5f9);
+  transition: width 0.6s ease;
+}
+
+.moon-crater {
+  fill: rgba(90, 85, 75, 0.35);
+}
+
+.moon-crater-highlight {
+  fill: rgba(180, 172, 155, 0.2);
+}
+
+.moon-lit-surface {
+  fill: url(#moon-lit-gradient);
+}
+
+.moon-shadow-surface {
+  fill: #0a0a14;
+}
+
+.moon-atmosphere-ring {
+  stroke: rgba(203, 213, 225, 0.4);
+}
+
+.moon-grid {
+  stroke: rgba(203, 213, 225, 0.08);
+}
