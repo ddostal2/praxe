@@ -22,6 +22,12 @@ import {
 import './EarthModule.css';
 
 // --------------------------------------------------------------------------
+// EQUIRECTANGULAR GEOMETRIC PROJECTION SOLVERS
+// --------------------------------------------------------------------------
+const getMapX = (lon) => 100 + (lon * 0.48);
+const getMapY = (lat) => 100 - (lat * (160 / 180));
+
+// --------------------------------------------------------------------------
 // STATIC QUICK LINKS CONFIGURATION
 // --------------------------------------------------------------------------
 const STATIC_LOCATIONS = [
@@ -32,8 +38,8 @@ const STATIC_LOCATIONS = [
     flag: '🇨🇿',
     lat: 50.0755,
     lon: 14.4378,
-    mapX: 108, // Hand-tuned map coordinates
-    mapY: 58,
+    mapX: getMapX(14.4378),
+    mapY: getMapY(50.0755),
     timezone: 'Europe/Prague',
     timezoneOffset: () => getOffsetForTimezone('Europe/Prague')
   },
@@ -44,8 +50,8 @@ const STATIC_LOCATIONS = [
     flag: '🇦🇺',
     lat: -33.8688,
     lon: 151.2093,
-    mapX: 165,
-    mapY: 138,
+    mapX: getMapX(151.2093),
+    mapY: getMapY(-33.8688),
     timezone: 'Australia/Sydney',
     timezoneOffset: () => getOffsetForTimezone('Australia/Sydney')
   },
@@ -56,8 +62,8 @@ const STATIC_LOCATIONS = [
     flag: '🇺🇸',
     lat: 40.7128,
     lon: -74.0060,
-    mapX: 55,
-    mapY: 72,
+    mapX: getMapX(-74.0060),
+    mapY: getMapY(40.7128),
     timezone: 'America/New_York',
     timezoneOffset: () => getOffsetForTimezone('America/New_York')
   },
@@ -68,8 +74,8 @@ const STATIC_LOCATIONS = [
     flag: '🇯🇵',
     lat: 35.6762,
     lon: 139.6503,
-    mapX: 168,
-    mapY: 62,
+    mapX: getMapX(139.6503),
+    mapY: getMapY(35.6762),
     timezone: 'Asia/Tokyo',
     timezoneOffset: () => getOffsetForTimezone('Asia/Tokyo')
   },
@@ -80,8 +86,8 @@ const STATIC_LOCATIONS = [
     flag: '🇮🇸',
     lat: 64.1466,
     lon: -21.9426,
-    mapX: 89,
-    mapY: 45,
+    mapX: getMapX(-21.9426),
+    mapY: getMapY(64.1466),
     timezone: 'Atlantic/Reykjavik',
     timezoneOffset: () => getOffsetForTimezone('Atlantic/Reykjavik')
   }
@@ -200,26 +206,27 @@ const getLocalTime = (offsetFn) => {
   };
 };
 
-// --------------------------------------------------------------------------
-// DYNAMIC 2D ADAPTIVE PROJECTION
-// --------------------------------------------------------------------------
+
+
+const renderCityLights = () => (
+  <>
+    <circle cx="55" cy="72" r="1.5" className="city-light" style={{ animationDelay: '0.2s' }} />
+    <circle cx="100" cy="54" r="1.2" className="city-light" style={{ animationDelay: '0.6s' }} />
+    <circle cx="168" cy="62" r="1.5" className="city-light" style={{ animationDelay: '0.9s' }} />
+    <circle cx="165" cy="138" r="1.2" className="city-light" style={{ animationDelay: '0.1s' }} />
+    <circle cx="108" cy="58" r="1.4" className="city-light" style={{ animationDelay: '0s' }} />
+    <circle cx="140" cy="98" r="1.2" className="city-light" style={{ animationDelay: '1.5s' }} />
+    <circle cx="70" cy="138" r="1.3" className="city-light" style={{ animationDelay: '1.2s' }} />
+    <circle cx="116" cy="92" r="1.2" className="city-light" style={{ animationDelay: '0.8s' }} />
+    <circle cx="114" cy="152" r="1" className="city-light" style={{ animationDelay: '0.4s' }} />
+  </>
+);
+
 const calculateMapCoordinates = (lat, lon) => {
-  // Cylindrical/equirectangular scaling mapping to SVG viewport
-  // X range [20, 180], Y range [20, 180] inside a circle of radius 80
-  let x = 100 + (lon * 0.48);
-  let y = 100 - (lat * 0.88);
-  
-  // Ensure the coordinate resides strictly within the circular boundary (clamped to radius 74)
-  const dx = x - 100;
-  const dy = y - 100;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  
-  if (dist > 74) {
-    x = 100 + (dx / dist) * 74;
-    y = 100 + (dy / dist) * 74;
-  }
-  
-  return { x, y };
+  return {
+    x: getMapX(lon),
+    y: getMapY(lat)
+  };
 };
 
 export default function EarthModule() {
@@ -233,6 +240,18 @@ export default function EarthModule() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState(null);
+
+  // Helper to render shifted and wrapped layers horizontally (translated side-by-side at -172.8, 0, +172.8)
+  const renderShiftedLayer = (children) => {
+    const shift = 100 - selectedLocation.mapX;
+    return (
+      <g transform={`translate(${shift}, 0)`} className="globe-map-group">
+        <g transform="translate(-172.8, 0)">{children}</g>
+        <g transform="translate(0, 0)">{children}</g>
+        <g transform="translate(172.8, 0)">{children}</g>
+      </g>
+    );
+  };
 
   // Update time details every second
   useEffect(() => {
@@ -327,48 +346,66 @@ export default function EarthModule() {
   };
 
   // --------------------------------------------------------------------------
-  // REPAIRED DYNAMIC TERMINATOR LOGIC
-  // Centers terminator dynamically using selected city coordinate and local time
+  // MATHEMATICALLY PERFECT DYNAMIC SOLAR TERMINATOR LOGIC
+  // Calculates global day/night boundaries based on UTC time (sun position)
+  // Maps sunrise/sunset with seamless midnight wrapping and soft penumbra (±8%)
   // --------------------------------------------------------------------------
-  const renderTerminatorStops = () => {
-    const H = timeData.decimalHours;
-    const P = (selectedLocation.mapX / 200) * 100; // City horizontal coordinate as percentage [0, 100]
-    
-    if (H === 12) {
-      return <stop offset="100%" stopColor="#ffffff" />;
-    }
-    if (H === 0 || H === 24) {
-      return <stop offset="100%" stopColor="#000000" />;
-    }
+  const getTerminatorStops = (isInverse = false) => {
+    // Decimal hours in local time of the selected location (range [0.0, 24.0])
+    const H_local = timeData.decimalHours;
 
-    let X_term;
-    if (H > 0 && H <= 12) {
-      if (H <= 6) {
-        X_term = 100 - (H / 6) * (100 - P);
-      } else {
-        X_term = P - ((H - 6) / 6) * P;
-      }
-      const startClamped = Math.max(0, Math.min(100, X_term - 12));
-      const endClamped = Math.max(0, Math.min(100, X_term + 12));
+    // Because the map rotates to center the selected city at 50% width (X=100),
+    // the sun's position on this disk is determined solely by local hours.
+    // Sun is at center (X=50%) at local noon (12:00), and at edges (X=100%/0%) at local midnight.
+    const X_sun = 100 - (H_local / 24) * 100;
+    
+    // Day extends 25% (90 degrees longitude) to either side of the sun
+    const X_start = X_sun - 25;
+    const X_end = X_sun + 25;
+
+    // Transition softness width (penumbra) for realistic atmospheric scattering
+    const soft = 8;
+
+    const nightColor = isInverse ? "#ffffff" : "rgba(4, 6, 18, 0.82)";
+    const dayColor = isInverse ? "#000000" : "rgba(0, 0, 0, 0)";
+
+    // Handle wrapping boundaries across the edges of the 2D sphere
+    if (X_start >= 0 && X_end <= 100) {
+      // Case 1: Day is in the middle of the flat map, night is at the left & right edges
       return (
         <>
-          <stop offset={`${startClamped}%`} stopColor="#000000" />
-          <stop offset={`${endClamped}%`} stopColor="#ffffff" />
+          <stop offset="0%" stopColor={nightColor} />
+          <stop offset={`${Math.max(0, X_start - soft)}%`} stopColor={nightColor} />
+          <stop offset={`${Math.min(100, X_start + soft)}%`} stopColor={dayColor} />
+          <stop offset={`${Math.max(0, X_end - soft)}%`} stopColor={dayColor} />
+          <stop offset={`${Math.min(100, X_end + soft)}%`} stopColor={nightColor} />
+          <stop offset="100%" stopColor={nightColor} />
+        </>
+      );
+    } else if (X_start < 0) {
+      // Case 2: Day is centered on the left edge (wraps to right edge), night is in the middle
+      const X_start_wrapped = 100 + X_start;
+      return (
+        <>
+          <stop offset="0%" stopColor={dayColor} />
+          <stop offset={`${Math.max(0, X_end - soft)}%`} stopColor={dayColor} />
+          <stop offset={`${Math.min(100, X_end + soft)}%`} stopColor={nightColor} />
+          <stop offset={`${Math.max(0, X_start_wrapped - soft)}%`} stopColor={nightColor} />
+          <stop offset={`${Math.min(100, X_start_wrapped + soft)}%`} stopColor={dayColor} />
+          <stop offset="100%" stopColor={dayColor} />
         </>
       );
     } else {
-      const H_after = H - 12;
-      if (H_after <= 6) {
-        X_term = 100 - (H_after / 6) * (100 - P);
-      } else {
-        X_term = P - ((H_after - 6) / 6) * P;
-      }
-      const startClamped = Math.max(0, Math.min(100, X_term - 12));
-      const endClamped = Math.max(0, Math.min(100, X_term + 12));
+      // Case 3: Day is centered on the right edge (wraps to left edge), night is in the middle
+      const X_end_wrapped = X_end - 100;
       return (
         <>
-          <stop offset={`${startClamped}%`} stopColor="#ffffff" />
-          <stop offset={`${endClamped}%`} stopColor="#000000" />
+          <stop offset="0%" stopColor={dayColor} />
+          <stop offset={`${Math.max(0, X_end_wrapped - soft)}%`} stopColor={dayColor} />
+          <stop offset={`${Math.min(100, X_end_wrapped + soft)}%`} stopColor={nightColor} />
+          <stop offset={`${Math.max(0, X_start - soft)}%`} stopColor={nightColor} />
+          <stop offset={`${Math.min(100, X_start + soft)}%`} stopColor={dayColor} />
+          <stop offset="100%" stopColor={dayColor} />
         </>
       );
     }
@@ -598,6 +635,14 @@ export default function EarthModule() {
           <div className="globe-wrapper">
             <div className="globe-glow-ambient" />
             
+            {/* 1. Real Satellite Texture of planet Earth (CSS background-image with transition) */}
+            <div 
+              className="earth-sphere" 
+              style={{ 
+                backgroundPositionX: `${50 + (selectedLocation.lon / 1.8)}%` 
+              }} 
+            />
+            
             <svg viewBox="0 0 200 200" className="earth-svg">
               <defs>
                 {/* Atmosphere outer gradient */}
@@ -607,32 +652,25 @@ export default function EarthModule() {
                   <stop offset="100%" stopColor="#00f0ff" stopOpacity="0" />
                 </radialGradient>
 
-                {/* Day ocean glow */}
-                <radialGradient id="day-ocean" cx="50%" cy="50%" r="70%">
-                  <stop offset="0%" stopColor="#005fa3" />
-                  <stop offset="70%" stopColor="#002d5a" />
-                  <stop offset="100%" stopColor="#001830" />
-                </radialGradient>
-
-                {/* Day Land neon gradient */}
-                <linearGradient id="day-land" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00e676" />
-                  <stop offset="100%" stopColor="#00b0ff" />
+                {/* Day/Night Terminator Gradient (Opacity overlay on top of Day Map) */}
+                <linearGradient id="terminator-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  {getTerminatorStops(false)}
                 </linearGradient>
+
+                {/* City Lights Mask Gradient (Inverse terminator gradient) */}
+                <linearGradient id="city-lights-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  {getTerminatorStops(true)}
+                </linearGradient>
+
+                {/* Night Mask to display city lights only on the dark hemisphere */}
+                <mask id="night-mask">
+                  <rect x="0" y="0" width="200" height="200" fill="url(#city-lights-grad)" />
+                </mask>
 
                 {/* Earth sphere clipping boundary */}
                 <clipPath id="earth-clip">
                   <circle cx="100" cy="100" r="80" />
                 </clipPath>
-
-                {/* Dynamic Day/Night Terminator Mask */}
-                <linearGradient id="terminator-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  {renderTerminatorStops()}
-                </linearGradient>
-
-                <mask id="day-mask">
-                  <rect x="0" y="0" width="200" height="200" fill="url(#terminator-grad)" />
-                </mask>
               </defs>
 
               {/* Atmosphere Outer Ring Glow */}
@@ -641,63 +679,17 @@ export default function EarthModule() {
 
               {/* Masked Earth Sphere Globe */}
               <g clipPath="url(#earth-clip)">
-                {/* --------------------------------------------------------
-                   NIGHT SIDE LAYER (Default base layer underneath)
-                   -------------------------------------------------------- */}
-                <rect x="0" y="0" width="200" height="200" fill="#040612" />
+                {/* 1. Dynamic Night Shadow (Linear gradient overlay) */}
+                <circle cx="100" cy="100" r="80" fill="url(#terminator-grad)" />
                 
-                {/* Night Continents - Deep dark blue outline & shape */}
-                <g opacity="0.85">
-                  {/* North America */}
-                  <path d="M 45,45 L 52,38 L 60,42 L 68,40 L 72,48 L 62,56 L 68,64 L 62,70 L 52,72 L 55,80 L 62,82 L 58,92 L 64,100 L 56,110 L 46,112 L 40,108 L 45,100 L 38,92 L 40,84 L 35,76 L 25,72 L 28,60 L 34,54 L 32,48 Z" fill="#0d122b" stroke="#18224d" strokeWidth="0.5" />
-                  {/* South America */}
-                  <path d="M 56,110 L 58,118 L 65,124 L 72,120 L 78,128 L 74,138 L 66,145 L 60,155 L 56,170 L 53,172 L 51,168 L 54,152 L 52,142 L 46,134 L 42,126 L 45,115 Z" fill="#0d122b" stroke="#18224d" strokeWidth="0.5" />
-                  {/* Europe / Asia */}
-                  <path d="M 90,52 L 96,44 L 105,40 L 115,38 L 128,32 L 142,32 L 155,36 L 168,34 L 175,40 L 172,48 L 165,48 L 168,54 L 176,50 L 180,60 L 172,66 L 165,62 L 160,68 L 156,76 L 162,82 L 168,80 L 172,86 L 165,92 L 158,88 L 150,92 L 144,98 L 140,105 L 142,112 L 136,118 L 128,110 L 125,98 L 120,95 L 115,98 L 116,90 L 110,88 L 105,94 L 98,90 L 92,84 L 96,78 L 92,72 L 95,64 L 88,60 Z" fill="#0d122b" stroke="#18224d" strokeWidth="0.5" />
-                  {/* Africa */}
-                  <path d="M 95,92 L 104,95 L 110,90 L 116,92 L 120,96 L 124,104 L 128,112 L 126,122 L 122,132 L 118,142 L 114,152 L 109,158 L 107,152 L 108,140 L 105,130 L 102,122 L 98,116 L 94,110 L 92,102 Z" fill="#0d122b" stroke="#18224d" strokeWidth="0.5" />
-                  {/* Australia */}
-                  <path d="M 152,132 L 162,128 L 170,132 L 174,142 L 168,148 L 158,146 L 150,140 Z" fill="#0d122b" stroke="#18224d" strokeWidth="0.5" />
-                  {/* Greenland */}
-                  <path d="M 72,28 L 82,24 L 78,34 L 70,36 Z" fill="#0d122b" stroke="#18224d" strokeWidth="0.5" />
-                  {/* Iceland */}
-                  <path d="M 89,45 L 91,44 L 90,46 Z" fill="#0d122b" stroke="#18224d" strokeWidth="0.5" />
-                </g>
-
-                {/* Faint Glowing Golden City Lights on Night Side */}
-                <g fill="#ffd700">
-                  <circle cx="55" cy="72" r="1.5" className="city-light" style={{ animationDelay: '0.2s' }} />
-                  <circle cx="100" cy="54" r="1.2" className="city-light" style={{ animationDelay: '0.6s' }} />
-                  <circle cx="168" cy="62" r="1.5" className="city-light" style={{ animationDelay: '0.9s' }} />
-                  <circle cx="165" cy="138" r="1.2" className="city-light" style={{ animationDelay: '0.1s' }} />
-                  <circle cx="108" cy="58" r="1.4" className="city-light" style={{ animationDelay: '0s' }} />
-                  <circle cx="140" cy="98" r="1.2" className="city-light" style={{ animationDelay: '1.5s' }} />
-                  <circle cx="70" cy="138" r="1.3" className="city-light" style={{ animationDelay: '1.2s' }} />
-                  <circle cx="116" cy="92" r="1.2" className="city-light" style={{ animationDelay: '0.8s' }} />
-                  <circle cx="114" cy="152" r="1" className="city-light" style={{ animationDelay: '0.4s' }} />
-                </g>
-
-                {/* --------------------------------------------------------
-                   DAY SIDE LAYER (Revealed dynamically via SVG mask)
-                   -------------------------------------------------------- */}
-                <g mask="url(#day-mask)">
-                  <rect x="0" y="0" width="200" height="200" fill="url(#day-ocean)" />
-
-                  {/* Day Continents - Vibrant cyber gradient */}
-                  <g filter="drop-shadow(0 0 2px rgba(0, 240, 255, 0.4))">
-                    <path d="M 45,45 L 52,38 L 60,42 L 68,40 L 72,48 L 62,56 L 68,64 L 62,70 L 52,72 L 55,80 L 62,82 L 58,92 L 64,100 L 56,110 L 46,112 L 40,108 L 45,100 L 38,92 L 40,84 L 35,76 L 25,72 L 28,60 L 34,54 L 32,48 Z" fill="url(#day-land)" stroke="#00f0ff" strokeWidth="0.4" />
-                    <path d="M 56,110 L 58,118 L 65,124 L 72,120 L 78,128 L 74,138 L 66,145 L 60,155 L 56,170 L 53,172 L 51,168 L 54,152 L 52,142 L 46,134 L 42,126 L 45,115 Z" fill="url(#day-land)" stroke="#00f0ff" strokeWidth="0.4" />
-                    <path d="M 90,52 L 96,44 L 105,40 L 115,38 L 128,32 L 142,32 L 155,36 L 168,34 L 175,40 L 172,48 L 165,48 L 168,54 L 176,50 L 180,60 L 172,66 L 165,62 L 160,68 L 156,76 L 162,82 L 168,80 L 172,86 L 165,92 L 158,88 L 150,92 L 144,98 L 140,105 L 142,112 L 136,118 L 128,110 L 125,98 L 120,95 L 115,98 L 116,90 L 110,88 L 105,94 L 98,90 L 92,84 L 96,78 L 92,72 L 95,64 L 88,60 Z" fill="url(#day-land)" stroke="#00f0ff" strokeWidth="0.4" />
-                    <path d="M 95,92 L 104,95 L 110,90 L 116,92 L 120,96 L 124,104 L 128,112 L 126,122 L 122,132 L 118,142 L 114,152 L 109,158 L 107,152 L 108,140 L 105,130 L 102,122 L 98,116 L 94,110 L 92,102 Z" fill="url(#day-land)" stroke="#00f0ff" strokeWidth="0.4" />
-                    <path d="M 152,132 L 162,128 L 170,132 L 174,142 L 168,148 L 158,146 L 150,140 Z" fill="url(#day-land)" stroke="#00f0ff" strokeWidth="0.4" />
-                    <path d="M 72,28 L 82,24 L 78,34 L 70,36 Z" fill="url(#day-land)" stroke="#00f0ff" strokeWidth="0.4" />
-                    <path d="M 89,45 L 91,44 L 90,46 Z" fill="url(#day-land)" stroke="#00f0ff" strokeWidth="0.4" />
+                {/* 2. Glowing Golden City Lights (Shifted & Wrapped, displayed only in dark night regions) */}
+                {renderShiftedLayer(
+                  <g fill="#ffd700" mask="url(#night-mask)">
+                    {renderCityLights()}
                   </g>
-                </g>
+                )}
 
-                {/* --------------------------------------------------------
-                   GLOBE CYBER NET OVERLAY (Always visible on top)
-                   -------------------------------------------------------- */}
+                {/* 3. Globe Cyber Grid Overlay */}
                 <g stroke="rgba(0, 240, 255, 0.08)" strokeWidth="0.4" fill="none">
                   <circle cx="100" cy="100" r="20" />
                   <circle cx="100" cy="100" r="40" />
@@ -710,13 +702,11 @@ export default function EarthModule() {
                   <path d="M 100,20 Q 45,100 100,180" />
                 </g>
 
-                {/* --------------------------------------------------------
-                   DYNAMIC PULSING SELECTOR RING FOR ACTIVE CITY
-                   -------------------------------------------------------- */}
-                <g>
+                {/* 4. Dynamic Pulsing Selector Ring for Active City (Fixed X=100, vertical translation) */}
+                <g transform={`translate(0, ${selectedLocation.mapY})`} className="globe-target-group">
                   <circle 
-                    cx={selectedLocation.mapX} 
-                    cy={selectedLocation.mapY} 
+                    cx={100} 
+                    cy={0} 
                     r="6" 
                     fill="none" 
                     stroke="#00f0ff" 
@@ -724,8 +714,8 @@ export default function EarthModule() {
                     className="target-ring" 
                   />
                   <circle 
-                    cx={selectedLocation.mapX} 
-                    cy={selectedLocation.mapY} 
+                    cx={100} 
+                    cy={0} 
                     r="2.5" 
                     fill="#ffffff" 
                     stroke="#0072ff"

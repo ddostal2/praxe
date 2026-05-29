@@ -482,10 +482,31 @@
   50% { opacity: 1; transform: scale(1.03); }
 }
 
+.earth-sphere {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  overflow: hidden;
+  background-image: url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg');
+  background-size: cover;
+  background-repeat: repeat-x;
+  background-position-y: center;
+  transition: background-position 0.8s ease-in-out;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .earth-svg {
+  position: relative;
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 0 25px rgba(0, 114, 255, 0.25));
+  z-index: 2;
+  pointer-events: none;
 }
 
 /* SVG Globe specific animations */
@@ -517,6 +538,15 @@
 @keyframes pulse-dot {
   0%, 100% { r: 2; opacity: 1; }
   50% { r: 3.5; opacity: 0.8; filter: drop-shadow(0 0 5px #00f0ff); }
+}
+
+/* Smooth Sliding Rotation for Map and Target Pointer */
+.globe-map-group {
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.globe-target-group {
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* Information panel underneath the planet - Upgraded for Nebula contrast */
