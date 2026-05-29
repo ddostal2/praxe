@@ -1,1 +1,615 @@
-/* App CSS Template */
+/* ==========================================================================
+   SOLARIS OS - ORBITAL DASHBOARD - GLOBAL STYLES
+   ========================================================================== */
+
+/* Root and Layout reset */
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #050515; /* Fallback deep space base */
+  color: #e2e8f0;
+  font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Global Application Container with Glowing Galactic Nebulae */
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(138, 43, 226, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(0, 240, 255, 0.13) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.09) 0%, transparent 55%),
+    radial-gradient(circle at 30% 80%, rgba(0, 114, 255, 0.12) 0%, transparent 40%),
+    #050515; /* Deep rich space base */
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   STARFIELD LAYERS & TWINKLING EFFECTS (GLOBAL)
+   -------------------------------------------------------------------------- */
+.starfield-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Tiny static stars (0.8px, various opacities, very dense) */
+.starfield-small {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  opacity: 0.65;
+  box-shadow: 
+    /* First quadrant */
+    80px 120px rgba(255,255,255,0.8), 240px 80px rgba(255,255,255,0.4), 380px 220px rgba(255,255,255,0.7), 490px 140px rgba(255,255,255,0.5),
+    150px 380px rgba(255,255,255,0.6), 290px 420px rgba(255,255,255,0.8), 420px 310px rgba(255,255,255,0.4), 580px 490px rgba(255,255,255,0.5),
+    70px 620px rgba(255,255,255,0.7), 210px 550px rgba(255,255,255,0.5), 350px 710px rgba(255,255,255,0.8), 530px 650px rgba(255,255,255,0.6),
+    120px 880px rgba(255,255,255,0.5), 270px 810px rgba(255,255,255,0.7), 440px 920px rgba(255,255,255,0.4), 590px 840px rgba(255,255,255,0.8),
+    /* Second quadrant */
+    710px 90px rgba(255,255,255,0.6), 840px 160px rgba(255,255,255,0.8), 990px 70px rgba(255,255,255,0.4), 1150px 230px rgba(255,255,255,0.5),
+    680px 340px rgba(255,255,255,0.5), 890px 290px rgba(255,255,255,0.7), 1030px 380px rgba(255,255,255,0.8), 1190px 310px rgba(255,255,255,0.4),
+    750px 520px rgba(255,255,255,0.8), 860px 480px rgba(255,255,255,0.4), 970px 600px rgba(255,255,255,0.6), 1120px 540px rgba(255,255,255,0.7),
+    690px 740px rgba(255,255,255,0.7), 810px 830px rgba(255,255,255,0.5), 940px 790px rgba(255,255,255,0.8), 1080px 890px rgba(255,255,255,0.4),
+    /* Third quadrant */
+    1310px 110px rgba(255,255,255,0.8), 1460px 70px rgba(255,255,255,0.5), 1620px 210px rgba(255,255,255,0.7), 1850px 150px rgba(255,255,255,0.4),
+    1280px 360px rgba(255,255,255,0.4), 1410px 280px rgba(255,255,255,0.6), 1590px 410px rgba(255,255,255,0.8), 1740px 330px rgba(255,255,255,0.5),
+    1350px 580px rgba(255,255,255,0.7), 1490px 490px rgba(255,255,255,0.4), 1680px 550px rgba(255,255,255,0.8), 1820px 630px rgba(255,255,255,0.6),
+    1260px 810px rgba(255,255,255,0.5), 1430px 890px rgba(255,255,255,0.7), 1600px 760px rgba(255,255,255,0.4), 1790px 820px rgba(255,255,255,0.8),
+    /* Bottom expansion */
+    200px 1150px rgba(255,255,255,0.6), 550px 1250px rgba(255,255,255,0.8), 890px 1120px rgba(255,255,255,0.4), 1180px 1310px rgba(255,255,255,0.7),
+    1450px 1190px rgba(255,255,255,0.5), 1710px 1260px rgba(255,255,255,0.8), 950px 1420px rgba(255,255,255,0.6), 1600px 1450px rgba(255,255,255,0.4);
+}
+
+/* Medium twinkling stars (1.5px, medium rate) */
+.starfield-medium {
+  width: 1.5px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  box-shadow: 
+    180px 190px #fff, 340px 290px rgba(0, 240, 255, 0.8), 510px 70px #fff, 620px 410px #fff,
+    110px 580px rgba(236, 72, 153, 0.8), 470px 780px #fff, 220px 940px #fff,
+    790px 210px #fff, 930px 120px #fff, 1120px 380px rgba(0, 240, 255, 0.8),
+    870px 680px #fff, 1040px 610px #fff, 730px 910px #fff,
+    1380px 250px rgba(236, 72, 153, 0.8), 1540px 130px #fff, 1720px 380px #fff,
+    1320px 640px #fff, 1610px 590px rgba(0, 240, 255, 0.8), 1810px 790px #fff,
+    400px 1190px #fff, 980px 1280px rgba(0, 240, 255, 0.8), 1510px 1340px #fff;
+}
+
+/* Large glowing stars (2.2px, slow breathing) */
+.starfield-large {
+  width: 2.2px;
+  height: 2.2px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 
+    290px 140px 3px rgba(255,255,255,0.8), 580px 250px 3px rgba(0, 240, 255, 0.7),
+    190px 720px 3px rgba(255,255,255,0.8), 410px 890px 3px rgba(236, 72, 153, 0.6),
+    830px 90px 3px rgba(255,255,255,0.8), 1180px 490px 3px rgba(0, 240, 255, 0.7),
+    950px 810px 3px rgba(255,255,255,0.8), 1480px 310px 3px rgba(255,255,255,0.8),
+    1760px 180px 3px rgba(236, 72, 153, 0.6), 1650px 680px 3px rgba(0, 240, 255, 0.7),
+    720px 1210px 3px rgba(255,255,255,0.8), 1320px 1290px 3px rgba(255,255,255,0.8);
+}
+
+.twinkling {
+  animation: star-twinkle 4s infinite ease-in-out;
+}
+
+.twinkling-slow {
+  animation: star-twinkle-slow 6s infinite ease-in-out;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1.0; }
+}
+
+@keyframes star-twinkle-slow {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.95; filter: drop-shadow(0 0 2px #fff); }
+}
+
+/* --------------------------------------------------------------------------
+   DENSE METEOR SHOWER OVER NEBULA (GLOBAL)
+   -------------------------------------------------------------------------- */
+.meteor-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.meteor {
+  position: absolute;
+  opacity: 0;
+  transform: rotate(-45deg);
+  animation: meteor-shoot 3.5s infinite linear;
+  z-index: 2;
+}
+
+/* Custom trail gradients for depth and spectral diversity */
+.meteor-cyan {
+  background: linear-gradient(to bottom, rgba(0, 240, 255, 0) 0%, rgba(0, 240, 255, 0.8) 50%, rgba(255, 255, 255, 1) 100%);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+
+.meteor-white {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 1) 100%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+}
+
+.meteor-purple {
+  background: linear-gradient(to bottom, rgba(168, 85, 247, 0) 0%, rgba(168, 85, 247, 0.75) 50%, rgba(0, 240, 255, 1) 100%);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+}
+
+/* Distant background layer (thin, slow, low opacity) */
+.meteor-1 { top: -10%; left: 30%; width: 1.0px; height: 50px; animation-delay: 0.2s; animation-duration: 4.8s; opacity: 0.35; }
+.meteor-3 { top: 15%; left: 90%; width: 0.8px; height: 40px; animation-delay: 1.8s; animation-duration: 5.2s; opacity: 0.30; }
+.meteor-8 { top: -5%; left: 45%; width: 0.7px; height: 35px; animation-delay: 0.9s; animation-duration: 5.8s; opacity: 0.25; }
+.meteor-10 { top: 30%; left: 110%; width: 0.9px; height: 45px; animation-delay: 2.3s; animation-duration: 4.5s; opacity: 0.40; }
+.meteor-12 { top: -12%; left: 75%; width: 0.7px; height: 38px; animation-delay: 0.1s; animation-duration: 5.5s; opacity: 0.32; }
+.meteor-16 { top: 20%; left: 25%; width: 0.8px; height: 45px; animation-delay: 3.1s; animation-duration: 5.0s; opacity: 0.38; }
+.meteor-18 { top: -8%; left: 100%; width: 0.6px; height: 30px; animation-delay: 1.4s; animation-duration: 6.2s; opacity: 0.22; }
+
+/* Mid-ground layer (standard size, medium speed, moderate opacity) */
+.meteor-5 { top: 5%; left: 35%; width: 1.6px; height: 85px; animation-delay: 1.1s; animation-duration: 3.2s; opacity: 0.70; }
+.meteor-6 { top: -5%; left: 65%; width: 1.4px; height: 75px; animation-delay: 0.4s; animation-duration: 2.8s; opacity: 0.65; }
+.meteor-9 { top: 10%; left: 55%; width: 1.8px; height: 95px; animation-delay: 2.1s; animation-duration: 3.0s; opacity: 0.75; }
+.meteor-11 { top: -15%; left: 15%; width: 1.5px; height: 80px; animation-delay: 0.7s; animation-duration: 3.4s; opacity: 0.68; }
+.meteor-14 { top: 25%; left: 80%; width: 1.5px; height: 80px; animation-delay: 1.5s; animation-duration: 3.1s; opacity: 0.72; }
+.meteor-15 { top: -10%; left: 120%; width: 1.6px; height: 90px; animation-delay: 2.7s; animation-duration: 2.9s; opacity: 0.62; }
+.meteor-19 { top: 40%; left: 70%; width: 1.5px; height: 75px; animation-delay: 0.3s; animation-duration: 3.5s; opacity: 0.65; }
+.meteor-20 { top: -8%; left: 50%; width: 1.3px; height: 70px; animation-delay: 1.9s; animation-duration: 3.3s; opacity: 0.60; }
+
+/* Foreground layer (thick, close, blazing fast, high brightness, very dense) */
+.meteor-2 { top: -15%; left: 60%; width: 2.4px; height: 140px; animation-delay: 0.8s; animation-duration: 1.8s; opacity: 0.95; }
+.meteor-4 { top: 10%; left: 20%; width: 2.6px; height: 155px; animation-delay: 0.2s; animation-duration: 1.5s; opacity: 1.00; }
+.meteor-7 { top: -5%; left: 95%; width: 2.2px; height: 135px; animation-delay: 2.5s; animation-duration: 1.9s; opacity: 0.95; }
+.meteor-13 { top: 15%; left: 40%; width: 2.5px; height: 160px; animation-delay: 1.2s; animation-duration: 1.4s; opacity: 1.00; }
+.meteor-17 { top: -12%; left: 85%; width: 2.3px; height: 145px; animation-delay: 0.6s; animation-duration: 1.7s; opacity: 0.98; }
+
+@keyframes meteor-shoot {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-45deg) scale(0.7);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-550px, 550px) rotate(-45deg) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-550px, 550px) rotate(-45deg) scale(1.15);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   DASHBOARD NAVIGATION HEADER
+   -------------------------------------------------------------------------- */
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background: rgba(8, 10, 24, 0.7);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 0.8rem 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
+.dashboard-nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Sci-fi logo styling */
+.dashboard-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-logo-icon {
+  width: 14px;
+  height: 14px;
+  background-color: #00f0ff;
+  border-radius: 3px;
+  box-shadow: 0 0 8px #00f0ff;
+  animation: logo-blink 2s infinite ease-in-out;
+}
+
+@keyframes logo-blink {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 14px #00f0ff; }
+}
+
+.dashboard-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e2e8f0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-title span {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+/* Nav Menu Button layout */
+.dashboard-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.nav-btn span {
+  font-size: 1.1rem;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.nav-btn:active {
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   NEON GLOW ACTIVE TAB ACCENTS
+   -------------------------------------------------------------------------- */
+
+/* 1. Earth Glow (Cyan) */
+.nav-btn-earth.active {
+  color: #ffffff;
+  background: rgba(0, 240, 255, 0.08);
+  border-color: #00f0ff;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+  box-shadow: 
+    0 0 15px rgba(0, 240, 255, 0.2), 
+    inset 0 0 10px rgba(0, 240, 255, 0.1);
+}
+
+/* 2. Mars Glow (Rust Red) */
+.nav-btn-mars.active {
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ff5722;
+  text-shadow: 0 0 8px rgba(255, 87, 34, 0.6);
+  box-shadow: 
+    0 0 15px rgba(255, 87, 34, 0.2), 
+    inset 0 0 10px rgba(255, 87, 34, 0.1);
+}
+
+/* 3. Moon Glow (Silver/White) */
+.nav-btn-moon.active {
+  color: #ffffff;
+  background: rgba(226, 232, 240, 0.08);
+  border-color: #cbd5e1;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 0 15px rgba(255, 255, 255, 0.15), 
+    inset 0 0 10px rgba(255, 255, 255, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   TRANSITIONS & DYNAMIC FADE-IN WRAPPERS
+   -------------------------------------------------------------------------- */
+.app-content-area {
+  flex-grow: 1;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Smooth Fade-in animation on mounting */
+@keyframes module-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.module-fade-wrapper {
+  animation: module-fade-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   PREMIUM GLASSMORPHISM PLACEHOLDER SYSTEM
+   -------------------------------------------------------------------------- */
+.placeholder-module {
+  flex-grow: 1;
+  min-height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 2rem;
+  box-sizing: border-box;
+}
+
+.placeholder-card {
+  width: 100%;
+  max-width: 750px;
+  background: rgba(8, 11, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 3.5rem 2.5rem;
+  border-radius: 24px;
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.6), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Futuristic grid/scanlines overlay */
+.placeholder-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.4;
+}
+
+/* Sweep scanning laser bar */
+.placeholder-card::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--laser-color, #00f0ff), transparent);
+  box-shadow: 0 0 10px var(--laser-color, #00f0ff);
+  opacity: 0.35;
+  animation: scan-line 4s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes scan-line {
+  0% { top: 0%; }
+  100% { top: 100%; }
+}
+
+/* Cybernetic diagnostic icon container */
+.cyber-icon-outer {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cyber-ring-spin {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed var(--accent-color, #00f0ff);
+  border-radius: 50%;
+  animation: cyber-spin 12s infinite linear;
+  opacity: 0.55;
+  filter: drop-shadow(0 0 4px var(--accent-color, #00f0ff));
+}
+
+@keyframes cyber-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cyber-icon-inner {
+  width: 66px;
+  height: 66px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--accent-color, #00f0ff);
+  filter: drop-shadow(0 0 6px var(--accent-color, #00f0ff));
+}
+
+.cyber-icon-pulse {
+  animation: cyber-pulse-scale 1.5s infinite ease-in-out;
+}
+
+@keyframes cyber-pulse-scale {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 10px var(--accent-color, #00f0ff)); }
+}
+
+/* Diagnostic title */
+.placeholder-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0 0 0.8rem 0;
+  color: #fff;
+  text-shadow: 0 0 12px var(--shadow-color, rgba(0, 240, 255, 0.4));
+}
+
+/* Glowing sub-tag */
+.placeholder-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent-color, #00f0ff);
+  background: var(--bg-tag, rgba(0, 240, 255, 0.08));
+  border: 1px solid var(--accent-color, rgba(0, 240, 255, 0.25));
+  padding: 0.3rem 0.8rem 0.3rem 1.2rem; /* slightly extra right padding for space */
+  border-radius: 6px;
+  margin-bottom: 1.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 0 10px var(--bg-tag, rgba(0, 240, 255, 0.08));
+}
+
+/* Pulse dot in tag */
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-color, #00f0ff);
+  border-radius: 50%;
+  animation: warning-blink 1s infinite ease-in-out;
+  box-shadow: 0 0 6px var(--accent-color, #00f0ff);
+}
+
+@keyframes warning-blink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Description body */
+.placeholder-desc {
+  max-width: 480px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin: 0 0 2rem 0;
+}
+
+/* Diagnostic code lines terminal */
+.cyber-terminal {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: left;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
+  color: #64748b;
+  box-sizing: border-box;
+}
+
+.terminal-line {
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-line:last-child {
+  margin-bottom: 0;
+}
+
+.terminal-prompt {
+  color: var(--accent-color, #00f0ff);
+}
+
+.terminal-text {
+  animation: typing 1.5s steps(30, end);
+}
+
+.terminal-text.anim-blink {
+  color: var(--accent-color, #00f0ff);
+  animation: text-flash 1s infinite steps(2, start);
+}
+
+@keyframes text-flash {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 1rem;
+  }
+  .dashboard-nav-container {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .dashboard-nav-menu {
+    width: 100%;
+    justify-content: center;
+  }
+  .nav-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  .placeholder-card {
+    padding: 2rem 1.5rem;
+  }
+}

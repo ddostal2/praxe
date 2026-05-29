@@ -392,39 +392,6 @@ export default function EarthModule() {
 
   return (
     <div className="earth-container">
-      {/* Enhanced Cosmic Meteor Shower & Starfield Background */}
-      <div className="meteor-container">
-        {/* Glowing Galactic Starfields */}
-        <div className="starfield-layer starfield-small" />
-        <div className="starfield-layer starfield-medium twinkling" />
-        <div className="starfield-layer starfield-large twinkling-slow" />
-
-        {/* Cyan trails (foreground/mid-ground) */}
-        <div className="meteor meteor-1 meteor-cyan" />
-        <div className="meteor meteor-2 meteor-cyan" />
-        <div className="meteor meteor-5 meteor-cyan" />
-        <div className="meteor meteor-6 meteor-cyan" />
-        <div className="meteor meteor-9 meteor-cyan" />
-        <div className="meteor meteor-11 meteor-cyan" />
-        <div className="meteor meteor-14 meteor-cyan" />
-        <div className="meteor meteor-15 meteor-cyan" />
-        <div className="meteor meteor-19 meteor-cyan" />
-        <div className="meteor meteor-20 meteor-cyan" />
-
-        {/* White trails (foreground sparks & deep highlights) */}
-        <div className="meteor meteor-4 meteor-white" />
-        <div className="meteor meteor-7 meteor-white" />
-        <div className="meteor meteor-10 meteor-white" />
-        <div className="meteor meteor-12 meteor-white" />
-        <div className="meteor meteor-13 meteor-white" />
-        <div className="meteor meteor-17 meteor-white" />
-
-        {/* Purple/Indigo trails (deep space spectral rays) */}
-        <div className="meteor meteor-3 meteor-purple" />
-        <div className="meteor meteor-8 meteor-purple" />
-        <div className="meteor meteor-16 meteor-purple" />
-        <div className="meteor meteor-18 meteor-purple" />
-      </div>
 
       {/* Header with Title */}
       <header className="earth-header">
