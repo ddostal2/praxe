@@ -57,7 +57,7 @@ const CartPage = () => {
     clearCart();
     navigate('/order-confirmation', { state: { order } });
   };
-
+  setTimeout(() => {}, 2000);
   if (loading) {
     return (
       <div className="page-container cart-page">
