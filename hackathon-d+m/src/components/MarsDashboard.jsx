@@ -122,10 +122,10 @@ export default function MarsDashboard() {
           const latestData = data[latestSol];
           
           setWeatherData({
-            temp: latestData.AT?.av || 'N/A',
-            pressure: latestData.PRE?.av || 'N/A',
-            windSpeed: latestData.HWS?.av || 'N/A',
-            windDir: latestData.WD?.most_common?.compass_point || 'Unknown'
+            temp: latestData.AT?.av || 'Nedostupné',
+            pressure: latestData.PRE?.av || 'Nedostupné',
+            windSpeed: latestData.HWS?.av || 'Nedostupné',
+            windDir: latestData.WD?.most_common?.compass_point || 'Neznámo'
           });
         } else {
           throw new Error("No recent data from InSight");
@@ -185,8 +185,10 @@ export default function MarsDashboard() {
         </div>
 
         {loadingWeather || !weatherData ? (
-          <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>
-            Čekání na přenos z Marsu...
+          <div className="stat-grid">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="stat-card skeleton-box" style={{ height: '88px', border: '1px solid transparent' }} />
+            ))}
           </div>
         ) : (
           <div className="stat-grid">
@@ -231,7 +233,7 @@ export default function MarsDashboard() {
         </div>
 
         {loadingPhoto ? (
-          <div className="loading" style={{ height: '250px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }} />
+          <div className="skeleton-box" style={{ height: '350px', width: '100%', borderRadius: '12px', marginTop: '1rem' }} />
         ) : roverPhoto ? (
           <div>
             <img src={roverPhoto.url} alt="Mars Rover" className="rover-image" />
