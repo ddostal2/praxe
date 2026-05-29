@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import React, { useCallback, useState } from 'react';
 import { Moon, Thermometer, AlertTriangle, Sun, RefreshCw } from 'lucide-react';
 import { calculateMoonPhase } from '../utils/moonApi';
@@ -21,8 +20,6 @@ const RISK_LABELS = {
   high: 'Vysoké',
 };
 
-=======
->>>>>>> Stashed changes
 export default function MoonDashboard() {
   const [data, setData] = useState(() => calculateMoonPhase());
 

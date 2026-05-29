@@ -9,6 +9,8 @@
   --glow-earth: rgba(77, 166, 255, 0.4);
   --glow-mars: rgba(255, 107, 77, 0.4);
   --glow-moon: rgba(212, 212, 212, 0.4);
+  --accent-compare: #a78bfa;
+  --glow-compare: rgba(167, 139, 250, 0.35);
   
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   color-scheme: dark;
@@ -108,6 +110,12 @@ body {
   box-shadow: 0 0 10px var(--glow-moon);
 }
 
+.nav-btn.active-compare {
+  color: var(--accent-compare);
+  background: rgba(167, 139, 250, 0.12);
+  box-shadow: 0 0 10px var(--glow-compare);
+}
+
 /* Dashboard Layout */
 .dashboard {
   flex: 1;
@@ -165,6 +173,144 @@ body {
 .earth-title { color: var(--accent-earth); }
 .mars-title { color: var(--accent-mars); }
 .moon-title { color: var(--accent-moon); }
+.compare-title { color: var(--accent-compare); }
+
+/* Compare module */
+.compare-dashboard {
+  grid-template-columns: 1fr;
+}
+
+.compare-panel {
+  gap: 1.5rem;
+}
+
+.compare-intro {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.compare-section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+}
+
+.compare-size-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2rem 2.5rem;
+  padding: 1.5rem 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.compare-size-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+.compare-sphere {
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: inset -8px -12px 24px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.06);
+}
+
+.compare-sphere--earth {
+  background: radial-gradient(circle at 32% 28%, #6eb5ff, #2a6eb8 55%, #0d2847);
+  box-shadow: inset -8px -12px 24px rgba(0, 0, 0, 0.5),
+    0 0 24px var(--glow-earth);
+}
+
+.compare-sphere--mars {
+  background: radial-gradient(circle at 32% 28%, #ff9a7a, #c44a2e 55%, #5a1a0a);
+  box-shadow: inset -8px -12px 24px rgba(0, 0, 0, 0.5),
+    0 0 24px var(--glow-mars);
+}
+
+.compare-sphere--moon {
+  background: radial-gradient(circle at 32% 28%, #e8e8e0, #a8a8a0 55%, #4a4a48);
+  box-shadow: inset -8px -12px 24px rgba(0, 0, 0, 0.5),
+    0 0 24px var(--glow-moon);
+}
+
+.compare-body-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.compare-body-value {
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.compare-body-ratio {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.compare-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.compare-table thead th {
+  background: rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+.compare-table tbody th {
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.compare-table tbody tr:hover td,
+.compare-table tbody tr:hover th[scope='row'] {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.compare-cell--max {
+  background: rgba(167, 139, 250, 0.08);
+  font-weight: 600;
+}
+
+.compare-notes {
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.compare-notes strong {
+  font-weight: 600;
+}
 
 .moon-phase-banner {
   background: rgba(212, 212, 212, 0.06);
@@ -441,7 +587,7 @@ select:hover, button.control-btn:hover {
 }
 
 @keyframes rotatePlanet {
-  0% { background-position: 0% 0; }
+  0% { background-position: 0 0; }
   100% { background-position: 200% 0; }
 }
 

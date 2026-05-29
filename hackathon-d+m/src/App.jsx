@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Rocket } from 'lucide-react';
 import MoonDashboard from './components/MoonDashboard';
+import CompareDashboard from './components/CompareDashboard';
 import CosmicBackground from './components/CosmicBackground';
-import './App.css'; // Optional, but keeping for standard Vite
+import './App.css';
+import MarsDashboard from "./components/MarsDashboard.jsx";
+import EarthDashboard from "./components/EarthDashboard.jsx"; // Optional, but keeping for standard Vite
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('earth');
@@ -16,40 +19,40 @@ export default function App() {
             Cosmic Explorer
           </div>
           <div className="nav-links">
-            <button 
+            <button
               className={`nav-btn ${activeTab === 'earth' ? 'active-earth' : ''}`}
               onClick={() => setActiveTab('earth')}
             >
               Earth
             </button>
-            <button 
+            <button
               className={`nav-btn ${activeTab === 'mars' ? 'active-mars' : ''}`}
               onClick={() => setActiveTab('mars')}
             >
               Mars
             </button>
-            <button 
+            <button
               className={`nav-btn ${activeTab === 'moon' ? 'active-moon' : ''}`}
               onClick={() => setActiveTab('moon')}
             >
               Moon
             </button>
+            <button
+                className={`nav-btn ${activeTab === 'compare' ? 'active-compare' : ''}`}
+                onClick={() => setActiveTab('compare')}
+            >
+              Porovnání
+            </button>
           </div>
         </nav>
 
-<<<<<<< Updated upstream
-      <main style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-        {activeTab === 'moon' && <MoonDashboard />}
-      </main>
-    </div>
-=======
         <main style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
           {activeTab === 'earth' && <EarthDashboard />}
           {activeTab === 'mars' && <MarsDashboard />}
           {activeTab === 'moon' && <MoonDashboard />}
+          {activeTab === 'compare' && <CompareDashboard />}
         </main>
       </div>
     </CosmicBackground>
->>>>>>> Stashed changes
   );
 }
