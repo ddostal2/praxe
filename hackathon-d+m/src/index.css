@@ -151,6 +151,112 @@ body {
 /* Specific Styles */
 .earth-title { color: var(--accent-earth); }
 .mars-title { color: var(--accent-mars); }
+.moon-title { color: var(--accent-moon); }
+
+.moon-phase-banner {
+  background: rgba(212, 212, 212, 0.06);
+  border: 1px solid rgba(212, 212, 212, 0.12);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.moon-phase-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent-moon);
+  letter-spacing: 0.02em;
+}
+
+.moon-phase-meta {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.moon-section-heading {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.moon-stat-value {
+  color: var(--accent-moon);
+}
+
+.moon-radiation-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.risk-low { color: #6ee7a0; }
+.risk-medium { color: #f5d76e; }
+.risk-high { color: #ff8a7a; }
+
+.viz-moon {
+  background: radial-gradient(circle at 50% 45%, #1a1a28 0%, #050510 70%);
+  box-shadow: inset -20px -20px 40px rgba(0, 0, 0, 0.8),
+    0 0 50px var(--glow-moon);
+  border-radius: 16px;
+  aspect-ratio: 1 / 1;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.moon-disc {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.moon-disc-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.moon-disc-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.moon-phase-svg {
+  display: block;
+  max-height: 100%;
+}
+
+.moon-illum-label {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.moon-viz-caption {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
 
 .stat-grid {
   display: grid;

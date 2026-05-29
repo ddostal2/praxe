@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Rocket } from 'lucide-react';
-import EarthDashboard from './components/EarthDashboard';
-import MarsDashboard from './components/MarsDashboard';
 import MoonDashboard from './components/MoonDashboard';
 import './App.css'; // Optional, but keeping for standard Vite
 
@@ -38,8 +36,6 @@ export default function App() {
       </nav>
 
       <main style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-        {activeTab === 'earth' && <EarthDashboard />}
-        {activeTab === 'mars' && <MarsDashboard />}
         {activeTab === 'moon' && <MoonDashboard />}
       </main>
     </div>
