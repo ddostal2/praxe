@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Thermometer, Wind, Droplets, MapPin, Clock, Search } from 'lucide-react';
+import { Thermometer, Wind, Droplets, MapPin, Clock, Search, Sun, Cloud, CloudRain, CloudSnow, CloudLightning, CloudFog } from 'lucide-react';
 import earthMapImage from '../assets/earth_map.jpg';
 import { globeGlowShadow, globeInsetShadow } from '../utils/globeStyles';
 
@@ -346,6 +346,19 @@ export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default
   );
 };
 
+const getWeatherDescription = (code) => {
+  if (code === 0) return { text: 'Jasno', icon: Sun };
+  if (code === 1 || code === 2) return { text: 'Polojasno', icon: Cloud };
+  if (code === 3) return { text: 'Zataženo', icon: Cloud };
+  if (code === 45 || code === 48) return { text: 'Mlhavo', icon: CloudFog };
+  if (code >= 51 && code <= 67) return { text: 'Déšť', icon: CloudRain };
+  if (code >= 71 && code <= 77) return { text: 'Sněžení', icon: CloudSnow };
+  if (code >= 80 && code <= 82) return { text: 'Dešťové přeháňky', icon: CloudRain };
+  if (code >= 85 && code <= 86) return { text: 'Sněhové přeháňky', icon: CloudSnow };
+  if (code >= 95 && code <= 99) return { text: 'Bouřka', icon: CloudLightning };
+  return { text: 'Proměnlivo', icon: Cloud };
+};
+
 export default function EarthDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentLocation, setCurrentLocation] = useState({ name: 'Prague', lat: 50.0755, lon: 14.4378, timezone: 'Europe/Prague' });
@@ -455,9 +468,29 @@ export default function EarthDashboard() {
         </div>
 
         {loading || !weatherData ? (
-          <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>Příjem telemetrie...</div>
+          <div className="stat-grid">
+            <div className="stat-card skeleton-box" style={{ gridColumn: '1 / -1', height: '88px', border: '1px solid transparent' }} />
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="stat-card skeleton-box" style={{ height: '88px', border: '1px solid transparent' }} />
+            ))}
+          </div>
         ) : (
           <div className="stat-grid">
+            <div className="stat-card" style={{ gridColumn: '1 / -1' }}>
+              <span className="stat-label">Předpověď Počasí</span>
+              <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {(() => {
+                  const wd = getWeatherDescription(weatherData.code);
+                  const Icon = wd.icon;
+                  return (
+                    <>
+                      <Icon className="earth-title" />
+                      {wd.text}
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
             <div className="stat-card">
               <span className="stat-label">Teplota</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -492,7 +525,7 @@ export default function EarthDashboard() {
 
       <div className="dashboard-panel" style={{ alignItems: 'center', justifyContent: 'center' }}>
         <h3 style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 10, color: 'var(--text-muted)' }}>
-          Earth Visualization
+          Satelitní Pohled
         </h3>
         <div style={{ width: '80%', maxWidth: '400px', display: 'flex', justifyContent: 'center' }}>
           <EarthGlobe activeCity={currentLocation} />
