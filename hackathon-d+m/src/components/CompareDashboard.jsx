@@ -1,8 +1,18 @@
 import React from 'react';
 import { Scale } from 'lucide-react';
-import { BODIES, COMPARE_METRICS } from '../data/bodies';
+import { BODIES } from '../planets';
+import { COMPARE_METRICS } from '../data/bodies';
+import { EarthGlobe } from './EarthDashboard';
+import { MarsGlobe } from './MarsDashboard';
+import { MoonGlobe } from './MoonDashboard';
 
 const MAX_DIAMETER = Math.max(...BODIES.map((b) => b.diameterKm));
+
+const GLOBE_COMPONENTS = {
+  earth: EarthGlobe,
+  mars: MarsGlobe,
+  moon: MoonGlobe,
+};
 
 function accentClass(accent) {
   return `${accent}-title`;
@@ -21,6 +31,24 @@ function isHighlight(metric, body, value) {
   const min = Math.min(...nums);
   if (max === min) return false;
   return metric.higherIsLarger ? value === max : value === min;
+}
+
+function CompareGlobe({ body, size }) {
+  const Globe = GLOBE_COMPONENTS[body.id];
+  if (!Globe) return null;
+
+  if (body.id === 'moon') {
+    return (
+      <MoonGlobe
+        size={size}
+        phaseAngle={180}
+        variant="compare"
+        showPhase={false}
+      />
+    );
+  }
+
+  return <Globe size={size} variant="compare" />;
 }
 
 export default function CompareDashboard() {
@@ -48,10 +76,11 @@ export default function CompareDashboard() {
               return (
                 <div key={body.id} className="compare-size-item">
                   <div
-                    className={`compare-sphere compare-sphere--${body.accent}`}
-                    style={{ width: sizePx, height: sizePx }}
+                    className="compare-globe-wrap"
                     title={`${body.name}: ${body.diameterKm.toLocaleString('cs-CZ')} km`}
-                  />
+                  >
+                    <CompareGlobe body={body} size={sizePx} />
+                  </div>
                   <span className={`compare-body-name ${accentClass(body.accent)}`}>
                     {body.name}
                   </span>

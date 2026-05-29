@@ -2,14 +2,29 @@ import { useState, useEffect } from 'react';
 import { Thermometer, Wind, Compass, Camera, AlertTriangle } from 'lucide-react';
 
 import marsMapImage from '../assets/mars_map.jpg';
+import { globeGlowShadow, globeInsetShadow } from '../utils/globeStyles';
+
+export const MARS = {
+  id: 'mars',
+  name: 'Mars',
+  accent: 'mars',
+  diameterKm: 6_779,
+  massKg: 6.39e23,
+  gravityMs2: 3.721,
+  dayLabel: '24,6 h',
+  orbitLabel: '687 dní kolem Slunce',
+  distanceFromSunAu: 1.524,
+  avgSurfaceTempC: -63,
+  atmosphere: 'CO₂ (tenká)',
+  moons: 2,
+};
 
 const NASA_API_KEY = 'AaD540tNdp60rKSeCM6yef4BiheAgLgInWjivBYt';
 
 const MAP_WIDTH = 1000;
-const MAP_HEIGHT = 500;
-const VIEWPORT_SIZE = 400;
+const DEFAULT_SIZE = 400;
 
-const MarsGlobe = () => {
+export const MarsGlobe = ({ size = DEFAULT_SIZE, variant = 'default' }) => {
   const [rotationOffset, setRotationOffset] = useState(0);
 
   useEffect(() => {
@@ -26,14 +41,18 @@ const MarsGlobe = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const currentMapWidth = size * 2.5;
+  const currentMapHeight = size * 1.25;
+  const scaledRotationOffset = rotationOffset * (currentMapWidth / MAP_WIDTH);
+
   return (
     <div style={{ 
-      width: VIEWPORT_SIZE, 
-      height: VIEWPORT_SIZE, 
+      width: size, 
+      height: size, 
       borderRadius: '50%', 
       overflow: 'hidden', 
       position: 'relative',
-      boxShadow: '0 0 80px var(--glow-mars)',
+      boxShadow: globeGlowShadow(size, 'var(--glow-mars)'),
       backgroundColor: '#000'
     }}>
       <div style={{
@@ -47,17 +66,17 @@ const MarsGlobe = () => {
         {[0, 1, 2].map(tileOffset => (
           <div key={tileOffset} style={{
             position: 'absolute',
-            left: rotationOffset + (tileOffset * MAP_WIDTH),
-            top: (VIEWPORT_SIZE - MAP_HEIGHT) / 2,
-            width: MAP_WIDTH,
-            height: MAP_HEIGHT
+            left: scaledRotationOffset + (tileOffset * currentMapWidth),
+            top: (size - currentMapHeight) / 2,
+            width: currentMapWidth,
+            height: currentMapHeight
           }}>
             <img src={marsMapImage} alt="Mars Satellite Map" style={{ 
               width: '100%', 
               height: '100%', 
               display: 'block', 
               objectFit: 'fill',
-              filter: 'brightness(1.1)'
+              filter: variant === 'compare' ? 'brightness(1.25) contrast(1.1)' : 'brightness(1.1)'
             }} />
           </div>
         ))}
@@ -72,7 +91,7 @@ const MarsGlobe = () => {
         height: '100%',
         borderRadius: '50%',
         pointerEvents: 'none',
-        boxShadow: 'inset 0 0 60px rgba(0,0,0,0.8), inset -40px -40px 80px rgba(0,0,0,0.9), inset 15px 15px 40px rgba(255, 80, 40, 0.4)'
+        boxShadow: globeInsetShadow(size, 'rgba(255, 80, 40, 0.4)', variant),
       }} />
     </div>
   );

@@ -2,12 +2,28 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Moon, Thermometer, AlertTriangle, Sun, RefreshCw } from 'lucide-react';
 import { calculateMoonPhase } from '../utils/moonApi';
 import moonMapImage from '../assets/moon_map.jpg';
+import { globeGlowShadow, globeInsetShadow } from '../utils/globeStyles';
+
+export const MOON = {
+  id: 'moon',
+  name: 'Měsíc',
+  accent: 'moon',
+  diameterKm: 3_474,
+  massKg: 7.342e22,
+  gravityMs2: 1.62,
+  dayLabel: '27,3 dní (vázaný)',
+  orbitLabel: '27,3 dní kolem Země',
+  distanceFromSunAu: 1,
+  avgSurfaceTempC: null,
+  atmosphere: 'Žádná',
+  moons: 0,
+  note: 'Oběžná dráha kolem Země (~384 400 km)',
+};
 
 const MAP_WIDTH = 1000;
-const MAP_HEIGHT = 500;
-const VIEWPORT_SIZE = 400;
+const DEFAULT_SIZE = 400;
 
-const MoonGlobe = ({ phaseAngle }) => {
+export const MoonGlobe = ({ phaseAngle, size = DEFAULT_SIZE, variant = 'default', showPhase = true }) => {
   const [rotationOffset, setRotationOffset] = useState(0);
 
   useEffect(() => {
@@ -23,7 +39,7 @@ const MoonGlobe = ({ phaseAngle }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const SIZE = VIEWPORT_SIZE;
+  const SIZE = size;
   const CX = SIZE / 2;
   const CY = SIZE / 2;
   const R = SIZE / 2;
@@ -33,14 +49,18 @@ const MoonGlobe = ({ phaseAngle }) => {
   const waxing = phaseAngle < 180;
   const shadowX = waxing ? CX - 2 * R * illum : CX + 2 * R * illum;
 
+  const currentMapWidth = size * 2.5;
+  const currentMapHeight = size * 1.25;
+  const scaledRotationOffset = rotationOffset * (currentMapWidth / MAP_WIDTH);
+
   return (
     <div style={{ 
-      width: VIEWPORT_SIZE, 
-      height: VIEWPORT_SIZE, 
+      width: size, 
+      height: size, 
       borderRadius: '50%', 
       overflow: 'hidden', 
       position: 'relative',
-      boxShadow: '0 0 80px rgba(200, 200, 220, 0.4)',
+      boxShadow: globeGlowShadow(size, 'rgba(200, 200, 220, 0.4)'),
       backgroundColor: '#000'
     }}>
       <div style={{
@@ -54,24 +74,24 @@ const MoonGlobe = ({ phaseAngle }) => {
         {[0, 1, 2].map(tileOffset => (
           <div key={tileOffset} style={{
             position: 'absolute',
-            left: rotationOffset + (tileOffset * MAP_WIDTH),
-            top: (VIEWPORT_SIZE - MAP_HEIGHT) / 2,
-            width: MAP_WIDTH,
-            height: MAP_HEIGHT
+            left: scaledRotationOffset + (tileOffset * currentMapWidth),
+            top: (size - currentMapHeight) / 2,
+            width: currentMapWidth,
+            height: currentMapHeight
           }}>
             <img src={moonMapImage} alt="Moon Satellite Map" style={{ 
               width: '100%', 
               height: '100%', 
               display: 'block', 
               objectFit: 'fill',
-              filter: 'brightness(1.1) contrast(1.1)'
+              filter: variant === 'compare' ? 'brightness(1.25) contrast(1.15)' : 'brightness(1.1) contrast(1.1)'
             }} />
           </div>
         ))}
       </div>
       
       {/* Dynamic Phase Shadow Overlay */}
-      {illum < 0.995 && (
+      {showPhase && illum < 0.995 && (
         <svg
           style={{
             position: 'absolute',
@@ -102,7 +122,7 @@ const MoonGlobe = ({ phaseAngle }) => {
         height: '100%',
         borderRadius: '50%',
         pointerEvents: 'none',
-        boxShadow: 'inset 0 0 60px rgba(0,0,0,0.8), inset -40px -40px 80px rgba(0,0,0,0.9), inset 15px 15px 40px rgba(220, 220, 240, 0.4)'
+        boxShadow: globeInsetShadow(size, 'rgba(220, 220, 240, 0.4)', variant),
       }} />
     </div>
   );
@@ -149,7 +169,7 @@ export default function MoonDashboard() {
         <div className="panel-header">
           <h2 className="panel-title moon-title">
             <Moon size={22} />
-            Datový panel — Měsíc
+            Datový panel — {MOON.name}
           </h2>
           <button type="button" className="control-btn" onClick={refresh} title="Obnovit telemetry">
             <RefreshCw size={16} style={{ verticalAlign: 'middle', marginRight: 4 }} />

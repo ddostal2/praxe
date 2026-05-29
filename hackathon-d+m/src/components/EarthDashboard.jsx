@@ -1,6 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Thermometer, Wind, Droplets, MapPin, Clock, Search } from 'lucide-react';
 import earthMapImage from '../assets/earth_map.jpg';
+import { globeGlowShadow, globeInsetShadow } from '../utils/globeStyles';
+
+export const EARTH = {
+  id: 'earth',
+  name: 'Země',
+  accent: 'earth',
+  diameterKm: 12_742,
+  massKg: 5.972e24,
+  gravityMs2: 9.807,
+  dayLabel: '24 h',
+  orbitLabel: '365 dní kolem Slunce',
+  distanceFromSunAu: 1,
+  avgSurfaceTempC: 15,
+  atmosphere: 'N₂, O₂ (21 % kyslíku)',
+  moons: 1,
+};
 
 const MAJOR_CITIES = [
   { name: 'Tokyo', lat: 35.6762, lon: 139.6503 },
@@ -67,12 +83,16 @@ const MAJOR_CITIES = [
 
 const MAP_WIDTH = 1000;
 const MAP_HEIGHT = 500;
-const VIEWPORT_SIZE = 400;
+const DEFAULT_SIZE = 400;
 
-const SatelliteGlobe = ({ activeCity }) => {
+export const EarthGlobe = ({ activeCity, size = DEFAULT_SIZE, variant = 'default' }) => {
+  const isCompare = variant === 'compare';
   const [sunLon, setSunLon] = useState(0);
+  const [rotationOffset, setRotationOffset] = useState(0);
 
   useEffect(() => {
+    if (isCompare) return undefined;
+
     const updateTime = () => {
       const now = new Date();
       // Calculate UTC decimal hours (e.g., 14.5 for 14:30)
@@ -91,7 +111,79 @@ const SatelliteGlobe = ({ activeCity }) => {
     updateTime();
     const interval = setInterval(updateTime, 10000); // update every 10 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [isCompare]);
+
+  useEffect(() => {
+    if (!isCompare) return undefined;
+
+    const updateRotation = () => {
+      setRotationOffset((prev) => {
+        const next = prev - 0.5;
+        if (next <= -MAP_WIDTH) return 0;
+        return next;
+      });
+    };
+
+    const interval = setInterval(updateRotation, 50);
+    return () => clearInterval(interval);
+  }, [isCompare]);
+
+  if (isCompare) {
+    const currentMapWidth = size * 2.5;
+    const currentMapHeight = size * 1.25;
+    const scaledRotationOffset = rotationOffset * (currentMapWidth / MAP_WIDTH);
+
+    return (
+      <div style={{
+        width: size,
+        height: size,
+        borderRadius: '50%',
+        overflow: 'hidden',
+        position: 'relative',
+        boxShadow: globeGlowShadow(size, 'var(--glow-earth)'),
+        backgroundColor: '#000',
+      }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+          {[0, 1, 2].map((tileOffset) => (
+            <div
+              key={tileOffset}
+              style={{
+                position: 'absolute',
+                left: scaledRotationOffset + tileOffset * currentMapWidth,
+                top: (size - currentMapHeight) / 2,
+                width: currentMapWidth,
+                height: currentMapHeight,
+              }}
+            >
+              <img
+                src={earthMapImage}
+                alt="Satellite Map"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'block',
+                  objectFit: 'fill',
+                  filter: 'brightness(1.15) contrast(1.2)',
+                }}
+              />
+            </div>
+          ))}
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            borderRadius: '50%',
+            pointerEvents: 'none',
+            boxShadow: globeInsetShadow(size, 'rgba(77, 166, 255, 0.35)', 'compare'),
+          }}
+        />
+      </div>
+    );
+  }
 
   // Map Real Lat/Lon to exact Map Pixels
   const getMapCoords = (lat, lon) => {
@@ -114,14 +206,14 @@ const SatelliteGlobe = ({ activeCity }) => {
   if (activeCity && activeCity.lat && activeCity.lon) {
     activeCoords = getMapCoords(activeCity.lat, activeCity.lon);
     // Center the target coordinate in the viewport
-    panX = VIEWPORT_SIZE / 2 - activeCoords.x;
+    panX = size / 2 - activeCoords.x;
     // Prevent panning past the North (0) or South (MAP_HEIGHT) poles to avoid empty space
-    panY = Math.min(0, Math.max(VIEWPORT_SIZE - MAP_HEIGHT, VIEWPORT_SIZE / 2 - activeCoords.y));
+    panY = Math.min(0, Math.max(size - MAP_HEIGHT, size / 2 - activeCoords.y));
   } else {
     // Default Atlantic-centric view (approx Lon -30, Lat 0) if no city is selected
     const centerCoords = getMapCoords(0, -30);
-    panX = VIEWPORT_SIZE / 2 - centerCoords.x;
-    panY = VIEWPORT_SIZE / 2 - centerCoords.y;
+    panX = size / 2 - centerCoords.x;
+    panY = size / 2 - centerCoords.y;
   }
 
   // Calculate position of the daylight center (the sun)
@@ -141,12 +233,12 @@ const SatelliteGlobe = ({ activeCity }) => {
 
   return (
     <div style={{ 
-      width: VIEWPORT_SIZE, 
-      height: VIEWPORT_SIZE, 
+      width: size, 
+      height: size, 
       borderRadius: '50%', 
       overflow: 'hidden', 
       position: 'relative',
-      boxShadow: '0 0 80px var(--glow-earth)',
+      boxShadow: globeGlowShadow(size, 'var(--glow-earth)'),
       backgroundColor: '#000'
     }}>
       <div style={{
@@ -248,7 +340,7 @@ const SatelliteGlobe = ({ activeCity }) => {
         height: '100%',
         borderRadius: '50%',
         pointerEvents: 'none',
-        boxShadow: 'inset 0 0 60px rgba(0,0,0,0.8), inset -40px -40px 80px rgba(0,0,0,0.9), inset 15px 15px 40px rgba(77, 166, 255, 0.4)'
+        boxShadow: globeInsetShadow(size, 'rgba(77, 166, 255, 0.4)'),
       }} />
     </div>
   );
@@ -403,7 +495,7 @@ export default function EarthDashboard() {
           Earth Visualization
         </h3>
         <div style={{ width: '80%', maxWidth: '400px', display: 'flex', justifyContent: 'center' }}>
-          <SatelliteGlobe activeCity={currentLocation} />
+          <EarthGlobe activeCity={currentLocation} />
         </div>
       </div>
     </div>
