@@ -2,6 +2,7 @@ import { useState } from 'react';
 import EarthModule from './modules/Earth/EarthModule.jsx';
 import MarsModule from './modules/Mars/MarsModule.jsx';
 import { MoonModule } from './moon/index.js';
+import CompareModule from './modules/Compare/CompareModule.jsx';
 import './App.css';
 
 function App() {
@@ -70,6 +71,13 @@ function App() {
               >
                 <span>🌙</span> MĚSÍC
               </button>
+              <button
+                type="button"
+                className={`nav-btn nav-btn-compare ${activeModule === 'compare' ? 'active' : ''}`}
+                onClick={() => setActiveModule('compare')}
+              >
+                <span>⚖️</span> POROVNÁNÍ
+              </button>
             </nav>
           </div>
         </header>
@@ -90,6 +98,12 @@ function App() {
           {activeModule === 'moon' && (
             <div className="module-fade-wrapper" key="moon">
               <MoonModule />
+            </div>
+          )}
+
+          {activeModule === 'compare' && (
+            <div className="module-fade-wrapper" key="compare">
+              <CompareModule />
             </div>
           )}
         </div>

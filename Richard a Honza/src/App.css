@@ -350,6 +350,17 @@ body {
     inset 0 0 10px rgba(255, 255, 255, 0.08);
 }
 
+/* 4. Compare Glow (Violet) */
+.nav-btn-compare.active {
+  color: #ffffff;
+  background: rgba(167, 139, 250, 0.08);
+  border-color: #a78bfa;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.6);
+  box-shadow:
+    0 0 15px rgba(167, 139, 250, 0.2),
+    inset 0 0 10px rgba(167, 139, 250, 0.1);
+}
+
 /* --------------------------------------------------------------------------
    TRANSITIONS & DYNAMIC FADE-IN WRAPPERS
    -------------------------------------------------------------------------- */
