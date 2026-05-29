@@ -23,7 +23,7 @@ export default function App() {
               className={`nav-btn ${activeTab === 'earth' ? 'active-earth' : ''}`}
               onClick={() => setActiveTab('earth')}
             >
-              Earth
+              Země
             </button>
             <button
               className={`nav-btn ${activeTab === 'mars' ? 'active-mars' : ''}`}
@@ -35,7 +35,7 @@ export default function App() {
               className={`nav-btn ${activeTab === 'moon' ? 'active-moon' : ''}`}
               onClick={() => setActiveTab('moon')}
             >
-              Moon
+              Měsíc
             </button>
             <button
                 className={`nav-btn ${activeTab === 'compare' ? 'active-compare' : ''}`}
