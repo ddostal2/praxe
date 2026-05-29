@@ -1,7 +1,112 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Moon, Thermometer, AlertTriangle, Sun, RefreshCw } from 'lucide-react';
 import { calculateMoonPhase } from '../utils/moonApi';
-import MoonVisualization from './MoonVisualization';
+import moonMapImage from '../assets/moon_map.jpg';
+
+const MAP_WIDTH = 1000;
+const MAP_HEIGHT = 500;
+const VIEWPORT_SIZE = 400;
+
+const MoonGlobe = ({ phaseAngle }) => {
+  const [rotationOffset, setRotationOffset] = useState(0);
+
+  useEffect(() => {
+    // Slowly rotate Moon constantly
+    const updateRotation = () => {
+      setRotationOffset(prev => {
+        let next = prev - 0.4;
+        if (next <= -MAP_WIDTH) return 0;
+        return next;
+      });
+    };
+    const interval = setInterval(updateRotation, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  const SIZE = VIEWPORT_SIZE;
+  const CX = SIZE / 2;
+  const CY = SIZE / 2;
+  const R = SIZE / 2;
+  const SHADOW_R = R * 1.14;
+
+  const illum = (1 - Math.cos((phaseAngle * Math.PI) / 180)) / 2;
+  const waxing = phaseAngle < 180;
+  const shadowX = waxing ? CX - 2 * R * illum : CX + 2 * R * illum;
+
+  return (
+    <div style={{ 
+      width: VIEWPORT_SIZE, 
+      height: VIEWPORT_SIZE, 
+      borderRadius: '50%', 
+      overflow: 'hidden', 
+      position: 'relative',
+      boxShadow: '0 0 80px rgba(200, 200, 220, 0.4)',
+      backgroundColor: '#000'
+    }}>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+      }}>
+        {/* Render tiles to wrap horizontally */}
+        {[0, 1, 2].map(tileOffset => (
+          <div key={tileOffset} style={{
+            position: 'absolute',
+            left: rotationOffset + (tileOffset * MAP_WIDTH),
+            top: (VIEWPORT_SIZE - MAP_HEIGHT) / 2,
+            width: MAP_WIDTH,
+            height: MAP_HEIGHT
+          }}>
+            <img src={moonMapImage} alt="Moon Satellite Map" style={{ 
+              width: '100%', 
+              height: '100%', 
+              display: 'block', 
+              objectFit: 'fill',
+              filter: 'brightness(1.1) contrast(1.1)'
+            }} />
+          </div>
+        ))}
+      </div>
+      
+      {/* Dynamic Phase Shadow Overlay */}
+      {illum < 0.995 && (
+        <svg
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none'
+          }}
+          viewBox={`0 0 ${SIZE} ${SIZE}`}
+        >
+          <circle
+            cx={shadowX}
+            cy={CY}
+            r={SHADOW_R}
+            fill="rgba(5, 5, 15, 0.9)"
+            style={{ filter: 'blur(15px)' }}
+          />
+        </svg>
+      )}
+
+      {/* 3D Atmospheric and Shading Overlay */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        pointerEvents: 'none',
+        boxShadow: 'inset 0 0 60px rgba(0,0,0,0.8), inset -40px -40px 80px rgba(0,0,0,0.9), inset 15px 15px 40px rgba(220, 220, 240, 0.4)'
+      }} />
+    </div>
+  );
+};
 
 const PHASE_LABELS = {
   'new-moon': 'Nov',
@@ -99,14 +204,11 @@ export default function MoonDashboard() {
         </div>
       </div>
 
-      <div className="dashboard-panel">
-        <div className="panel-header">
-          <h2 className="panel-title moon-title">Vizuální náhled</h2>
-        </div>
-        <MoonVisualization phaseAngle={phaseAngle} />
-        <p className="moon-viz-caption">
-          Osvětlená a zastíněná část podle aktuální fáze (vypočteno z úhlu {Math.round(phaseAngle)}°).
-        </p>
+      <div className="dashboard-panel" style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <h3 style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 10, color: 'var(--text-muted)' }}>
+          Satelitní Pohled
+        </h3>
+        <MoonGlobe phaseAngle={phaseAngle} />
       </div>
     </div>
   );
