@@ -272,17 +272,17 @@ export default function EarthDashboard() {
       const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`);
       const geoData = await geoRes.json();
       if (!geoData.results || geoData.results.length === 0) {
-        setSearchError('City not found (check spelling)');
+        setSearchError('Město nenalezeno (zkontrolujte překlep)');
         setLoading(false);
         return;
       }
       const sortedResults = geoData.results.sort((a, b) => (b.population || 0) - (a.population || 0));
       const { name, latitude, longitude, country, timezone } = sortedResults[0];
-      setCurrentLocation({ name: `${name}, ${country || 'Unknown'}`, lat: latitude, lon: longitude, timezone });
+      setCurrentLocation({ name: `${name}, ${country || 'Neznámé'}`, lat: latitude, lon: longitude, timezone });
       setSearchQuery('');
     } catch (err) {
       console.error("Geocoding failed:", err);
-      setSearchError('Search failed');
+      setSearchError('Hledání selhalo');
       setLoading(false);
     }
   };
@@ -342,7 +342,7 @@ export default function EarthDashboard() {
             <form onSubmit={handleSearch} style={{ display: 'flex', gap: '0.5rem' }}>
               <input
                 type="text"
-                placeholder="Search city..."
+                placeholder="Hledat město..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
@@ -363,32 +363,32 @@ export default function EarthDashboard() {
         </div>
 
         {loading || !weatherData ? (
-          <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>Receiving telemetry...</div>
+          <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>Příjem telemetrie...</div>
         ) : (
           <div className="stat-grid">
             <div className="stat-card">
-              <span className="stat-label">Temperature</span>
+              <span className="stat-label">Teplota</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Thermometer className="earth-title" />
                 {weatherData.temp}°C
               </div>
             </div>
             <div className="stat-card">
-              <span className="stat-label">Wind Speed</span>
+              <span className="stat-label">Rychlost Větru</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Wind className="earth-title" />
                 {weatherData.windSpeed} km/h
               </div>
             </div>
             <div className="stat-card">
-              <span className="stat-label">Humidity</span>
+              <span className="stat-label">Vlhkost</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Droplets className="earth-title" />
                 {weatherData.humidity}%
               </div>
             </div>
             <div className="stat-card">
-              <span className="stat-label">Local Time</span>
+              <span className="stat-label">Místní Čas</span>
               <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Clock className="earth-title" />
                 {currentTime}
